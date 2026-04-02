@@ -1202,10 +1202,42 @@ window.addEventListener('load', () => {
   renderRecentVideos();
   renderVidLib();
   renderSearchTags();
-  renderLangSelector();
   buildOfflineSubjects();
   startLiveCounter();
-  setTimeout(() => goTo('language'), 3200);
+
+  // Restore dark mode
+  const savedDark = localStorage.getItem('es_dark');
+  if (savedDark === 'true') {
+    darkMode = true;
+    document.documentElement.setAttribute('data-theme','dark');
+    const dt = document.getElementById('dmToggle');
+    const di = document.getElementById('dmIcon');
+    const ds = document.getElementById('dmSub');
+    if (dt) dt.classList.add('on');
+    if (di) di.textContent = '\u2600\uFE0F';
+    if (ds) ds.textContent = 'Currently dark theme';
+  }
+
+  // Restore language
+  const savedLang = localStorage.getItem('es_lang');
+  const savedLabel = localStorage.getItem('es_label');
+  if (savedLang) { curLang = savedLang; curLabel = savedLabel || 'EN'; }
+  renderLangSelector();
+
+  // Auto login if previously logged in
+  const savedName = localStorage.getItem('es_name');
+  const savedEmail = localStorage.getItem('es_email');
+
+  setTimeout(() => {
+    if (savedName && savedEmail) {
+      setUser(savedName, savedEmail);
+      goTo('home');
+      switchTab('home');
+      showToast('\uD83D\uDC4B Welcome back, ' + savedName + '!');
+    } else {
+      goTo('language');
+    }
+  }, 2000);
 });
 
 /* ══════════════════════════
@@ -1280,6 +1312,7 @@ function closePanel(id) { document.getElementById(id).classList.remove('on'); }
 function toggleDarkMode() {
   darkMode = !darkMode;
   document.documentElement.setAttribute('data-theme', darkMode?'dark':'light');
+  localStorage.setItem('es_dark', darkMode);
   document.getElementById('dmToggle').classList.toggle('on', darkMode);
   document.getElementById('dmIcon').textContent = darkMode?'☀️':'🌙';
   document.getElementById('dmSub').textContent = darkMode?'Currently dark theme':'Switch to dark theme';
@@ -1304,6 +1337,8 @@ function renderLangSelector() {
 }
 function setAppLang(lang, label, name, el) {
   curLang=lang; curLabel=label;
+  localStorage.setItem('es_lang', lang);
+  localStorage.setItem('es_label', label);
   document.querySelectorAll('.lang-opt').forEach(e=>e.classList.remove('on'));
   el.classList.add('on');
   syncLangPill();
@@ -1362,6 +1397,8 @@ function googleSignIn(name, email) {
 function setUser(name, email) {
   userName = name.charAt(0).toUpperCase()+name.slice(1);
   userEmail = email||'student@edusmart.ai';
+  localStorage.setItem('es_name', userName);
+  localStorage.setItem('es_email', userEmail);
   ['uav','profAv'].forEach(id=>{
     const el=document.getElementById(id);
     if (el) el.textContent=userName.charAt(0).toUpperCase();
@@ -1373,8 +1410,11 @@ function setUser(name, email) {
   if (g) g.textContent=(h<12?'Good morning':h<17?'Good afternoon':'Good evening')+' 👋';
   document.getElementById('chatFab').classList.remove('gone');
 }
+
 function doLogout() {
   stopSpeech(); closeChat();
+  localStorage.removeItem('es_name');
+  localStorage.removeItem('es_email');
   chatHistory = [];
   chatPhase = 'chat';
   lastExplainedTopic = '';
