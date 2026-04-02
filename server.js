@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════
 //  EduSmart AI Backend Server
 //  Using GROQ AI — 100% FREE FOREVER!
-//  No credit card. No bills. No limits worries.
+//  Node 18+ native fetch — no extra packages needed
 // ═══════════════════════════════════════════════════
 
 const express = require('express');
@@ -11,15 +11,14 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ── Middleware ──────────────────────────────────────
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(cors({ origin: '*' }));
 app.use(express.static('public'));
 
-// ── Rate Limiting ───────────────────────────────────
+// Rate Limiting
 const rateLimitMap = new Map();
 const RATE_LIMIT = 100;
-const RATE_WINDOW = 60 * 60 * 1000; // 1 hour
+const RATE_WINDOW = 60 * 60 * 1000;
 
 function checkRateLimit(ip) {
   const now = Date.now();
@@ -44,24 +43,21 @@ setInterval(() => {
   }
 }, RATE_WINDOW);
 
-// ── Health Check ────────────────────────────────────
+// Health Check
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
-    message: '🎓 EduSmart AI Server is running!',
-    ai: 'Groq (Free)',
-    model: 'llama-3.3-70b-versatile'
+    message: 'EduSmart running!',
+    key: process.env.GROQ_API_KEY ? 'loaded' : 'MISSING'
   });
 });
 
-// ── Main AI Endpoint ────────────────────────────────
+// Main AI Endpoint
 app.post('/api/chat', async (req, res) => {
-  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+  const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || 'unknown';
 
   if (!checkRateLimit(ip)) {
-    return res.status(429).json({
-      error: '⚠️ Too many questions! You have used 100 questions this hour. Please wait and try again! 😊'
-    });
+    return res.status(429).json({ error: 'Too many questions! Please wait an hour.' });
   }
 
   const { system, messages, max_tokens } = req.body;
@@ -70,69 +66,65 @@ app.post('/api/chat', async (req, res) => {
     return res.status(400).json({ error: 'Invalid request.' });
   }
 
-  if (!process.env.GROQ_API_KEY) {
-    return res.status(500).json({ error: '❌ Server not configured. Add GROQ_API_KEY to .env file.' });
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    console.error('GROQ_API_KEY is not set!');
+    return res.status(500).json({ error: 'Server not configured. Contact admin.' });
   }
 
   try {
-    // Build messages array for Groq
     const groqMessages = [];
-
-    // Add system message first
-    if (system) {
-      groqMessages.push({ role: 'system', content: system });
-    }
-
-    // Add conversation history
+    if (system) groqMessages.push({ role: 'system', content: system });
     for (const msg of messages) {
-      groqMessages.push({ role: msg.role, content: msg.content });
+      groqMessages.push({ role: msg.role, content: String(msg.content) });
     }
+
+    console.log(`Calling Groq... messages: ${groqMessages.length}`);
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
+        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',  // Best free model on Groq
+        model: 'llama-3.3-70b-versatile',
         messages: groqMessages,
         max_tokens: max_tokens || 1200,
-        temperature: 0.7,
-        stream: false
+        temperature: 0.7
       })
     });
 
+    const responseText = await response.text();
+    console.log(`Groq status: ${response.status}`);
+
     if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      console.error('Groq API error:', response.status, errData);
-      return res.status(response.status).json({
-        error: errData.error?.message || 'AI error. Please try again.'
-      });
+      console.error('Groq error:', responseText);
+      return res.status(response.status).json({ error: 'AI error. Please try again.' });
     }
 
-    const data = await response.json();
+    const data = JSON.parse(responseText);
     const text = data.choices?.[0]?.message?.content?.trim() || '';
 
-    if (!text) throw new Error('Empty response from Groq');
+    if (!text) throw new Error('Empty response');
 
+    console.log(`Success! ${text.length} chars`);
     res.json({ text });
 
   } catch (err) {
-    console.error('Server error:', err.message);
-    res.status(500).json({ error: '⚠️ Server error. Please try again in a moment.' });
+    console.error('Error:', err.message);
+    res.status(500).json({ error: 'Server error. Please try again.' });
   }
 });
 
-// ── Start ───────────────────────────────────────────
+app.get('*', (req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
 app.listen(PORT, () => {
   console.log('\n╔══════════════════════════════════════╗');
-  console.log('║   🎓 EduSmart AI Server              ║');
-  console.log('║   Powered by GROQ — 100% FREE!       ║');
+  console.log('║   EduSmart AI Server — Groq FREE!    ║');
   console.log('╚══════════════════════════════════════╝');
-  console.log(`\n🌐 Open: http://localhost:${PORT}`);
-  console.log(`🤖 Model: llama-3.3-70b-versatile`);
-  console.log(`🔑 Groq Key: ${process.env.GROQ_API_KEY ? '✅ Loaded' : '❌ MISSING — add to .env'}`);
-  console.log(`📊 Rate limit: ${RATE_LIMIT} questions/hour per user`);
-  console.log(`💰 Cost: ZERO — Groq is FREE!\n`);
+  console.log(`Port: ${PORT}`);
+  console.log(`Key: ${process.env.GROQ_API_KEY ? 'LOADED' : 'MISSING!'}`);
 });
