@@ -1,0 +1,97 @@
+# 🎓 EduSmart AI Setup Guide
+# Using Groq AI — 100% FREE, No Credit Card!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 1 — Get FREE Groq API Key
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Open browser → go to https://console.groq.com
+2. Click "Sign Up" → sign in with Google (free)
+3. Click "API Keys" on left side
+4. Click "Create API Key"
+5. Copy the key (looks like: gsk_xxxxxxxxxxxxxxxx)
+✅ Done! No credit card needed!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 2 — Install Node.js (one time only)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Go to https://nodejs.org
+2. Click "LTS Download" (big green button)
+3. Install it → Next → Next → Finish
+✅ Done!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 3 — Set Up EduSmart
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Extract this ZIP file to your Desktop
+2. Open the folder "edusmart-groq"
+3. Find the file ".env.example"
+4. RENAME it to ".env" (delete the word "example")
+5. Open ".env" with Notepad
+6. Replace "your_groq_api_key_here" with your key
+7. Save the file
+✅ Done!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 4 — Run EduSmart
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+On Windows:
+  - Hold SHIFT + Right-click inside the edusmart-groq folder
+  - Click "Open PowerShell window here" or "Open Terminal here"
+  - Type:  npm install
+  - Press Enter → wait 1 minute
+  - Type:  npm start
+  - Press Enter
+
+On Mac:
+  - Open Terminal
+  - Type: cd Desktop/edusmart-groq
+  - Press Enter
+  - Type: npm install
+  - Press Enter → wait 1 minute
+  - Type: npm start
+  - Press Enter
+
+You will see:
+╔══════════════════════════════════════╗
+║   🎓 EduSmart AI Server              ║
+║   Powered by GROQ — 100% FREE!       ║
+╚══════════════════════════════════════╝
+✅ It's working!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 5 — Open EduSmart
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Open your browser → type:
+  localhost:3000
+Press Enter → EduSmart opens! 🎉
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 6 — Share With Everyone (Free Hosting)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+To make it available online for all students:
+
+1. Go to https://render.com → Sign up free
+2. Upload your edusmart-groq folder to GitHub
+3. Connect GitHub to Render
+4. Add environment variable:
+   Key:   GROQ_API_KEY
+   Value: gsk_your_key_here
+5. Deploy → get link like: edusmart.onrender.com
+6. Share with everyone! 🌍
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COST = ₹0 FOREVER 💰
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Groq Free Tier includes:
+✅ 30 requests per minute
+✅ 6,000 requests per day  
+✅ No credit card ever needed
+✅ Perfect for school/college projects
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROBLEMS? 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"npm not found"     → Install Node.js (Step 2)
+"Groq Key Missing"  → Check your .env file (Step 3)
+"Port in use"       → Change PORT=3001 in .env
+AI not responding   → Check internet connection
