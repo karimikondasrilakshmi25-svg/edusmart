@@ -634,7 +634,30 @@ input,textarea,select{font-family:var(--fb)}
 .total-users-card{background:linear-gradient(135deg,var(--brand),var(--brand-lt));border-radius:16px;padding:16px;margin:0 0 16px;display:flex;align-items:center;gap:14px;color:#fff}
 .tuc-num{font-family:var(--fh);font-size:28px;font-weight:800}
 .tuc-lbl{font-size:12px;opacity:.85}
+
+/* ── Camera Search ── */
+.camera-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(8px)}
+.camera-modal.on{opacity:1;pointer-events:all}
+.camera-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-width:500px;animation:slideUp .3s ease}
+.camera-sheet h3{font-family:var(--fh);font-size:18px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.camera-sheet p{font-size:13px;color:var(--ink3);margin-bottom:20px}
+.camera-btns{display:flex;flex-direction:column;gap:12px}
+.camera-btn{display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;border:1.5px solid var(--border);background:var(--bg2);cursor:pointer;transition:all .2s;font-family:var(--fb)}
+.camera-btn:hover{border-color:var(--brand);background:var(--bg3)}
+.camera-btn-ico{width:44px;height:44px;border-radius:12px;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.camera-btn-info{text-align:left}
+.camera-btn-title{font-size:14px;font-weight:600;color:var(--ink)}
+.camera-btn-sub{font-size:12px;color:var(--ink3);margin-top:2px}
+.camera-processing{display:none;text-align:center;padding:20px}
+.camera-processing .genspin{margin:0 auto 12px}
 </style>
+  <!-- Prevent file access errors when sharing -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta property="og:title" content="EduSmart — Free AI Tutor">
+  <meta property="og:description" content="Ask any academic question and get instant AI explanations, quizzes and assignments — 100% FREE!">
+  <meta property="og:type" content="website">
 </head>
 <body>
 
@@ -838,7 +861,15 @@ input,textarea,select{font-family:var(--fb)}
 <div id="search" class="screen">
   <div class="search-hdr">
     <h2>Search Lessons</h2>
-    <div class="search-big-box"><svg width="18" height="18" fill="none" stroke="var(--ink3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" id="searchQ" placeholder="Search any topic…" oninput="doSearch(this.value)"/></div>
+    <div class="search-big-box">
+      <svg width="18" height="18" fill="none" stroke="var(--ink3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="searchQ" placeholder="Search any topic…" oninput="doSearch(this.value)"/>
+      <button onclick="openCameraSearch()" style="background:none;border:none;cursor:pointer;padding:6px;color:var(--ink3);display:flex;align-items:center" title="Search with camera">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </button>
+    </div>
+    <!-- Hidden camera input -->
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleCameraImage(this)"/>
   </div>
   <div class="sbody">
     <div class="stags" id="searchTags"></div>
@@ -1131,6 +1162,44 @@ input,textarea,select{font-family:var(--fb)}
   </div>
 </div>
 
+
+<!-- CAMERA SEARCH MODAL -->
+<div class="camera-modal" id="cameraModal" onclick="if(event.target===this)closeCameraModal()">
+  <div class="camera-sheet">
+    <h3>📷 Search with Camera</h3>
+    <p>Take a photo of your question, textbook or problem — AI will identify and explain it!</p>
+    <div class="camera-btns" id="cameraBtns">
+      <div class="camera-btn" onclick="triggerCamera('environment')">
+        <div class="camera-btn-ico">📷</div>
+        <div class="camera-btn-info">
+          <div class="camera-btn-title">Take a Photo</div>
+          <div class="camera-btn-sub">Use your back camera to capture a question</div>
+        </div>
+      </div>
+      <div class="camera-btn" onclick="triggerCamera('user')">
+        <div class="camera-btn-ico">🤳</div>
+        <div class="camera-btn-info">
+          <div class="camera-btn-title">Use Front Camera</div>
+          <div class="camera-btn-sub">Use front camera to scan notes</div>
+        </div>
+      </div>
+      <div class="camera-btn" onclick="triggerGallery()">
+        <div class="camera-btn-ico">🖼️</div>
+        <div class="camera-btn-info">
+          <div class="camera-btn-title">Choose from Gallery</div>
+          <div class="camera-btn-sub">Pick an existing photo from your phone</div>
+        </div>
+      </div>
+    </div>
+    <div class="camera-processing" id="cameraProcessing">
+      <div class="genspin"></div>
+      <div style="font-size:14px;font-weight:600;color:var(--brand);margin-bottom:4px">Analyzing your image...</div>
+      <div style="font-size:12px;color:var(--ink3)">AI is reading your question</div>
+    </div>
+    <button onclick="closeCameraModal()" style="width:100%;margin-top:16px;padding:13px;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--ink3);font-size:14px;cursor:pointer;font-family:var(--fh)">Cancel</button>
+  </div>
+</div>
+
 <div class="toast" id="toastEl"></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
@@ -1225,19 +1294,19 @@ function loadState() {
 }
 
 function restoreChatMessages() {
-  // Re-render saved chat messages on screen
   if (chatHistory.length === 0) return;
   const msgs = document.getElementById('chatMsgs');
   if (!msgs) return;
   msgs.innerHTML = '';
   chatHistory.forEach(msg => {
+    // Use saved timestamp if available, otherwise show "Earlier"
+    const savedTime = msg.time || null;
     if (msg.role === 'user') {
-      addUserMsg(msg.content);
+      addUserMsg(msg.content, savedTime);
     } else if (msg.role === 'assistant') {
-      addBotMsg(msg.content);
+      addBotMsg(msg.content, savedTime);
     }
   });
-  // Hide quick prompts if chat has history
   if (chatHistory.length > 0) {
     const qa = document.getElementById('chatQuickArea');
     if (qa) qa.style.display = 'none';
@@ -1324,18 +1393,36 @@ function escHtml(str) {
    DATA
 ══════════════════════════ */
 const ALL_VIDS = [
-  {q:"What is photosynthesis?",subj:"Science",icon:"🌱",bg:"#e0f9f5",dur:"4 min",key:"photosynthesis"},
-  {q:"Pythagorean theorem — complete guide",subj:"Maths",icon:"📐",bg:"#ece9ff",dur:"5 min",key:"pythagoras"},
-  {q:"Newton's three laws of motion",subj:"Physics",icon:"⚡",bg:"#f3e8ff",dur:"5 min",key:"newton"},
-  {q:"The French Revolution explained",subj:"History",icon:"🗺️",bg:"#fff8e0",dur:"6 min",key:"french"},
-  {q:"The periodic table — all you need to know",subj:"Chemistry",icon:"⚗️",bg:"#dcfce7",dur:"5 min",key:"periodic"},
-  {q:"How does the human heart work?",subj:"Biology",icon:"🫀",bg:"#fce7f3",dur:"5 min",key:"heart"},
-  {q:"AI and machine learning explained",subj:"Comp. Sci.",icon:"💻",bg:"#e0f2fe",dur:"5 min",key:"ai"},
-  {q:"Active vs passive voice",subj:"English",icon:"📖",bg:"#ffe9e9",dur:"4 min",key:"english"},
-  {q:"The water cycle",subj:"Science",icon:"💧",bg:"#e0f9f5",dur:"4 min",key:"default"},
-  {q:"Introduction to algebra",subj:"Maths",icon:"➕",bg:"#ece9ff",dur:"5 min",key:"pythagoras"},
-  {q:"Ancient civilisations of India",subj:"History",icon:"🏛️",bg:"#fff8e0",dur:"6 min",key:"french"},
-  {q:"Laws of thermodynamics",subj:"Physics",icon:"🔥",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  // Science
+  {q:"How does photosynthesis work? Light and dark reactions explained",subj:"Science",icon:"🌱",bg:"#e0f9f5",dur:"5 min",key:"photosynthesis"},
+  {q:"What is mitosis and meiosis? Cell division explained",subj:"Biology",icon:"🧬",bg:"#fce7f3",dur:"5 min",key:"heart"},
+  {q:"How does the human digestive system work?",subj:"Biology",icon:"🫁",bg:"#fce7f3",dur:"5 min",key:"heart"},
+  {q:"What is DNA and how does it store genetic information?",subj:"Biology",icon:"🧪",bg:"#fce7f3",dur:"5 min",key:"heart"},
+  // Maths
+  {q:"Quadratic equations — formula, factoring and graphing",subj:"Maths",icon:"📐",bg:"#ece9ff",dur:"5 min",key:"pythagoras"},
+  {q:"Trigonometry basics — sin, cos, tan explained with examples",subj:"Maths",icon:"📏",bg:"#ece9ff",dur:"5 min",key:"pythagoras"},
+  {q:"Probability and statistics for beginners",subj:"Maths",icon:"🎲",bg:"#ece9ff",dur:"5 min",key:"pythagoras"},
+  {q:"Differentiation and integration — calculus basics",subj:"Maths",icon:"∫",bg:"#ece9ff",dur:"6 min",key:"pythagoras"},
+  // Physics
+  {q:"Newton's three laws of motion with real life examples",subj:"Physics",icon:"⚡",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  {q:"What is electricity? Current, voltage, resistance explained",subj:"Physics",icon:"🔌",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  {q:"Wave motion — types, properties and examples",subj:"Physics",icon:"〜",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  {q:"Gravitation — universal law and escape velocity",subj:"Physics",icon:"🌍",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  // Chemistry
+  {q:"The periodic table — groups, periods and trends",subj:"Chemistry",icon:"⚗️",bg:"#dcfce7",dur:"5 min",key:"periodic"},
+  {q:"Chemical bonding — ionic, covalent and metallic bonds",subj:"Chemistry",icon:"🔗",bg:"#dcfce7",dur:"5 min",key:"periodic"},
+  {q:"Acids, bases and pH scale explained",subj:"Chemistry",icon:"🧫",bg:"#dcfce7",dur:"4 min",key:"periodic"},
+  // History
+  {q:"The Indian Independence Movement — key events and leaders",subj:"History",icon:"🇮🇳",bg:"#fff8e0",dur:"6 min",key:"french"},
+  {q:"World War 2 — causes, events and consequences",subj:"History",icon:"🌏",bg:"#fff8e0",dur:"6 min",key:"french"},
+  {q:"The French Revolution — causes and effects",subj:"History",icon:"🗺️",bg:"#fff8e0",dur:"6 min",key:"french"},
+  // English
+  {q:"Active and passive voice — rules and examples",subj:"English",icon:"📖",bg:"#ffe9e9",dur:"4 min",key:"english"},
+  {q:"Tenses in English — all 12 tenses with examples",subj:"English",icon:"📝",bg:"#ffe9e9",dur:"5 min",key:"english"},
+  // Computer Science
+  {q:"How does a computer work? CPU, RAM and storage explained",subj:"Comp. Sci.",icon:"💻",bg:"#e0f2fe",dur:"5 min",key:"ai"},
+  {q:"What is Python programming? Beginner guide with examples",subj:"Comp. Sci.",icon:"🐍",bg:"#e0f2fe",dur:"5 min",key:"ai"},
+  {q:"Artificial intelligence and machine learning explained simply",subj:"Comp. Sci.",icon:"🤖",bg:"#e0f2fe",dur:"5 min",key:"ai"},
 ];
 
 const QUIZ_DATA = {
@@ -2223,7 +2310,7 @@ async function sendChatMsg() {
 
   if (handleSpecialInput(msg)) return;
 
-  chatHistory.push({ role: 'user', content: msg });
+  chatHistory.push({ role: 'user', content: msg, time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
   saveState();
   showTyping();
   chatTyping = true;
@@ -2259,7 +2346,7 @@ Student: ${userName} | Subject: ${curSubject}`;
     if (markerMatch) {
       lastExplainedTopic = markerMatch[1].trim();
       const cleanReply = reply.replace(/\[EXPLANATION_COMPLETE:.*?\]/g, '').trim();
-      chatHistory.push({ role: 'assistant', content: cleanReply });
+      chatHistory.push({ role: 'assistant', content: cleanReply, time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
       addBotMsg(cleanReply);
       saveState();
       setTimeout(() => {
@@ -2269,7 +2356,7 @@ Student: ${userName} | Subject: ${curSubject}`;
 
       }, 600);
     } else {
-      chatHistory.push({ role: 'assistant', content: reply });
+      chatHistory.push({ role: 'assistant', content: reply, time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
       addBotMsg(reply);
       saveState();
     }
@@ -2451,11 +2538,11 @@ Make questions test real understanding and application, not just memorisation. B
   }
 }
 
-function addUserMsg(text) {
+function addUserMsg(text, savedTime) {
   const msgs = document.getElementById('chatMsgs');
   const d = document.createElement('div');
   d.className = 'chat-msg user';
-  const time = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const time = savedTime || new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
   d.innerHTML = `
     <div class="chat-msg-av">${userName.charAt(0).toUpperCase()}</div>
     <div>
@@ -2466,11 +2553,11 @@ function addUserMsg(text) {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-function addBotMsg(text) {
+function addBotMsg(text, savedTime) {
   const msgs = document.getElementById('chatMsgs');
   const d = document.createElement('div');
   d.className = 'chat-msg bot';
-  const time = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const time = savedTime || new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
 
   // Render markdown properly
   let html = escHtml(text)
@@ -2585,6 +2672,81 @@ function setAppLang(lang, label, name, el) {
   showToast('Voice: '+name);
   document.querySelectorAll('.lang-card').forEach(c=>c.classList.toggle('sel',c.dataset.lang===lang));
   if (isPlaying) { stopSpeech(); setTimeout(startPlay,200); }
+}
+
+/* ══════════════════════════
+   CAMERA SEARCH
+══════════════════════════ */
+function openCameraSearch() {
+  document.getElementById('cameraModal').classList.add('on');
+  document.getElementById('cameraBtns').style.display = 'flex';
+  document.getElementById('cameraProcessing').style.display = 'none';
+}
+function closeCameraModal() {
+  document.getElementById('cameraModal').classList.remove('on');
+}
+function triggerCamera(facing) {
+  const inp = document.getElementById('cameraInput');
+  inp.setAttribute('capture', facing);
+  inp.accept = 'image/*';
+  inp.click();
+}
+function triggerGallery() {
+  const inp = document.getElementById('cameraInput');
+  inp.removeAttribute('capture');
+  inp.accept = 'image/*';
+  inp.click();
+}
+async function handleCameraImage(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+
+  // Show processing state
+  document.getElementById('cameraBtns').style.display = 'none';
+  document.getElementById('cameraProcessing').style.display = 'block';
+
+  try {
+    // Convert image to base64
+    const base64 = await new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = () => res(reader.result.split(',')[1]);
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    });
+
+    // Send to AI to identify the question
+    const resp = await fetch('/api/analyze-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: base64, mimeType: file.type })
+    });
+
+    if (!resp.ok) throw new Error('Server error');
+    const data = await resp.json();
+
+    closeCameraModal();
+
+    if (data.topic) {
+      // Search for the identified topic
+      switchTab('search');
+      document.getElementById('searchQ').value = data.topic;
+      doSearch(data.topic);
+      showToast('Found: ' + data.topic);
+    } else {
+      showToast('Could not identify topic. Please try again!');
+    }
+  } catch(e) {
+    closeCameraModal();
+    // Fallback — open chat with image description request
+    showToast('Camera search requires internet. Opening AI chat instead!');
+    setTimeout(() => {
+      openChat();
+      document.getElementById('chatInput').value = 'I have a question from my textbook — can you help me?';
+      document.getElementById('chatInput').focus();
+    }, 500);
+  }
+  // Reset input
+  input.value = '';
 }
 
 /* ══════════════════════════
