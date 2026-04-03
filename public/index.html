@@ -600,6 +600,40 @@ input,textarea,select{font-family:var(--fb)}
   color:var(--brand);font-weight:600;
   margin-bottom:8px
 }
+
+/* ── Auth Error Messages ── */
+.auth-err{display:none;background:#fff0f0;border:1.5px solid #fca5a5;border-radius:10px;padding:10px 14px;font-size:13px;color:#dc2626;margin-bottom:12px;animation:fadeUp .3s ease}
+.auth-err.on{display:block}
+.auth-ok{display:none;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 14px;font-size:13px;color:#16a34a;margin-bottom:12px;animation:fadeUp .3s ease}
+.auth-ok.on{display:block}
+
+/* ── Password Strength Bar ── */
+.pw-wrap{position:relative}
+.pw-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--ink3);font-size:16px;padding:4px}
+.pw-strength{height:4px;border-radius:2px;margin-top:6px;transition:all .3s;background:var(--border)}
+.pw-strength.weak{background:#ef4444;width:33%}
+.pw-strength.medium{background:#f59e0b;width:66%}
+.pw-strength.strong{background:#22c55e;width:100%}
+.pw-hint{font-size:11px;color:var(--ink3);margin-top:3px}
+
+/* ── Live Users Badge ── */
+.live-users-bar{background:linear-gradient(90deg,rgba(80,70,228,.08),rgba(80,70,228,.04));border:1px solid var(--border2);border-radius:12px;padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.live-users-count{font-family:var(--fh);font-size:20px;font-weight:800;color:var(--brand)}
+.live-users-label{font-size:11px;color:var(--ink3);margin-top:1px}
+.live-pulse{width:8px;height:8px;border-radius:50%;background:var(--green);animation:livePulse 1.5s infinite;flex-shrink:0;margin-right:6px}
+
+/* ── Loading Spinner on Button ── */
+.btn-loading{position:relative;pointer-events:none;opacity:.8}
+.btn-loading::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+
+/* ── Welcome animation ── */
+@keyframes welcomePop{0%{opacity:0;transform:scale(.8) translateY(20px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+.welcome-pop{animation:welcomePop .5s cubic-bezier(.34,1.56,.64,1) forwards}
+
+/* ── Registered users count in profile ── */
+.total-users-card{background:linear-gradient(135deg,var(--brand),var(--brand-lt));border-radius:16px;padding:16px;margin:0 0 16px;display:flex;align-items:center;gap:14px;color:#fff}
+.tuc-num{font-family:var(--fh);font-size:28px;font-weight:800}
+.tuc-lbl{font-size:12px;opacity:.85}
 </style>
 </head>
 <body>
@@ -641,21 +675,52 @@ input,textarea,select{font-family:var(--fb)}
 <!-- AUTH -->
 <div id="auth" class="screen">
   <div class="auth-hdr">
-    <div class="auth-em">📚</div>
+    <div class="auth-em">🎓</div>
     <h2>Welcome to EduSmart</h2>
-    <p>AI-powered learning companion</p>
-    <div class="auth-live"><div class="live-dot"></div><span id="authLive">1,20,847</span> students online</div>
+    <p>India's FREE AI Learning Companion</p>
+    <div class="auth-live"><div class="live-dot"></div><span id="authLive">1,20,847</span> students online now</div>
   </div>
   <div class="auth-body">
+    <!-- Live users bar -->
+    <div class="live-users-bar">
+      <div>
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:2px">Total Students Joined</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="live-pulse"></div>
+          <div class="live-users-count" id="totalUsersCount">0</div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:22px">🏆</div>
+        <div style="font-size:10px;color:var(--ink3)">Join them!</div>
+      </div>
+    </div>
+
     <div class="tab-sw">
       <button class="tab-b on" id="lt" onclick="swTab('login')">Log In</button>
       <button class="tab-b" id="st" onclick="swTab('signup')">Sign Up</button>
     </div>
+
+    <!-- LOGIN FORM -->
     <div id="loginF">
-      <div class="fg"><label>Email</label><input class="fi" type="email" id="le" placeholder="you@example.com"/></div>
-      <div class="fg"><label>Password</label><input class="fi" type="password" id="lp" placeholder="Your password"/></div>
+      <div id="loginErr" class="auth-err"></div>
+      <div id="loginOk" class="auth-ok"></div>
+      <div class="fg">
+        <label>Email Address</label>
+        <input class="fi" type="email" id="le" placeholder="you@example.com" oninput="clearAuthMsg('login')"/>
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input class="fi" type="password" id="lp" placeholder="Your password" style="padding-right:44px" oninput="clearAuthMsg('login')"/>
+          <button class="pw-toggle" onclick="togglePwVis('lp',this)" type="button">👁️</button>
+        </div>
+      </div>
       <div class="abw">
-        <button class="btn btn-brand" style="width:100%" onclick="doLogin()">Log In →</button>
+        <button class="btn btn-brand" style="width:100%" id="loginBtn" onclick="doLogin()">Log In →</button>
+        <div style="text-align:right;margin-top:4px">
+          <span style="font-size:12px;color:var(--brand);cursor:pointer" onclick="showForgotPw()">Forgot password?</span>
+        </div>
         <div class="divrow"><span>or</span></div>
         <button class="gbtn" onclick="openGooglePicker()">
           <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
@@ -663,12 +728,41 @@ input,textarea,select{font-family:var(--fb)}
         </button>
       </div>
     </div>
+
+    <!-- SIGNUP FORM -->
     <div id="signupF" class="gone">
-      <div class="fg"><label>Full Name</label><input class="fi" type="text" id="sn" placeholder="Your name"/></div>
-      <div class="fg"><label>Email</label><input class="fi" type="email" id="se" placeholder="you@example.com"/></div>
-      <div class="fg"><label>Password</label><input class="fi" type="password" id="sp" placeholder="Create a password"/></div>
+      <div id="signupErr" class="auth-err"></div>
+      <div id="signupOk" class="auth-ok"></div>
+      <div class="fg">
+        <label>Full Name</label>
+        <input class="fi" type="text" id="sn" placeholder="Your full name" oninput="clearAuthMsg('signup')"/>
+      </div>
+      <div class="fg">
+        <label>Email Address</label>
+        <input class="fi" type="email" id="se" placeholder="you@example.com" oninput="clearAuthMsg('signup')"/>
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input class="fi" type="password" id="sp" placeholder="Min 6 characters" style="padding-right:44px" oninput="checkPwStrength(this.value)"/>
+          <button class="pw-toggle" onclick="togglePwVis('sp',this)" type="button">👁️</button>
+        </div>
+        <div class="pw-strength" id="pwStrengthBar"></div>
+        <div class="pw-hint" id="pwHint">Enter a password</div>
+      </div>
+      <div class="fg">
+        <label>Confirm Password</label>
+        <div class="pw-wrap">
+          <input class="fi" type="password" id="spc" placeholder="Repeat your password" style="padding-right:44px" oninput="clearAuthMsg('signup')"/>
+          <button class="pw-toggle" onclick="togglePwVis('spc',this)" type="button">👁️</button>
+        </div>
+      </div>
+      <div class="fg" style="display:flex;align-items:flex-start;gap:10px">
+        <input type="checkbox" id="terms" style="margin-top:3px;width:16px;height:16px;flex-shrink:0"/>
+        <label for="terms" style="font-size:12px;color:var(--ink3);cursor:pointer">I agree to the <span style="color:var(--brand)">Terms of Service</span> and <span style="color:var(--brand)">Privacy Policy</span></label>
+      </div>
       <div class="abw">
-        <button class="btn btn-brand" style="width:100%" onclick="doSignup()">Create Account →</button>
+        <button class="btn btn-brand" style="width:100%" id="signupBtn" onclick="doSignup()">Create Account →</button>
         <div class="divrow"><span>or</span></div>
         <button class="gbtn" onclick="openGooglePicker()">
           <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
@@ -1058,18 +1152,97 @@ input,textarea,select{font-family:var(--fb)}
    Calls Groq backend — 100% FREE, API key safe on server!
 ══════════════════════════ */
 async function callClaude({ system, messages, max_tokens = 1200 }) {
-  const resp = await fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ system, messages, max_tokens })
-  });
-  if (!resp.ok) {
-    const err = await resp.json().catch(() => ({}));
-    throw new Error(err.error || 'Server error ' + resp.status);
+  try {
+    const resp = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system, messages, max_tokens })
+    });
+    const data = await resp.json().catch(() => ({ error: 'Invalid server response' }));
+    if (!resp.ok) {
+      throw new Error(data.error || 'Server error ' + resp.status);
+    }
+    if (!data.text) throw new Error('Empty response from AI');
+    return data.text;
+  } catch(e) {
+    // Re-throw with clear message
+    if (e.message.includes('Failed to fetch') || e.message.includes('NetworkError')) {
+      throw new Error('Cannot reach server. Please check your internet connection.');
+    }
+    throw e;
   }
-  const data = await resp.json();
-  return data.text;
 }
+/* ══════════════════════════
+   STORAGE HELPERS — Save everything!
+══════════════════════════ */
+function saveState() {
+  try {
+    // Save chat history (last 30 messages only to avoid size limits)
+    const historyToSave = chatHistory.slice(-30);
+    localStorage.setItem('es_chatHistory', JSON.stringify(historyToSave));
+    localStorage.setItem('es_chatPhase', chatPhase);
+    localStorage.setItem('es_lastTopic', lastExplainedTopic);
+    // Save stats
+    localStorage.setItem('es_vidWatched', vidWatched);
+    localStorage.setItem('es_quizTotal', quizTotal);
+    localStorage.setItem('es_quizCorrect', quizCorrect);
+    localStorage.setItem('es_subjects', JSON.stringify([...subjectsSeen]));
+    localStorage.setItem('es_streakDate', new Date().toDateString());
+  } catch(e) { console.log('Save error:', e); }
+}
+
+function loadState() {
+  try {
+    // Load chat history
+    const savedHistory = localStorage.getItem('es_chatHistory');
+    if (savedHistory) {
+      chatHistory = JSON.parse(savedHistory);
+    }
+    const savedPhase = localStorage.getItem('es_chatPhase');
+    if (savedPhase) chatPhase = savedPhase;
+    const savedTopic = localStorage.getItem('es_lastTopic');
+    if (savedTopic) lastExplainedTopic = savedTopic;
+    // Load stats
+    const sv = localStorage.getItem('es_vidWatched');
+    if (sv) { vidWatched = parseInt(sv) || 0; document.getElementById('vidWatched').textContent = vidWatched; }
+    const sq = localStorage.getItem('es_quizTotal');
+    const sc = localStorage.getItem('es_quizCorrect');
+    if (sq && sc) {
+      quizTotal = parseInt(sq) || 0;
+      quizCorrect = parseInt(sc) || 0;
+      if (quizTotal > 0) {
+        const avg = Math.round((quizCorrect/quizTotal)*100);
+        document.getElementById('quizScore').textContent = avg + '%';
+      }
+    }
+    const ss = localStorage.getItem('es_subjects');
+    if (ss) {
+      subjectsSeen = new Set(JSON.parse(ss));
+      document.getElementById('subLearned').textContent = subjectsSeen.size;
+    }
+  } catch(e) { console.log('Load error:', e); }
+}
+
+function restoreChatMessages() {
+  // Re-render saved chat messages on screen
+  if (chatHistory.length === 0) return;
+  const msgs = document.getElementById('chatMsgs');
+  if (!msgs) return;
+  msgs.innerHTML = '';
+  chatHistory.forEach(msg => {
+    if (msg.role === 'user') {
+      addUserMsg(msg.content);
+    } else if (msg.role === 'assistant') {
+      addBotMsg(msg.content);
+    }
+  });
+  // Hide quick prompts if chat has history
+  if (chatHistory.length > 0) {
+    const qa = document.getElementById('chatQuickArea');
+    if (qa) qa.style.display = 'none';
+  }
+}
+
 /* ══════════════════════════
    UTILS
 ══════════════════════════ */
@@ -1228,6 +1401,7 @@ window.addEventListener('load', () => {
   const savedName = localStorage.getItem('es_name');
   const savedEmail = localStorage.getItem('es_email');
 
+  updateTotalUsersDisplay();
   setTimeout(() => {
     if (savedName && savedEmail) {
       setUser(savedName, savedEmail);
@@ -1369,22 +1543,142 @@ function swTab(t) {
   document.getElementById('loginF').classList.toggle('gone',!isL);
   document.getElementById('signupF').classList.toggle('gone',isL);
 }
-function doLogin() {
-  const e=document.getElementById('le').value.trim();
-  const p=document.getElementById('lp').value;
-  if (!e||!p) { showToast('Please fill all fields'); return; }
-  setUser(e.split('@')[0], e);
-  goTo('home'); switchTab('home');
-  showToast('👋 Welcome back, '+userName+'!');
+
+/* ── Auth helpers ── */
+function showAuthErr(form, msg) {
+  const el = document.getElementById(form+'Err');
+  if (el) { el.textContent = '⚠️ ' + msg; el.classList.add('on'); }
 }
+function showAuthOk(form, msg) {
+  const el = document.getElementById(form+'Ok');
+  if (el) { el.textContent = '✅ ' + msg; el.classList.add('on'); }
+}
+function clearAuthMsg(form) {
+  const err = document.getElementById(form+'Err');
+  const ok = document.getElementById(form+'Ok');
+  if (err) err.classList.remove('on');
+  if (ok) ok.classList.remove('on');
+}
+function togglePwVis(id, btn) {
+  const inp = document.getElementById(id);
+  if (!inp) return;
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
+}
+function checkPwStrength(pw) {
+  const bar = document.getElementById('pwStrengthBar');
+  const hint = document.getElementById('pwHint');
+  if (!bar || !hint) return;
+  if (pw.length === 0) { bar.className = 'pw-strength'; hint.textContent = 'Enter a password'; return; }
+  if (pw.length < 6) { bar.className = 'pw-strength weak'; hint.textContent = '❌ Too short (min 6 chars)'; return; }
+  const hasUpper = /[A-Z]/.test(pw);
+  const hasNum = /[0-9]/.test(pw);
+  const hasSpecial = /[^A-Za-z0-9]/.test(pw);
+  const score = (hasUpper ? 1 : 0) + (hasNum ? 1 : 0) + (hasSpecial ? 1 : 0);
+  if (score === 0) { bar.className = 'pw-strength weak'; hint.textContent = '⚠️ Weak — add numbers or symbols'; }
+  else if (score === 1) { bar.className = 'pw-strength medium'; hint.textContent = '👍 Medium — good but could be stronger'; }
+  else { bar.className = 'pw-strength strong'; hint.textContent = '🔒 Strong password!'; }
+}
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+function showForgotPw() {
+  const email = document.getElementById('le').value.trim();
+  if (!email || !isValidEmail(email)) {
+    showAuthErr('login', 'Enter your email first, then click Forgot Password');
+    return;
+  }
+  showAuthOk('login', 'If this email is registered, a reset link has been sent! (Demo mode)');
+}
+
+/* ── Get/Save registered users ── */
+function getRegisteredUsers() {
+  try { return JSON.parse(localStorage.getItem('es_users') || '[]'); } catch(e) { return []; }
+}
+function saveRegisteredUsers(users) {
+  localStorage.setItem('es_users', JSON.stringify(users));
+  updateTotalUsersDisplay();
+}
+function updateTotalUsersDisplay() {
+  const users = getRegisteredUsers();
+  const el = document.getElementById('totalUsersCount');
+  if (el) el.textContent = users.length.toLocaleString('en-IN');
+}
+
+function doLogin() {
+  const e = document.getElementById('le').value.trim();
+  const p = document.getElementById('lp').value;
+  clearAuthMsg('login');
+
+  // Validations
+  if (!e || !p) { showAuthErr('login', 'Please fill in all fields'); return; }
+  if (!isValidEmail(e)) { showAuthErr('login', 'Please enter a valid email address'); return; }
+  if (p.length < 6) { showAuthErr('login', 'Password must be at least 6 characters'); return; }
+
+  // Check if user exists
+  const users = getRegisteredUsers();
+  const user = users.find(u => u.email.toLowerCase() === e.toLowerCase());
+
+  if (!user) {
+    showAuthErr('login', 'No account found with this email. Please sign up first!');
+    return;
+  }
+  if (user.password !== btoa(p)) {
+    showAuthErr('login', 'Wrong password. Please try again.');
+    return;
+  }
+
+  // Login successful!
+  const btn = document.getElementById('loginBtn');
+  if (btn) btn.classList.add('btn-loading');
+  setTimeout(() => {
+    if (btn) btn.classList.remove('btn-loading');
+    setUser(user.name, user.email);
+    goTo('home'); switchTab('home');
+    showToast('👋 Welcome back, ' + user.name + '!');
+  }, 800);
+}
+
 function doSignup() {
-  const n=document.getElementById('sn').value.trim();
-  const e=document.getElementById('se').value.trim();
-  const p=document.getElementById('sp').value;
-  if (!n||!e||!p) { showToast('Please fill all fields'); return; }
-  setUser(n.split(' ')[0], e);
-  goTo('home'); switchTab('home');
-  showToast('🎉 Welcome to EduSmart, '+userName+'!');
+  const n = document.getElementById('sn').value.trim();
+  const e = document.getElementById('se').value.trim();
+  const p = document.getElementById('sp').value;
+  const pc = document.getElementById('spc').value;
+  const terms = document.getElementById('terms').checked;
+  clearAuthMsg('signup');
+
+  // Validations
+  if (!n || !e || !p || !pc) { showAuthErr('signup', 'Please fill in all fields'); return; }
+  if (n.length < 2) { showAuthErr('signup', 'Please enter your full name'); return; }
+  if (!isValidEmail(e)) { showAuthErr('signup', 'Please enter a valid email address (e.g. you@gmail.com)'); return; }
+  if (p.length < 6) { showAuthErr('signup', 'Password must be at least 6 characters'); return; }
+  if (p !== pc) { showAuthErr('signup', 'Passwords do not match! Please re-enter'); return; }
+  if (!terms) { showAuthErr('signup', 'Please agree to the Terms of Service to continue'); return; }
+
+  // Check if email already registered
+  const users = getRegisteredUsers();
+  if (users.find(u => u.email.toLowerCase() === e.toLowerCase())) {
+    showAuthErr('signup', 'This email is already registered! Please log in instead.');
+    setTimeout(() => swTab('login'), 2000);
+    return;
+  }
+
+  // Save new user
+  const newUser = { name: n.split(' ')[0], fullName: n, email: e, password: btoa(p), joinedAt: new Date().toISOString() };
+  users.push(newUser);
+  saveRegisteredUsers(users);
+
+  // Show loading then redirect
+  const btn = document.getElementById('signupBtn');
+  if (btn) btn.classList.add('btn-loading');
+  showAuthOk('signup', 'Account created successfully! Logging you in...');
+
+  setTimeout(() => {
+    if (btn) btn.classList.remove('btn-loading');
+    setUser(newUser.name, newUser.email);
+    goTo('home'); switchTab('home');
+    showToast('🎉 Welcome to EduSmart, ' + newUser.name + '!');
+  }, 1200);
 }
 function openGooglePicker() { document.getElementById('gpickOverlay').classList.add('on'); }
 function closeGooglePicker() { document.getElementById('gpickOverlay').classList.remove('on'); }
@@ -1399,6 +1693,8 @@ function setUser(name, email) {
   userEmail = email||'student@edusmart.ai';
   localStorage.setItem('es_name', userName);
   localStorage.setItem('es_email', userEmail);
+  // Load saved progress after login
+  setTimeout(loadState, 100);
   ['uav','profAv'].forEach(id=>{
     const el=document.getElementById(id);
     if (el) el.textContent=userName.charAt(0).toUpperCase();
@@ -1415,6 +1711,13 @@ function doLogout() {
   stopSpeech(); closeChat();
   localStorage.removeItem('es_name');
   localStorage.removeItem('es_email');
+  localStorage.removeItem('es_chatHistory');
+  localStorage.removeItem('es_chatPhase');
+  localStorage.removeItem('es_lastTopic');
+  localStorage.removeItem('es_vidWatched');
+  localStorage.removeItem('es_quizTotal');
+  localStorage.removeItem('es_quizCorrect');
+  localStorage.removeItem('es_subjects');
   chatHistory = [];
   chatPhase = 'chat';
   lastExplainedTopic = '';
@@ -1528,11 +1831,13 @@ Rules:
     });
     if (!fullText) throw new Error('empty');
   } catch(e) {
+    console.error('Video gen error:', e.message);
     fullText = `Let us explore ${q} together. This is a fascinating topic that connects to real-world applications all around us. The key principles here involve understanding the fundamental mechanisms and how they interact with each other. When we break this topic down step by step, we can see how each part builds upon the previous one, creating a complete picture of how things work. Understanding this concept deeply will help you excel in your exams and give you genuine insight into how the world operates. Keep asking great questions like this — curiosity is the foundation of all learning!`;
   }
 
   vidWatched++;
   document.getElementById('vidWatched').textContent=vidWatched;
+  saveState();
   setupPlayer(q, fullText);
 }
 
@@ -1715,6 +2020,7 @@ function answerQ(idx) {
   quizTotal++; if (idx===q.ans) quizCorrect++;
   const avg=Math.round((quizCorrect/quizTotal)*100);
   document.getElementById('quizScore').textContent=avg+'%';
+  saveState();
   const fb=document.createElement('div');
   fb.className='qfeedback '+(idx===q.ans?'good':'bad');
   fb.textContent=(idx===q.ans?'✅ Correct! ':'❌ Not quite. ')+q.exp;
@@ -1753,11 +2059,21 @@ let assignmentPending = false;
 function openChat() {
   document.getElementById('chatOverlay').classList.add('on');
   document.getElementById('chatNotif').style.display='none';
-  if (chatHistory.length === 0) {
-    setTimeout(() => {
-      const welcome = `Hi ${userName}! 👋 I'm your EduSmart AI Tutor, powered by **Groq AI** 🆓.\n\nI can help you with **any academic subject** — maths with step-by-step working, science concepts, history analysis, English grammar, coding, and much more.\n\nWhat would you like to learn today? 🎓`;
-      addBotMsg(welcome);
-    }, 300);
+  const msgs = document.getElementById('chatMsgs');
+  // Only render messages if screen is empty
+  if (msgs && msgs.children.length === 0) {
+    if (chatHistory.length > 0) {
+      // Restore previous conversation
+      restoreChatMessages();
+      setTimeout(() => {
+        addBotMsg('👋 Welcome back, ' + userName + '! Continuing from where we left off. Ask me anything! 📚');
+      }, 200);
+    } else {
+      setTimeout(() => {
+        const welcome = `Hi ${userName}! 👋 I'm your EduSmart AI Tutor, powered by **Groq AI** 🆓.\n\nI can help you with **any academic subject** — maths with step-by-step working, science concepts, history analysis, English grammar, coding, and much more.\n\nWhat would you like to learn today? 🎓`;
+        addBotMsg(welcome);
+      }, 300);
+    }
   }
   setTimeout(() => document.getElementById('chatInput').focus(), 500);
 }
@@ -1807,6 +2123,7 @@ async function sendChatMsg() {
   if (handleSpecialInput(msg)) return;
 
   chatHistory.push({ role: 'user', content: msg });
+  saveState();
   showTyping();
   chatTyping = true;
   document.getElementById('chatSendBtn').disabled = true;
@@ -1845,6 +2162,7 @@ Current subject context: ${curSubject}`;
       const cleanReply = reply.replace(/\[EXPLANATION_COMPLETE:.*?\]/g, '').trim();
       chatHistory.push({ role: 'assistant', content: cleanReply });
       addBotMsg(cleanReply);
+      saveState();
       // After a short delay, ask if they want to test themselves
       setTimeout(() => {
         chatPhase = 'awaitQuizYN';
@@ -1853,11 +2171,26 @@ Current subject context: ${curSubject}`;
     } else {
       chatHistory.push({ role: 'assistant', content: reply });
       addBotMsg(reply);
+      saveState();
     }
 
   } catch(err) {
     hideTyping();
-    addBotMsg('⚠️ Connection error. Please check your internet and try again. You can also explore video lessons and quizzes while offline!');
+    const errMsg = err.message || 'Unknown error';
+    let userMsg = '⚠️ ';
+    if (errMsg.includes('Cannot reach server') || errMsg.includes('internet')) {
+      userMsg += 'Cannot reach the server. Please check your internet and try again.';
+    } else if (errMsg.includes('API key') || errMsg.includes('401') || errMsg.includes('auth')) {
+      userMsg += 'AI service not configured. Please contact the app administrator.';
+    } else if (errMsg.includes('rate') || errMsg.includes('429') || errMsg.includes('limit')) {
+      userMsg += 'Too many questions sent! Please wait a minute and try again. 😊';
+    } else if (errMsg.includes('500')) {
+      userMsg += 'Server error. Please wait 30 seconds and try again.';
+    } else {
+      userMsg += 'Something went wrong: ' + errMsg + '\n\nPlease try again!';
+    }
+    addBotMsg(userMsg);
+    console.error('Chat error:', errMsg);
   }
 
   chatTyping = false;
@@ -1895,7 +2228,7 @@ ans is the 0-based index of the correct option. Make questions test deep underst
     hideTyping();
     chatTyping = false;
     document.getElementById('chatSendBtn').disabled = false;
-    addBotMsg('⚠️ Could not generate quiz right now. Try asking me more questions!');
+    addBotMsg('⚠️ Could not generate quiz: ' + (e.message || 'Unknown error') + '\n\nType **quiz** to try again!');
     chatPhase = 'chat';
   }
 }
