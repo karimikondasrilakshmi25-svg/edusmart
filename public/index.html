@@ -681,22 +681,8 @@ input,textarea,select{font-family:var(--fb)}
     <div class="auth-live"><div class="live-dot"></div><span id="authLive">1,20,847</span> students online now</div>
   </div>
   <div class="auth-body">
-    <!-- Live users bar -->
-    <div class="live-users-bar">
-      <div>
-        <div style="font-size:11px;color:var(--ink3);margin-bottom:2px">Total Students Joined</div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <div class="live-pulse"></div>
-          <div class="live-users-count" id="totalUsersCount">0</div>
-        </div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-size:22px">🏆</div>
-        <div style="font-size:10px;color:var(--ink3)">Join them!</div>
-      </div>
-    </div>
 
-    <div class="tab-sw">
+        <div class="tab-sw">
       <button class="tab-b on" id="lt" onclick="swTab('login')">Log In</button>
       <button class="tab-b" id="st" onclick="swTab('signup')">Sign Up</button>
     </div>
@@ -722,9 +708,9 @@ input,textarea,select{font-family:var(--fb)}
           <span style="font-size:12px;color:var(--brand);cursor:pointer" onclick="showForgotPw()">Forgot password?</span>
         </div>
         <div class="divrow"><span>or</span></div>
-        <button class="gbtn" onclick="openGooglePicker()">
+        <button class="gbtn" onclick="showToast('Google Sign-In coming soon! Use email for now.')" style="opacity:.6;cursor:default">
           <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Continue with Google
+          Google Sign-In — Coming Soon 🔜
         </button>
       </div>
     </div>
@@ -764,9 +750,9 @@ input,textarea,select{font-family:var(--fb)}
       <div class="abw">
         <button class="btn btn-brand" style="width:100%" id="signupBtn" onclick="doSignup()">Create Account →</button>
         <div class="divrow"><span>or</span></div>
-        <button class="gbtn" onclick="openGooglePicker()">
+        <button class="gbtn" onclick="showToast('Google Sign-Up coming soon! Use email for now.')" style="opacity:.6;cursor:default">
           <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Sign up with Google
+          Google Sign-Up — Coming Soon 🔜
         </button>
       </div>
     </div>
@@ -781,15 +767,15 @@ input,textarea,select{font-family:var(--fb)}
     <div class="gpick-accounts">
       <div class="gpick-acc" onclick="googleSignIn('Arjun Sharma','arjun.sharma@gmail.com')">
         <div class="gpick-av" style="background:#4285F4">A</div>
-        <div class="gpick-info"><div class="gpick-name">Arjun Sharma</div><div class="gpick-email">arjun.sharma@gmail.com</div></div>
+        <div class="gpick-info"><div class="gpick-name">Arjun Sharma</div><div class="gpick-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d2b3a0b8a7bcfca1bab3a0bfb392b5bfb3bbbefcb1bdbf">[email&#160;protected]</a></div></div>
       </div>
       <div class="gpick-acc" onclick="googleSignIn('Priya Reddy','priya.reddy@gmail.com')">
         <div class="gpick-av" style="background:#34A853">P</div>
-        <div class="gpick-info"><div class="gpick-name">Priya Reddy</div><div class="gpick-email">priya.reddy@gmail.com</div></div>
+        <div class="gpick-info"><div class="gpick-name">Priya Reddy</div><div class="gpick-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ff8f8d96869ed18d9a9b9b86bf98929e9693d19c9092">[email&#160;protected]</a></div></div>
       </div>
       <div class="gpick-acc" onclick="googleSignIn('Rahul Kumar','rahul.kumar@gmail.com')">
         <div class="gpick-av" style="background:#EA4335">R</div>
-        <div class="gpick-info"><div class="gpick-name">Rahul Kumar</div><div class="gpick-email">rahul.kumar@gmail.com</div></div>
+        <div class="gpick-info"><div class="gpick-name">Rahul Kumar</div><div class="gpick-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3f4d5e574a5311544a525e4d7f58525e5653115c5052">[email&#160;protected]</a></div></div>
       </div>
     </div>
     <button class="gpick-cancel" onclick="closeGooglePicker()">Cancel</button>
@@ -894,12 +880,13 @@ input,textarea,select{font-family:var(--fb)}
       <div class="stat-card"><div class="stat-num" id="subLearned">0</div><div class="stat-lbl">Subjects</div></div>
     </div>
     <div class="prof-sec-title">Badges Earned</div>
-    <div class="badge-grid">
-      <div class="badge-item"><div class="badge-ico">🌟</div><div class="badge-nm">First Video</div></div>
-      <div class="badge-item"><div class="badge-ico">🎯</div><div class="badge-nm">Quiz Pro</div></div>
-      <div class="badge-item"><div class="badge-ico">🔥</div><div class="badge-nm">7-Day Streak</div></div>
-      <div class="badge-item"><div class="badge-ico">🧠</div><div class="badge-nm">Science Fan</div></div>
+    <div class="badge-grid" id="badgeGrid">
+      <div class="badge-item" style="opacity:.3;border:1.5px dashed var(--border)"><div class="badge-ico">🔒</div><div class="badge-nm">Locked</div></div>
+      <div class="badge-item" style="opacity:.3;border:1.5px dashed var(--border)"><div class="badge-ico">🔒</div><div class="badge-nm">Locked</div></div>
+      <div class="badge-item" style="opacity:.3;border:1.5px dashed var(--border)"><div class="badge-ico">🔒</div><div class="badge-nm">Locked</div></div>
+      <div class="badge-item" style="opacity:.3;border:1.5px dashed var(--border)"><div class="badge-ico">🔒</div><div class="badge-nm">Locked</div></div>
     </div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:16px;text-align:center">Complete activities to earn badges!</div>
     <div class="prof-sec-title">Voice Language</div>
     <div class="lang-selector-wrap" id="langSelector"></div>
     <div class="prof-sec-title">Settings</div>
@@ -1146,32 +1133,44 @@ input,textarea,select{font-family:var(--fb)}
 
 <div class="toast" id="toastEl"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ══════════════════════════
    REAL AI PROXY HELPER
    Calls Groq backend — 100% FREE, API key safe on server!
 ══════════════════════════ */
-async function callClaude({ system, messages, max_tokens = 1200 }) {
+async function callClaude({ system, messages, max_tokens = 1000 }) {
+  const recentMsgs = (messages || []).slice(-6).map(m => ({
+    role: m.role === 'assistant' ? 'assistant' : 'user',
+    content: String(m.content || '').slice(0, 1500)
+  }));
+  const cleanSystem = (system || '').slice(0, 1500);
+
+  // Always use /api/chat backend (works on Render + localhost)
+  let resp;
   try {
-    const resp = await fetch('/api/chat', {
+    resp = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system, messages, max_tokens })
+      body: JSON.stringify({ system: cleanSystem, messages: recentMsgs, max_tokens })
     });
-    const data = await resp.json().catch(() => ({ error: 'Invalid server response' }));
-    if (!resp.ok) {
-      throw new Error(data.error || 'Server error ' + resp.status);
-    }
-    if (!data.text) throw new Error('Empty response from AI');
-    return data.text;
-  } catch(e) {
-    // Re-throw with clear message
-    if (e.message.includes('Failed to fetch') || e.message.includes('NetworkError')) {
-      throw new Error('Cannot reach server. Please check your internet connection.');
-    }
-    throw e;
+  } catch(networkErr) {
+    throw new Error('No internet connection. Please check and try again.');
   }
+
+  let data;
+  try {
+    const text = await resp.text();
+    data = JSON.parse(text);
+  } catch(e) {
+    throw new Error('Server returned invalid response. Please try again in 30 seconds.');
+  }
+
+  if (!resp.ok) throw new Error(data.error || 'Server error ' + resp.status);
+  if (!data.text) throw new Error('AI returned empty response. Please try again!');
+  return data.text;
 }
+
+
 /* ══════════════════════════
    STORAGE HELPERS — Save everything!
 ══════════════════════════ */
@@ -1221,6 +1220,8 @@ function loadState() {
       document.getElementById('subLearned').textContent = subjectsSeen.size;
     }
   } catch(e) { console.log('Load error:', e); }
+  renderBadges();
+  updateStreak();
 }
 
 function restoreChatMessages() {
@@ -1241,6 +1242,70 @@ function restoreChatMessages() {
     const qa = document.getElementById('chatQuickArea');
     if (qa) qa.style.display = 'none';
   }
+}
+
+/* ══════════════════════════
+   BADGE SYSTEM — Real earned badges
+══════════════════════════ */
+const BADGE_DEFS = [
+  { id:'first_video',  ico:'🌟', nm:'First Lesson',  desc:'Watch your first lesson',      check: ()=> vidWatched >= 1 },
+  { id:'five_videos',  ico:'📺', nm:'Video Star',    desc:'Watch 5 lessons',              check: ()=> vidWatched >= 5 },
+  { id:'ten_videos',   ico:'🎬', nm:'Binge Learner', desc:'Watch 10 lessons',             check: ()=> vidWatched >= 10 },
+  { id:'first_quiz',   ico:'🎯', nm:'Quiz Starter',  desc:'Complete your first quiz',     check: ()=> quizTotal >= 1 },
+  { id:'quiz_pro',     ico:'🏆', nm:'Quiz Pro',      desc:'Score 80%+ on a quiz',         check: ()=> quizTotal > 0 && Math.round((quizCorrect/quizTotal)*100) >= 80 },
+  { id:'five_subj',    ico:'🧠', nm:'All Rounder',   desc:'Study 5 different subjects',   check: ()=> subjectsSeen.size >= 5 },
+  { id:'streak_3',     ico:'🔥', nm:'On Fire!',      desc:'Study 3 days in a row',        check: ()=> getStreak() >= 3 },
+  { id:'streak_7',     ico:'💎', nm:'Diamond',       desc:'Study 7 days in a row',        check: ()=> getStreak() >= 7 },
+];
+
+function getEarnedBadges() {
+  try { return JSON.parse(localStorage.getItem('es_badges') || '[]'); } catch(e) { return []; }
+}
+function getStreak() {
+  try { return parseInt(localStorage.getItem('es_streak') || '0'); } catch(e) { return 0; }
+}
+function updateStreak() {
+  const today = new Date().toDateString();
+  const lastStudy = localStorage.getItem('es_lastStudyDate');
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  let streak = parseInt(localStorage.getItem('es_streak') || '0');
+  if (lastStudy === today) return; // already counted today
+  if (lastStudy === yesterday) { streak++; } else { streak = 1; }
+  localStorage.setItem('es_streak', streak);
+  localStorage.setItem('es_lastStudyDate', today);
+  // Update streak display
+  const sd = document.getElementById('streakDays');
+  if (sd) sd.textContent = streak;
+}
+function checkAndAwardBadges() {
+  updateStreak();
+  const earned = getEarnedBadges();
+  let newBadge = false;
+  BADGE_DEFS.forEach(b => {
+    if (!earned.includes(b.id) && b.check()) {
+      earned.push(b.id);
+      newBadge = true;
+      showToast('🏅 Badge earned: ' + b.nm + '!');
+    }
+  });
+  if (newBadge) localStorage.setItem('es_badges', JSON.stringify(earned));
+  renderBadges();
+}
+function renderBadges() {
+  const el = document.getElementById('badgeGrid');
+  if (!el) return;
+  const earned = getEarnedBadges();
+  const earnedDefs = BADGE_DEFS.filter(b => earned.includes(b.id));
+  const lockedDefs = BADGE_DEFS.filter(b => !earned.includes(b.id));
+  // Show earned first, then locked
+  const all = [...earnedDefs, ...lockedDefs].slice(0, 8);
+  el.innerHTML = all.map(b => {
+    const isEarned = earned.includes(b.id);
+    return `<div class="badge-item" style="${isEarned ? '' : 'opacity:.3;border:1.5px dashed var(--border)'}" title="${b.desc}">
+      <div class="badge-ico">${isEarned ? b.ico : '🔒'}</div>
+      <div class="badge-nm">${isEarned ? b.nm : b.nm}</div>
+    </div>`;
+  }).join('');
 }
 
 /* ══════════════════════════
@@ -1401,7 +1466,6 @@ window.addEventListener('load', () => {
   const savedName = localStorage.getItem('es_name');
   const savedEmail = localStorage.getItem('es_email');
 
-  updateTotalUsersDisplay();
   setTimeout(() => {
     if (savedName && savedEmail) {
       setUser(savedName, savedEmail);
@@ -1597,7 +1661,6 @@ function getRegisteredUsers() {
 }
 function saveRegisteredUsers(users) {
   localStorage.setItem('es_users', JSON.stringify(users));
-  updateTotalUsersDisplay();
 }
 function updateTotalUsersDisplay() {
   const users = getRegisteredUsers();
@@ -1754,13 +1817,40 @@ function setVidTab(s) { activeVidTab=s; renderVidLib(); }
 function renderRecentVideos() {
   const el=document.getElementById('recentList');
   if (!el) return;
-  el.innerHTML=ALL_VIDS.slice(0,5).map(v=>
-    `<div class="vc" onclick="qa('${escHtml(v.q)}','${v.subj}','${v.icon}','${v.key}')">
-      <div class="vth" style="background:${v.bg}">${v.icon}</div>
-      <div class="vi"><div class="vtit">${v.q}</div><div class="vmet">${v.subj} · AI Voice · Claude</div></div>
+  // Load user-generated lessons first, then fill with defaults
+  const stored = getRecentLessons();
+  const defaults = ALL_VIDS.slice(0,5);
+  const combined = [...stored, ...defaults].slice(0,6);
+  if (combined.length === 0) {
+    el.innerHTML = '<div style="text-align:center;color:var(--ink3);padding:20px;font-size:13px">No lessons yet — search a topic to get started!</div>';
+    return;
+  }
+  el.innerHTML = combined.map(v=>
+    `<div class="vc" onclick="qa('${escHtml(v.q)}','${v.subj||"General"}','${v.icon||"📚"}','${v.key||"default"}')">
+      <div class="vth" style="background:${v.bg||"#ece9ff"}">${v.icon||"📚"}</div>
+      <div class="vi">
+        <div class="vtit">${escHtml(v.q)}</div>
+        <div class="vmet">${v.subj||"General"} · ${v.isCustom?"Your lesson":"AI Voice"} · Groq AI</div>
+      </div>
       <button class="vplay">▶</button>
     </div>`
   ).join('');
+}
+
+function getRecentLessons() {
+  try { return JSON.parse(localStorage.getItem('es_recent_lessons') || '[]'); } catch(e) { return []; }
+}
+
+function addRecentLesson(q, subj, icon, key, bg) {
+  const lessons = getRecentLessons();
+  // Remove duplicate if exists
+  const filtered = lessons.filter(l => l.q !== q);
+  // Add to front
+  filtered.unshift({ q, subj: subj||'General', icon: icon||'📚', key: key||'default', bg: bg||'#ece9ff', isCustom: true });
+  // Keep only last 10
+  const trimmed = filtered.slice(0, 10);
+  localStorage.setItem('es_recent_lessons', JSON.stringify(trimmed));
+  renderRecentVideos();
 }
 
 /* ══════════════════════════
@@ -1837,8 +1927,20 @@ Rules:
 
   vidWatched++;
   document.getElementById('vidWatched').textContent=vidWatched;
+  // Save to recent lessons
+  addRecentLesson(q, curSubject, curIcon, curKey, getSubjectBg(curSubject));
+  checkAndAwardBadges();
   saveState();
   setupPlayer(q, fullText);
+}
+
+function getSubjectBg(subj) {
+  const map = {
+    'Science':'#e0f9f5','Maths':'#ece9ff','Physics':'#f3e8ff',
+    'Chemistry':'#dcfce7','Biology':'#fce7f3','History':'#fff8e0',
+    'English':'#ffe9e9','Comp. Sci.':'#e0f2fe','General':'#f5f4ff'
+  };
+  return map[subj] || '#f5f4ff';
 }
 
 function openModal(q) {
@@ -2119,7 +2221,6 @@ async function sendChatMsg() {
   document.getElementById('chatQuickArea').style.display = 'none';
   addUserMsg(msg);
 
-  // Handle special phases first (quiz/assignment Y/N)
   if (handleSpecialInput(msg)) return;
 
   chatHistory.push({ role: 'user', content: msg });
@@ -2129,33 +2230,31 @@ async function sendChatMsg() {
   document.getElementById('chatSendBtn').disabled = true;
 
   try {
-    const systemPrompt = `You are EduSmart AI Tutor — a knowledgeable, warm, and encouraging academic tutor powered by Groq AI.
+    const systemPrompt = `You are EduSmart AI Tutor powered by Groq AI (FREE!).
+Help students deeply understand any subject.
 
-Your role:
-- Give DEEP, ACCURATE answers at school/college/competitive-exam level
-- For maths: show full step-by-step working
-- For science: explain mechanisms, principles, equations with real examples
-- For history: give causes, key figures, chronology, effects, significance
-- For coding: provide working code with clear explanations
-- Use analogies and real-world examples to make concepts memorable
-- Be warm, enthusiastic, and encouraging
-- Format clearly with numbered steps for multi-step problems
-- NEVER say you cannot help with academic topics
+Rules:
+- Give DEEP accurate answers at school/college/exam level
+- Maths: full step-by-step working
+- Science: mechanisms, equations, real examples  
+- History: causes, key figures, dates, effects
+- Coding: working code with comments
+- Use simple language and real examples
+- Be warm, encouraging and enthusiastic
+- NEVER refuse academic questions
 
-IMPORTANT: After you fully explain a topic (not for casual questions or follow-ups), end your response with EXACTLY this line on its own:
-[EXPLANATION_COMPLETE: <topic name in 3-5 words>]
+After explaining a NEW topic fully, end with EXACTLY this on its own line:
+[EXPLANATION_COMPLETE: topic name here]
+Only add this after full explanations, not for short answers.
 
-Only include this marker when you have finished a substantial explanation of a new topic the student asked about. Do NOT include it for quick answers, clarifications, or conversational replies.
+Student: ${userName} | Subject: ${curSubject}`;
 
-Student name: ${userName}
-Current subject context: ${curSubject}`;
+    const recentHistory = chatHistory.slice(-10);
+    const reply = await callClaude({ system: systemPrompt, messages: recentHistory, max_tokens: 1200 });
 
-    const reply = await callClaude({ system: systemPrompt, messages: chatHistory, max_tokens: 1200 });
-    if (!reply) throw new Error('Empty response');
-
+    if (!reply) throw new Error('empty');
     hideTyping();
 
-    // Check for explanation complete marker
     const markerMatch = reply.match(/\[EXPLANATION_COMPLETE:\s*(.+?)\]/);
     if (markerMatch) {
       lastExplainedTopic = markerMatch[1].trim();
@@ -2163,10 +2262,11 @@ Current subject context: ${curSubject}`;
       chatHistory.push({ role: 'assistant', content: cleanReply });
       addBotMsg(cleanReply);
       saveState();
-      // After a short delay, ask if they want to test themselves
       setTimeout(() => {
         chatPhase = 'awaitQuizYN';
-        addBotMsg(`🎯 Great! You just learned about **${lastExplainedTopic}**.\n\n**Would you like to test yourself?** I'll give you some MCQ/short-answer questions to check your understanding.\n\nJust say **Yes** or **No**! 😊`);
+        addBotMsg('Great! You learned about **' + lastExplainedTopic + '**!\n\n**Want to test yourself?** Say **Yes** for a 5-question quiz or **No** to continue!');
+
+
       }, 600);
     } else {
       chatHistory.push({ role: 'assistant', content: reply });
@@ -2176,21 +2276,26 @@ Current subject context: ${curSubject}`;
 
   } catch(err) {
     hideTyping();
-    const errMsg = err.message || 'Unknown error';
-    let userMsg = '⚠️ ';
-    if (errMsg.includes('Cannot reach server') || errMsg.includes('internet')) {
-      userMsg += 'Cannot reach the server. Please check your internet and try again.';
-    } else if (errMsg.includes('API key') || errMsg.includes('401') || errMsg.includes('auth')) {
-      userMsg += 'AI service not configured. Please contact the app administrator.';
-    } else if (errMsg.includes('rate') || errMsg.includes('429') || errMsg.includes('limit')) {
-      userMsg += 'Too many questions sent! Please wait a minute and try again. 😊';
-    } else if (errMsg.includes('500')) {
-      userMsg += 'Server error. Please wait 30 seconds and try again.';
-    } else {
-      userMsg += 'Something went wrong: ' + errMsg + '\n\nPlease try again!';
+    if (chatHistory.length > 0 && chatHistory[chatHistory.length-1].role === 'user') {
+      chatHistory.pop();
     }
-    addBotMsg(userMsg);
-    console.error('Chat error:', errMsg);
+    const e = (err.message || 'Unknown error').toLowerCase();
+    console.error('Chat error:', err.message);
+    let errDisplay = '';
+    if (e.includes('failed to fetch') || e.includes('networkerror') || e.includes('network')) {
+      errDisplay = 'No internet connection! Please check your internet and try again.';
+    } else if (e.includes('429') || e.includes('rate') || e.includes('limit')) {
+      errDisplay = 'Too many requests! Please wait 1 minute and try again.';
+    } else if (e.includes('401') || e.includes('key') || e.includes('auth')) {
+      errDisplay = 'AI key error. Please contact the app admin.';
+    } else if (e.includes('500') || e.includes('server')) {
+      errDisplay = 'Server error! Please wait 30 seconds and try again.';
+    } else if (e.includes('empty')) {
+      errDisplay = 'AI returned empty response. Please try asking again!';
+    } else {
+      errDisplay = 'Error: ' + err.message + ' — Please try again!';
+    }
+    addBotMsg('Sorry! ' + errDisplay);
   }
 
   chatTyping = false;
@@ -2198,7 +2303,6 @@ Current subject context: ${curSubject}`;
   document.getElementById('chatInput').focus();
 }
 
-/* ── Generate 5 quiz questions via AI ── */
 async function startChatQuiz() {
   showTyping();
   chatTyping = true;
@@ -2471,6 +2575,17 @@ function renderLangSelector() {
     `<div class="lang-opt${l.lang===curLang?' on':''}" onclick="setAppLang('${l.lang}','${l.label}','${l.name}',this)">${l.flag} ${l.name}</div>`
   ).join('');
 }
+function setAppLang(lang, label, name, el) {
+  curLang=lang; curLabel=label;
+  localStorage.setItem('es_lang', lang);
+  localStorage.setItem('es_label', label);
+  document.querySelectorAll('.lang-opt').forEach(e=>e.classList.remove('on'));
+  el.classList.add('on');
+  syncLangPill();
+  showToast('Voice: '+name);
+  document.querySelectorAll('.lang-card').forEach(c=>c.classList.toggle('sel',c.dataset.lang===lang));
+  if (isPlaying) { stopSpeech(); setTimeout(startPlay,200); }
+}
 
 /* ══════════════════════════
    TOAST
@@ -2482,6 +2597,7 @@ function showToast(msg) {
   el.classList.add('on');
   clearTimeout(toastTimeout);
   toastTimeout=setTimeout(()=>{ el.classList.remove('on'); }, 2800);
-}</script>
+}
+</script>
 </body>
 </html>
