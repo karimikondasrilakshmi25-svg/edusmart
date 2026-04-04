@@ -110,7 +110,7 @@ app.post('/api/chat', async (req, res) => {
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: groqMessages,
-        max_tokens: Math.min(Number(max_tokens) || 1000, 1500),
+        max_tokens: Math.min(Number(max_tokens) || 1000, 1000),
         temperature: 0.7
       })
     });
