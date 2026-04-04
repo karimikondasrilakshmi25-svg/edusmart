@@ -1002,33 +1002,203 @@ input,textarea,select{font-family:var(--fb)}
 
     <!-- EXAM PREP QUICK CARDS -->
     <div class="sec" style="margin-top:20px">
-      <div class="sech"><h3>📝 Exam Prep</h3><span class="sall" onclick="sendQuick('What are the most important topics for board exams?')">Ask AI →</span></div>
-      <div class="quick-grid">
-        <div class="quick-card" onclick="qa('Explain all important topics for JEE physics preparation','Physics','⚡','newton')" style="border-color:#ede9fe">
-          <div class="quick-card-ico">🎯</div>
-          <div class="quick-card-title">JEE Physics Key Topics</div>
-          <div class="quick-card-tag" style="background:#ede9fe;color:#6d28d9">Physics</div>
+      <div class="sech"><h3>📝 Exam Prep &amp; Past Papers</h3><span class="sall" onclick="openChat();sendQuick('What are the most important topics for my board exam?')">Ask AI →</span></div>
+
+      <!-- Board Tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px">
+        <button onclick="switchExamTab('cbse',this)" id="etab-cbse" style="flex-shrink:0;padding:7px 16px;border-radius:50px;border:1.5px solid var(--brand);background:var(--brand);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fh)">CBSE</button>
+        <button onclick="switchExamTab('state',this)" id="etab-state" style="flex-shrink:0;padding:7px 16px;border-radius:50px;border:1.5px solid var(--border);background:var(--card);color:var(--ink2);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fh)">State Board</button>
+        <button onclick="switchExamTab('jee',this)" id="etab-jee" style="flex-shrink:0;padding:7px 16px;border-radius:50px;border:1.5px solid var(--border);background:var(--card);color:var(--ink2);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fh)">JEE / NEET</button>
+      </div>
+
+      <!-- CBSE Tab -->
+      <div id="etab-cbse-content" class="quick-grid">
+        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 10 Maths board questions with full step-by-step solutions.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#5046e4">PYQ</div>
+          <div class="quick-card-ico">📐</div>
+          <div class="quick-card-title">Class 10 Maths</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">CBSE</div>
         </div>
-        <div class="quick-card" onclick="qa('Important biology topics for NEET preparation and exam','Biology','🫀','heart')" style="border-color:#fce7f3">
-          <div class="quick-card-new">Hot</div>
-          <div class="quick-card-ico">🏥</div>
-          <div class="quick-card-title">NEET Biology Topics</div>
-          <div class="quick-card-tag" style="background:#fce7f3;color:#9d174d">Biology</div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 10 Science board questions with answers - Physics, Chemistry, Biology.')" style="border-color:#e0f9f5">
+          <div class="quick-card-new" style="background:#5046e4">PYQ</div>
+          <div class="quick-card-ico">🔬</div>
+          <div class="quick-card-title">Class 10 Science</div>
+          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">CBSE</div>
         </div>
-        <div class="quick-card" onclick="qa('Class 10 maths important questions and topics for board exam','Maths','📐','pythagoras')" style="border-color:#ece9ff">
-          <div class="quick-card-ico">📊</div>
-          <div class="quick-card-title">Class 10 Maths Boards</div>
-          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">Maths</div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 10 Social Science board questions with answers from History, Geography, Civics and Economics.')" style="border-color:#fff8e0">
+          <div class="quick-card-new" style="background:#5046e4">PYQ</div>
+          <div class="quick-card-ico">🌍</div>
+          <div class="quick-card-title">Class 10 Social Science</div>
+          <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">CBSE</div>
         </div>
-        <div class="quick-card" onclick="qa('Class 12 chemistry important chapters and topics for boards','Chemistry','⚗️','periodic')" style="border-color:#dcfce7">
-          <div class="quick-card-new">New</div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 10 English board questions including reading comprehension, grammar, writing and literature.')" style="border-color:#ffe9e9">
+          <div class="quick-card-new" style="background:#5046e4">PYQ</div>
+          <div class="quick-card-ico">📚</div>
+          <div class="quick-card-title">Class 10 English</div>
+          <div class="quick-card-tag" style="background:#ffe9e9;color:#a83030">CBSE</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 12 Physics board questions with solutions - Electrostatics, Optics, Modern Physics.')" style="border-color:#f3e8ff">
+          <div class="quick-card-new" style="background:#5046e4">PYQ</div>
+          <div class="quick-card-ico">⚡</div>
+          <div class="quick-card-title">Class 12 Physics</div>
+          <div class="quick-card-tag" style="background:#f3e8ff;color:#6d28d9">CBSE</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 12 Chemistry board questions with answers - Physical, Organic, Inorganic.')" style="border-color:#dcfce7">
+          <div class="quick-card-new" style="background:#5046e4">PYQ</div>
           <div class="quick-card-ico">⚗️</div>
           <div class="quick-card-title">Class 12 Chemistry</div>
-          <div class="quick-card-tag" style="background:#dcfce7;color:#166534">Chemistry</div>
+          <div class="quick-card-tag" style="background:#dcfce7;color:#166534">CBSE</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 12 Biology board questions with answers - Genetics, Reproduction, Biotechnology.')" style="border-color:#fce7f3">
+          <div class="quick-card-new" style="background:#5046e4">PYQ</div>
+          <div class="quick-card-ico">🧬</div>
+          <div class="quick-card-title">Class 12 Biology</div>
+          <div class="quick-card-tag" style="background:#fce7f3;color:#9d174d">CBSE</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 12 Maths board questions with solutions - Calculus, Matrices, Probability.')" style="border-color:#fff8e0">
+          <div class="quick-card-new" style="background:#5046e4">PYQ</div>
+          <div class="quick-card-ico">📊</div>
+          <div class="quick-card-title">Class 12 Maths</div>
+          <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">CBSE</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me all important Maths and Physics formulas for CBSE Class 9 and 10 board exams, chapter by chapter with units.')" style="border-color:#fef9c3">
+          <div class="quick-card-ico">📌</div>
+          <div class="quick-card-title">Formula Sheet</div>
+          <div class="quick-card-tag" style="background:#fef9c3;color:#92400e">Class 9-10</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('What is the chapter-wise mark weightage for CBSE Class 10 board exam 2025? List for Maths, Science, Social Science and English.')" style="border-color:#e0f2fe">
+          <div class="quick-card-ico">🎯</div>
+          <div class="quick-card-title">Mark Weightage</div>
+          <div class="quick-card-tag" style="background:#e0f2fe;color:#0369a1">Class 10</div>
+        </div>
+      </div>
+
+      <!-- State Board Tab (hidden by default) -->
+      <div id="etab-state-content" class="quick-grid" style="display:none">
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 6 student. Give me 10 important questions with answers for Maths - Fractions, Decimals, Basic Geometry and Algebra.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#14b8a6">6th</div>
+          <div class="quick-card-ico">📐</div>
+          <div class="quick-card-title">Class 6 Maths</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 6 student. Give me 10 important questions with answers for Science - Plants, Animals, Food, Body, Basic Physics.')" style="border-color:#e0f9f5">
+          <div class="quick-card-new" style="background:#14b8a6">6th</div>
+          <div class="quick-card-ico">🌿</div>
+          <div class="quick-card-title">Class 6 Science</div>
+          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 7 student. Give me 10 important questions with answers for Maths - Integers, Fractions, Lines and Angles, Triangles, Data Handling.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#14b8a6">7th</div>
+          <div class="quick-card-ico">📐</div>
+          <div class="quick-card-title">Class 7 Maths</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 7 student. Give me 10 important questions with answers for Science - Nutrition, Heat, Acids and Bases, Weather, Motion and Time.')" style="border-color:#e0f9f5">
+          <div class="quick-card-new" style="background:#14b8a6">7th</div>
+          <div class="quick-card-ico">🔬</div>
+          <div class="quick-card-title">Class 7 Science</div>
+          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 8 student. Give me 10 important questions with answers for Maths - Rational Numbers, Squares, Cubes, Algebraic Expressions, Mensuration.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#f59e0b">8th</div>
+          <div class="quick-card-ico">📐</div>
+          <div class="quick-card-title">Class 8 Maths</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 8 student. Give me 10 important questions with answers for Science - Crop Production, Microorganisms, Combustion, Cell, Force and Pressure.')" style="border-color:#e0f9f5">
+          <div class="quick-card-new" style="background:#f59e0b">8th</div>
+          <div class="quick-card-ico">🔬</div>
+          <div class="quick-card-title">Class 8 Science</div>
+          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 9 student. Give me 10 important exam questions with answers for Maths - Number Systems, Polynomials, Triangles, Linear Equations, Statistics.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#ef4444">9th</div>
+          <div class="quick-card-ico">📐</div>
+          <div class="quick-card-title">Class 9 Maths</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 9 student. Give me 10 important exam questions with answers for Science - Matter, Atoms, Motion, Gravitation, Sound, Cell Biology.')" style="border-color:#e0f9f5">
+          <div class="quick-card-new" style="background:#ef4444">9th</div>
+          <div class="quick-card-ico">🔬</div>
+          <div class="quick-card-title">Class 9 Science</div>
+          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 9 student. Give me 10 important questions with answers for Social Studies - History India, Geography, Civics, Economics.')" style="border-color:#fff8e0">
+          <div class="quick-card-new" style="background:#ef4444">9th</div>
+          <div class="quick-card-ico">🌍</div>
+          <div class="quick-card-title">Class 9 Social Studies</div>
+          <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 10 student. Give me 10 important exam questions with full solutions for Maths - Real Numbers, Quadratics, Triangles, Trigonometry, Statistics.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#5046e4">10th</div>
+          <div class="quick-card-ico">📐</div>
+          <div class="quick-card-title">Class 10 Maths</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 10 student. Give me 10 important exam questions with answers for Science - Chemical Reactions, Acids, Metals, Light, Electricity, Reproduction.')" style="border-color:#e0f9f5">
+          <div class="quick-card-new" style="background:#5046e4">10th</div>
+          <div class="quick-card-ico">🔬</div>
+          <div class="quick-card-title">Class 10 Science</div>
+          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 10 student. Give me 10 important questions with answers for Social Studies - Indian History, World History, Geography and Civics.')" style="border-color:#fff8e0">
+          <div class="quick-card-new" style="background:#5046e4">10th</div>
+          <div class="quick-card-ico">🌍</div>
+          <div class="quick-card-title">Class 10 Social Studies</div>
+          <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">State Board</div>
+        </div>
+      </div>
+
+      <!-- JEE/NEET Tab (hidden by default) -->
+      <div id="etab-jee-content" class="quick-grid" style="display:none">
+        <div class="quick-card" onclick="openChat();sendQuick('Give me top 15 most important JEE Main Physics previous year questions with solutions and shortcuts.')" style="border-color:#f3e8ff">
+          <div class="quick-card-new" style="background:#ef4444">JEE</div>
+          <div class="quick-card-ico">⚡</div>
+          <div class="quick-card-title">JEE Physics PYQs</div>
+          <div class="quick-card-tag" style="background:#f3e8ff;color:#6d28d9">JEE Main</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me top 15 most important JEE Main Chemistry previous year questions with answers and shortcuts.')" style="border-color:#dcfce7">
+          <div class="quick-card-new" style="background:#ef4444">JEE</div>
+          <div class="quick-card-ico">⚗️</div>
+          <div class="quick-card-title">JEE Chemistry PYQs</div>
+          <div class="quick-card-tag" style="background:#dcfce7;color:#166534">JEE Main</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me top 15 most important JEE Main Maths previous year questions with solutions and shortcuts.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#ef4444">JEE</div>
+          <div class="quick-card-ico">📊</div>
+          <div class="quick-card-title">JEE Maths PYQs</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">JEE Main</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me top 15 most important NEET Biology previous year questions with correct answers and explanations.')" style="border-color:#fce7f3">
+          <div class="quick-card-new" style="background:#ef4444">NEET</div>
+          <div class="quick-card-ico">🧬</div>
+          <div class="quick-card-title">NEET Biology PYQs</div>
+          <div class="quick-card-tag" style="background:#fce7f3;color:#9d174d">NEET</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me top 10 most important NEET Physics previous year questions with answers.')" style="border-color:#f3e8ff">
+          <div class="quick-card-new" style="background:#ef4444">NEET</div>
+          <div class="quick-card-ico">⚡</div>
+          <div class="quick-card-title">NEET Physics PYQs</div>
+          <div class="quick-card-tag" style="background:#f3e8ff;color:#6d28d9">NEET</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me top 10 most important NEET Chemistry previous year questions with answers.')" style="border-color:#dcfce7">
+          <div class="quick-card-new" style="background:#ef4444">NEET</div>
+          <div class="quick-card-ico">⚗️</div>
+          <div class="quick-card-title">NEET Chemistry PYQs</div>
+          <div class="quick-card-tag" style="background:#dcfce7;color:#166534">NEET</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give me complete JEE Mains important formulas and shortcuts for Physics, Chemistry and Maths. Organize chapter by chapter.')" style="border-color:#fef9c3">
+          <div class="quick-card-ico">📌</div>
+          <div class="quick-card-title">JEE Formula Sheet</div>
+          <div class="quick-card-tag" style="background:#fef9c3;color:#92400e">JEE Main</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('What is the complete syllabus and chapter-wise weightage for JEE Main 2025 in Physics, Chemistry and Maths?')" style="border-color:#e0f2fe">
+          <div class="quick-card-ico">🎯</div>
+          <div class="quick-card-title">JEE Syllabus 2025</div>
+          <div class="quick-card-tag" style="background:#e0f2fe;color:#0369a1">JEE</div>
         </div>
       </div>
     </div>
-
     <!-- RECENT VIDEOS -->
     <div class="sec" style="margin-top:20px;padding-bottom:100px">
       <div class="sech"><h3>📺 Continue Learning</h3><span class="sall" onclick="switchTab('videos')">Library →</span></div>
@@ -2554,7 +2724,19 @@ function openChat() {
       }, 200);
     } else {
       setTimeout(() => {
-        const welcome = `Hi ${userName}! 👋 I'm your EduSmart AI Tutor, powered by **Groq AI** 🆓.\n\nI can help you with **any academic subject** — maths with step-by-step working, science concepts, history analysis, English grammar, coding, and much more.\n\nWhat would you like to learn today? 🎓`;
+        const welcome = `Hey ${userName}! 👋 So happy to see you here!
+
+I am **EduSmart AI** - your personal tutor for **all boards** (CBSE, ICSE, State Boards) and **all classes** (6th to 12th)! 🎓
+
+I can help you with:
+📐 **Maths** - step-by-step solutions
+🔬 **Science** - clear explanations
+📝 **Past Year Questions** - CBSE, ICSE, State Boards
+🌍 **Social Studies, History, Geography**
+📚 **English Grammar & Writing**
+🧬 **Biology, Chemistry, Physics**
+
+Just ask me anything - even say hi! I am here to help. What shall we study today? 🚀`;
         addBotMsg(welcome);
       }, 300);
     }
@@ -2571,6 +2753,20 @@ function autoResize(ta) {
   ta.style.height=Math.min(ta.scrollHeight,120)+'px';
 }
 function sendQuick(q) { document.getElementById('chatInput').value=q; sendChatMsg(); }
+
+function switchExamTab(tab, btn) {
+  ['cbse','state','jee'].forEach(t => {
+    const content = document.getElementById('etab-'+t+'-content');
+    const button  = document.getElementById('etab-'+t);
+    if (content) content.style.display = t === tab ? 'grid' : 'none';
+    if (button) {
+      button.style.background = t === tab ? 'var(--brand)' : 'var(--card)';
+      button.style.color = t === tab ? '#fff' : 'var(--ink2)';
+      button.style.borderColor = t === tab ? 'var(--brand)' : 'var(--border)';
+    }
+  });
+}
+
 
 /* ── Intercept quiz / assignment yes/no answers ── */
 function handleSpecialInput(msg) {
@@ -2601,35 +2797,52 @@ async function sendChatMsg() {
   input.value = '';
   input.style.height = 'auto';
   document.getElementById('chatQuickArea').style.display = 'none';
-  addUserMsg(msg);
+  const msgTime = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  addUserMsg(msg, msgTime);
 
   if (handleSpecialInput(msg)) return;
 
-  chatHistory.push({ role: 'user', content: msg, time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
+  chatHistory.push({ role: 'user', content: msg, time: msgTime });
   saveState();
   showTyping();
   chatTyping = true;
   document.getElementById('chatSendBtn').disabled = true;
 
   try {
-    const systemPrompt = `You are EduSmart AI Tutor powered by Groq AI (FREE!).
-Help students deeply understand any subject.
+    const systemPrompt = `You are EduSmart - a friendly, accurate AI tutor for Indian students.
+You cover ALL boards: CBSE, ICSE, State Boards (AP, Telangana, Maharashtra, Tamil Nadu, Karnataka, UP, Rajasthan, etc), JEE, NEET.
+You teach ALL classes: 6th, 7th, 8th, 9th, 10th, 11th, 12th.
 
-Rules:
-- Give DEEP accurate answers at school/college/exam level
-- Maths: full step-by-step working
-- Science: mechanisms, equations, real examples  
-- History: causes, key figures, dates, effects
-- Coding: working code with comments
-- Use simple language and real examples
-- Be warm, encouraging and enthusiastic
-- NEVER refuse academic questions
+PERSONALITY - Be like a friendly elder sibling who is great at studies:
+- Chat naturally, use friendly language like 'Great question!', 'Got it!', 'Sure thing!'
+- If someone says 'hi', 'hello', 'how are you' - respond warmly and ask what they want to learn
+- Use encouraging words: 'You are doing great!', 'Almost there!', 'That makes sense!'
+- Keep explanations fun and relatable with real-life Indian examples
+- Never sound robotic or refuse to chat
 
-After explaining a NEW topic fully, end with EXACTLY this on its own line:
-[EXPLANATION_COMPLETE: topic name here]
-Only add this after full explanations, not for short answers.
+ACCURACY RULES - This is critical:
+- ALL facts, formulas, dates, values MUST be 100% correct
+- Maths: show every step, check your answer before replying
+- Physics constants: g=9.8 m/s2, c=3x10^8 m/s, e=1.6x10^-19 C
+- Chemistry: correct valencies, balanced equations, correct IUPAC names
+- History: only verified dates and facts
+- If you are not 100% sure, say: 'I think it is X but please verify from your textbook'
+- NEVER make up facts, numbers or dates
 
-Student: ${userName} | Subject: ${curSubject}`;
+HOW TO ANSWER ACADEMIC QUESTIONS:
+- Problems (Maths/Physics): Step 1... Step 2... show full working, bold the final answer
+- Concepts: simple definition, how it works, formula if any, real example
+- Past year questions: give REAL exam-style questions with proper marks and model answers
+- State board questions: follow that board's exact syllabus and pattern
+- For Class 6-8: use very simple language with fun examples
+- For Class 9-10: standard board level with exam tips
+- For Class 11-12/JEE/NEET: deep level with derivations and shortcuts
+
+After giving a FULL topic explanation, end with exactly:
+[EXPLANATION_COMPLETE: topic name]
+Only for full explanations, not for casual chat or short answers.
+
+Student name: ${userName} | Subject: ${curSubject}`;
 
     const recentHistory = chatHistory.slice(-10);
     const reply = await callClaude({ system: systemPrompt, messages: recentHistory, max_tokens: 1200 });
@@ -3070,16 +3283,28 @@ async function processCameraImage(file) {
     });
 
     // Ask AI to analyze image
-    const resp = await fetch('/api/analyze-image', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: base64, mimeType: file.type, target: cameraTarget })
-    });
+    let resp, data;
+    try {
+      resp = await fetch('/api/analyze-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: base64, mimeType: file.type, target: cameraTarget })
+      });
+      if (!resp.ok) throw new Error('Server error ' + resp.status);
+      data = await resp.json();
+    } catch(fetchErr) {
+      closeCameraModal();
+      // Fallback: if image API fails, open chat and ask user to type
+      if (cameraTarget === 'chat') {
+        openChat();
+        addBotMsg('📷 I received your photo but could not read it clearly.\n\nPlease **type your question** and I will answer it right away! 📚');
+      } else {
+        showToast('⚠️ Photo could not be processed. Please type your topic instead.');
+      }
+      return;
+    }
 
     closeCameraModal();
-
-    if (!resp.ok) throw new Error('Server error ' + resp.status);
-    const data = await resp.json();
 
     if (cameraTarget === 'chat') {
       // Put the AI answer directly in chat
