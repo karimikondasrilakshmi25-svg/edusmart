@@ -127,7 +127,7 @@ input,textarea,select{font-family:var(--fb)}
 .live-badge{display:flex;align-items:center;gap:5px;background:var(--bg2);border:1px solid var(--border2);border-radius:50px;padding:5px 10px;font-size:11px;font-weight:600;color:var(--green)}
 .navr{display:flex;align-items:center;gap:8px}
 .navav{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-lt));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:700;font-size:14px;color:#fff;cursor:pointer}
-.hbody{flex:1;overflow-y:auto;padding-bottom:90px}
+.hbody{flex:1;overflow-y:auto;padding-bottom:100px;background:var(--bg2)}
 .hhero{background:linear-gradient(135deg,#1a1060,#5046e4,#8b5cf6);padding:32px 22px 50px;position:relative;overflow:hidden}
 .hhero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:36px;background:var(--bg2);border-radius:28px 28px 0 0}
 .hd{position:absolute;border-radius:50%;opacity:.14;animation:bfloat 5s ease-in-out infinite alternate}
@@ -635,7 +635,105 @@ input,textarea,select{font-family:var(--fb)}
 .tuc-num{font-family:var(--fh);font-size:28px;font-weight:800}
 .tuc-lbl{font-size:12px;opacity:.85}
 
+/* ══════════════════════════
+   HOME DASHBOARD — Clean & Beautiful
+══════════════════════════ */
+
+/* Nav bar */
+.hnav{background:var(--nav);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:20}
+
+/* Hero section */
+.hhero{background:linear-gradient(135deg,#1a1060,#5046e4,#8b5cf6);padding:28px 22px 48px;position:relative;overflow:hidden}
+.hhero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:36px;background:var(--bg2);border-radius:28px 28px 0 0}
+
+/* Stats row */
+.stats-row{display:flex;gap:10px;padding:18px 22px 0}
+.stat-mini{flex:1;background:var(--card);border-radius:14px;padding:13px 12px;border:1px solid var(--border2);text-align:center}
+.stat-mini-num{font-family:var(--fh);font-size:20px;font-weight:800;color:var(--brand)}
+.stat-mini-lbl{font-size:10px;color:var(--ink3);margin-top:2px;font-weight:500}
+
+/* Daily Challenge */
+.daily-card{margin:16px 22px 0;background:linear-gradient(135deg,#1a1060,#5046e4,#8b5cf6);border-radius:20px;padding:18px 20px;position:relative;overflow:hidden;cursor:pointer;transition:transform .2s}
+.daily-card:active{transform:scale(.98)}
+.daily-card::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:rgba(255,255,255,.07);border-radius:50%}
+.daily-card::after{content:'';position:absolute;bottom:-30px;left:30%;width:100px;height:100px;background:rgba(255,255,255,.04);border-radius:50%}
+.daily-card-tag{font-size:10px;font-weight:700;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;position:relative;z-index:1;display:flex;align-items:center;gap:5px}
+.daily-card-title{font-family:var(--fh);font-size:16px;font-weight:800;color:#fff;line-height:1.3;margin-bottom:12px;position:relative;z-index:1}
+.daily-card-row{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.daily-card-meta{font-size:11px;color:rgba(255,255,255,.65)}
+.daily-card-btn{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.35);border-radius:50px;padding:8px 18px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--fh);transition:all .2s;white-space:nowrap}
+.daily-card-btn:hover{background:rgba(255,255,255,.35)}
+
+/* Section headers */
+.sec{padding:18px 22px 0}
+.sech{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.sech h3{font-family:var(--fh);font-size:17px;font-weight:700;color:var(--ink)}
+.sall{font-size:13px;color:var(--brand);font-weight:500;cursor:pointer}
+
+/* Quick Topic Pills — HORIZONTAL SCROLL */
+.topic-scroll-wrap{padding:0 22px 0;overflow:hidden}
+.topic-scroll{
+  display:flex !important;
+  flex-direction:row !important;
+  flex-wrap:nowrap !important;
+  gap:10px;
+  overflow-x:auto !important;
+  overflow-y:hidden;
+  padding-bottom:8px;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.topic-scroll::-webkit-scrollbar{display:none !important}
+.topic-pill{
+  display:flex !important;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  flex-shrink:0 !important;
+  width:82px;
+  min-width:82px;
+  max-width:82px;
+  background:var(--card);
+  border-radius:16px;
+  padding:14px 8px;
+  border:1.5px solid var(--border2);
+  cursor:pointer;
+  transition:all .2s;
+  text-align:center;
+}
+.topic-pill:hover,.topic-pill:active{border-color:var(--brand);background:var(--bg3);transform:translateY(-2px)}
+.topic-pill-ico{font-size:28px;line-height:1;display:block}
+.topic-pill-nm{font-size:11px;font-weight:700;color:var(--ink);font-family:var(--fh);line-height:1.2;display:block}
+.topic-pill-sub{font-size:9px;color:var(--ink3);display:block}
+
+/* Subjects grid */
+.subgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.subc{background:var(--card);border-radius:var(--r);padding:16px 14px;border:1px solid var(--border2);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.subc::before{content:'';position:absolute;top:-18px;right:-18px;width:72px;height:72px;border-radius:50%;opacity:.09;transition:transform .3s}
+.subc:hover,.subc:active{transform:translateY(-3px);box-shadow:var(--shadow)}
+.subc:hover::before{transform:scale(1.4)}
+
+/* Trending */
+.trending-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border-radius:14px;border:1.5px solid var(--border2);cursor:pointer;transition:all .2s;margin-bottom:8px}
+.trending-item:hover,.trending-item:active{border-color:var(--brand);transform:translateX(4px)}
+.trending-rank{font-family:var(--fh);font-size:18px;font-weight:800;color:var(--ink4);min-width:28px;text-align:center}
+.trending-rank.top{color:var(--brand)}
+.trending-info{flex:1;min-width:0}
+.trending-title{font-size:13px;font-weight:600;color:var(--ink);font-family:var(--fh);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trending-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+.trending-ico{font-size:22px;flex-shrink:0}
+
+/* Exam Prep Grid */
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quick-card{background:var(--card);border-radius:16px;padding:14px;border:1.5px solid var(--border2);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.quick-card:hover,.quick-card:active{transform:translateY(-2px);box-shadow:0 6px 20px rgba(80,70,228,.12);border-color:var(--brand-lt)}
+.quick-card-ico{font-size:26px;margin-bottom:7px;display:block}
+.quick-card-title{font-size:12px;font-weight:700;color:var(--ink);font-family:var(--fh);line-height:1.3}
+.quick-card-tag{display:inline-block;font-size:9px;font-weight:600;padding:2px 7px;border-radius:50px;margin-top:6px}
+.quick-card-new{position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;background:var(--coral);color:#fff;padding:2px 6px;border-radius:50px}
+
 /* ── Camera Search ── */
+
 .camera-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(8px)}
 .camera-modal.on{opacity:1;pointer-events:all}
 .camera-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-width:500px;animation:slideUp .3s ease}
@@ -826,29 +924,43 @@ input,textarea,select{font-family:var(--fb)}
       </div>
       <input type="file" id="lessonCameraInput" accept="image/*" style="display:none" onchange="handleCameraFor(this,'lesson')"/>
     </div>
-    <div class="strip">
-      <div class="chip"><div class="dot" style="background:var(--green)"></div><span id="stripLive">1,20,847</span> Students</div>
-      <div class="chip"><div class="dot" style="background:var(--brand)"></div>50+ Subjects</div>
-      <div class="chip"><div class="dot" style="background:var(--amber)"></div>10 Languages</div>
-      <div class="chip"><div class="dot" style="background:var(--teal)"></div>AI Voice Videos</div>
+    <!-- Stats mini row -->
+    <div class="stats-row">
+      <div class="stat-mini">
+        <div class="stat-mini-num" id="homeVidCount">0</div>
+        <div class="stat-mini-lbl">Lessons</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-num" id="homeQuizAvg">—</div>
+        <div class="stat-mini-lbl">Quiz Avg</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-num" id="homeStreak">0🔥</div>
+        <div class="stat-mini-lbl">Day Streak</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-num" id="homeSubj">0</div>
+        <div class="stat-mini-lbl">Subjects</div>
+      </div>
     </div>
-    <div class="live-viewer-bar" id="liveViewerBar"></div>
+    <div class="live-viewer-bar" id="liveViewerBar" style="margin:10px 22px 0;border-radius:12px;padding:8px 14px;font-size:11px"></div>
     <!-- DAILY CHALLENGE -->
     <div style="padding:18px 22px 0">
-      <div class="daily-card" onclick="qa(getDailyTopic().q, getDailyTopic().subj, getDailyTopic().ico, getDailyTopic().key)" id="dailyCard">
+      <div class="daily-card" onclick="startDailyChallenge()" id="dailyCard">
         <div class="daily-card-tag">⚡ Daily Challenge</div>
-        <div class="daily-card-title" id="dailyTitle">Loading today's topic...</div>
+        <div class="daily-card-title" id="dailyTitle">Quadratic Equations Mastery</div>
         <div class="daily-card-row">
-          <div class="daily-card-meta" id="dailyMeta">Tap to start learning</div>
-          <button class="daily-card-btn">Learn Now →</button>
+          <div class="daily-card-meta" id="dailyMeta">Maths · Step-by-step · 5 min</div>
+          <button class="daily-card-btn" onclick="event.stopPropagation();startDailyChallenge()">Learn Now →</button>
         </div>
       </div>
     </div>
 
     <!-- QUICK TOPICS -->
-    <div class="sec" style="margin-top:20px">
-      <div class="sech"><h3>Quick Topics</h3><span class="sall" onclick="switchTab('search')">See all →</span></div>
-      <div class="topic-scroll">
+    <div style="margin-top:20px;padding:0 22px">
+      <div class="sech"><h3>⚡ Quick Topics</h3><span class="sall" onclick="switchTab('search')">See all →</span></div>
+    </div>
+    <div style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 22px 8px;display:flex;gap:10px;flex-wrap:nowrap;scrollbar-width:none">
         <div class="topic-pill" onclick="qa('What is photosynthesis and how does it produce oxygen?','Science','🌱','photosynthesis')"><div class="topic-pill-ico">🌱</div><div class="topic-pill-nm">Photo-synthesis</div><div class="topic-pill-sub">Science</div></div>
         <div class="topic-pill" onclick="qa('Explain quadratic equations with step by step examples','Maths','📐','pythagoras')"><div class="topic-pill-ico">📐</div><div class="topic-pill-nm">Quadratics</div><div class="topic-pill-sub">Maths</div></div>
         <div class="topic-pill" onclick="qa('Explain Newton three laws of motion with real life examples','Physics','⚡','newton')"><div class="topic-pill-ico">⚡</div><div class="topic-pill-nm">Newton's Laws</div><div class="topic-pill-sub">Physics</div></div>
@@ -859,12 +971,11 @@ input,textarea,select{font-family:var(--fb)}
         <div class="topic-pill" onclick="qa('What is trigonometry? Explain sin cos tan','Maths','📏','pythagoras')"><div class="topic-pill-ico">📏</div><div class="topic-pill-nm">Trigonometry</div><div class="topic-pill-sub">Maths</div></div>
         <div class="topic-pill" onclick="qa('How does electricity work? Explain current voltage resistance','Physics','🔌','newton')"><div class="topic-pill-ico">🔌</div><div class="topic-pill-nm">Electricity</div><div class="topic-pill-sub">Physics</div></div>
         <div class="topic-pill" onclick="qa('Explain Indian independence movement and key leaders','History','🇮🇳','french')"><div class="topic-pill-ico">🇮🇳</div><div class="topic-pill-nm">India Freedom</div><div class="topic-pill-sub">History</div></div>
-      </div>
     </div>
 
     <!-- SUBJECTS -->
     <div class="sec" style="margin-top:20px">
-      <div class="sech"><h3>Subjects</h3><span class="sall" onclick="switchTab('videos')">All →</span></div>
+      <div class="sech"><h3>📚 Subjects</h3><span class="sall" onclick="switchTab('videos')">All →</span></div>
       <div class="subgrid">
         <div class="subc sc" onclick="qa('What is photosynthesis and how does it work?','Science','🔬','photosynthesis')"><div class="sico">🔬</div><div class="snm">Science</div><div class="sct">240 topics</div><div class="sbadge" style="background:#e0f9f5;color:#0d7a6b">Biology · Chemistry</div></div>
         <div class="subc ma" onclick="qa('Explain the Pythagoras theorem with examples','Maths','📐','pythagoras')"><div class="sico">📐</div><div class="snm">Maths</div><div class="sct">180 topics</div><div class="sbadge" style="background:#ece9ff;color:#4338ca">Algebra · Geometry</div></div>
@@ -1365,6 +1476,15 @@ function loadState() {
   } catch(e) { console.log('Load error:', e); }
   renderBadges();
   updateStreak();
+  // Update home stats
+  const hvc = document.getElementById('homeVidCount');
+  const hqa = document.getElementById('homeQuizAvg');
+  const hst = document.getElementById('homeStreak');
+  const hsb = document.getElementById('homeSubj');
+  if (hvc) hvc.textContent = vidWatched;
+  if (hqa) hqa.textContent = quizTotal > 0 ? Math.round((quizCorrect/quizTotal)*100)+'%' : '—';
+  if (hst) hst.textContent = getStreak()+'🔥';
+  if (hsb) hsb.textContent = subjectsSeen.size;
 }
 
 function restoreChatMessages() {
@@ -1423,9 +1543,10 @@ function initDailyChallenge() {
   const metaEl = document.getElementById('dailyMeta');
   if (titleEl) titleEl.textContent = t.label;
   if (metaEl) metaEl.textContent = t.meta;
-  // Update onclick
-  const card = document.getElementById('dailyCard');
-  if (card) card.onclick = () => qa(t.q, t.subj, t.ico, t.key);
+}
+function startDailyChallenge() {
+  const t = getDailyTopic();
+  qa(t.q, t.subj, t.ico, t.key);
 }
 
 /* ══════════════════════════
@@ -1697,6 +1818,7 @@ let activeVidTab = 'All';
 ══════════════════════════ */
 window.addEventListener('load', () => {
   renderRecentVideos();
+  initDailyChallenge(); // Show daily challenge topic
   renderVidLib();
   renderSearchTags();
   buildOfflineSubjects();
@@ -2027,6 +2149,7 @@ function setUser(name, email) {
   const g=document.getElementById('hgreet');
   if (g) g.textContent=(h<12?'Good morning':h<17?'Good afternoon':'Good evening')+' 👋';
   document.getElementById('chatFab').classList.remove('gone');
+  initDailyChallenge();
 }
 
 function doLogout() {
