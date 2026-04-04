@@ -2900,20 +2900,23 @@ function addBotMsg(text, savedTime) {
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     // Italic
     .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
-    // Numbered lists
-    .replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>')
-    // Bullet lists
-    .replace(/^[•\-]\s+(.+)$/gm, '<li>$1</li>')
+    // Numbered lists - use data-ol marker
+    .replace(/^\d+\.\s+(.+)$/gm, '<li data-ol>$1</li>')
+    // Bullet lists - use data-ul marker  
+    .replace(/^[\u2022\-]\s+(.+)$/gm, '<li data-ul>$1</li>')
     // Double newlines = paragraph break
     .replace(/\n\n/g, '<br><br>')
     // Single newlines
     .replace(/\n/g, '<br>');
 
-  // Wrap consecutive <li> in <ol>
-  html = html.replace(/(<li>.*?<\/li>(\s*<li>.*?<\/li>)*)/gs, '<ol>$1</ol>');
-
-  d.innerHTML = `
-    <div class="chat-msg-av">🤖</div>
+  // Wrap consecutive numbered <li> in <ol>
+  html = html.replace(/(<li data-ol>[\s\S]*?<\/li>(\s*<br>\s*<li data-ol>[\s\S]*?<\/li>)*)/g,
+    m => '<ol>' + m.replace(/<br>\s*(?=<li)/g, '') + '</ol>');
+  // Wrap consecutive bullet <li> in <ul>
+  html = html.replace(/(<li data-ul>[\s\S]*?<\/li>(\s*<br>\s*<li data-ul>[\s\S]*?<\/li>)*)/g,
+    m => '<ul>' + m.replace(/<br>\s*(?=<li)/g, '') + '</ul>');
+  // Clean up data attributes
+  html = html.replace(/ data-ol| data-ul/g, '');<div class="chat-msg-av">🤖</div>
     <div>
       <div class="chat-bubble">${html}</div>
       <div class="chat-time">${time}</div>
