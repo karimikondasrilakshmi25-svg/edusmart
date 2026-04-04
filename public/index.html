@@ -820,9 +820,11 @@ input,textarea,select{font-family:var(--fb)}
       <div class="hsub">Ask anything — get an instant AI voice explanation</div>
       <div class="sbox">
         <input type="text" id="sinput" placeholder="e.g. What is photosynthesis?" onkeydown="if(event.key==='Enter')playVideo()"/>
-        <button class="micbtn" id="micbtn" onclick="toggleMic()"><svg width="17" height="17" fill="#fff" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zm0 2a1 1 0 0 1 1 1v8a1 1 0 0 1-2 0V4a1 1 0 0 1 1-1zM19 11a7 7 0 0 1-14 0H3a9 9 0 0 0 8 8.94V22h2v-2.06A9 9 0 0 0 21 11h-2z"/></svg></button>
+        <button class="micbtn" id="micbtn" onclick="toggleMic()" title="Voice input"><svg width="17" height="17" fill="#fff" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zm0 2a1 1 0 0 1 1 1v8a1 1 0 0 1-2 0V4a1 1 0 0 1 1-1zM19 11a7 7 0 0 1-14 0H3a9 9 0 0 0 8 8.94V22h2v-2.06A9 9 0 0 0 21 11h-2z"/></svg></button>
+        <button class="micbtn" onclick="openCameraFor('lesson')" title="Camera search" style="background:linear-gradient(135deg,#8b5cf6,#5046e4)"><svg width="17" height="17" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
         <button class="askbtn" onclick="playVideo()">▶</button>
       </div>
+      <input type="file" id="lessonCameraInput" accept="image/*" style="display:none" onchange="handleCameraFor(this,'lesson')"/>
     </div>
     <div class="strip">
       <div class="chip"><div class="dot" style="background:var(--green)"></div><span id="stripLive">1,20,847</span> Students</div>
@@ -831,21 +833,94 @@ input,textarea,select{font-family:var(--fb)}
       <div class="chip"><div class="dot" style="background:var(--teal)"></div>AI Voice Videos</div>
     </div>
     <div class="live-viewer-bar" id="liveViewerBar"></div>
-    <div class="sec">
-      <div class="sech"><h3>Subjects</h3><span class="sall" onclick="switchTab('videos')">See all →</span></div>
+    <!-- DAILY CHALLENGE -->
+    <div style="padding:18px 22px 0">
+      <div class="daily-card" onclick="qa(getDailyTopic().q, getDailyTopic().subj, getDailyTopic().ico, getDailyTopic().key)" id="dailyCard">
+        <div class="daily-card-tag">⚡ Daily Challenge</div>
+        <div class="daily-card-title" id="dailyTitle">Loading today's topic...</div>
+        <div class="daily-card-row">
+          <div class="daily-card-meta" id="dailyMeta">Tap to start learning</div>
+          <button class="daily-card-btn">Learn Now →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK TOPICS -->
+    <div class="sec" style="margin-top:20px">
+      <div class="sech"><h3>Quick Topics</h3><span class="sall" onclick="switchTab('search')">See all →</span></div>
+      <div class="topic-scroll">
+        <div class="topic-pill" onclick="qa('What is photosynthesis and how does it produce oxygen?','Science','🌱','photosynthesis')"><div class="topic-pill-ico">🌱</div><div class="topic-pill-nm">Photo-synthesis</div><div class="topic-pill-sub">Science</div></div>
+        <div class="topic-pill" onclick="qa('Explain quadratic equations with step by step examples','Maths','📐','pythagoras')"><div class="topic-pill-ico">📐</div><div class="topic-pill-nm">Quadratics</div><div class="topic-pill-sub">Maths</div></div>
+        <div class="topic-pill" onclick="qa('Explain Newton three laws of motion with real life examples','Physics','⚡','newton')"><div class="topic-pill-ico">⚡</div><div class="topic-pill-nm">Newton's Laws</div><div class="topic-pill-sub">Physics</div></div>
+        <div class="topic-pill" onclick="qa('How does DNA work and store genetic information?','Biology','🧬','heart')"><div class="topic-pill-ico">🧬</div><div class="topic-pill-nm">DNA & Genes</div><div class="topic-pill-sub">Biology</div></div>
+        <div class="topic-pill" onclick="qa('Explain the periodic table trends and properties','Chemistry','⚗️','periodic')"><div class="topic-pill-ico">⚗️</div><div class="topic-pill-nm">Periodic Table</div><div class="topic-pill-sub">Chemistry</div></div>
+        <div class="topic-pill" onclick="qa('What caused World War 2 and what were the effects?','History','🌏','french')"><div class="topic-pill-ico">🌏</div><div class="topic-pill-nm">World War 2</div><div class="topic-pill-sub">History</div></div>
+        <div class="topic-pill" onclick="qa('Explain artificial intelligence and machine learning simply','Comp. Sci.','🤖','ai')"><div class="topic-pill-ico">🤖</div><div class="topic-pill-nm">AI & ML</div><div class="topic-pill-sub">Comp. Sci.</div></div>
+        <div class="topic-pill" onclick="qa('What is trigonometry? Explain sin cos tan','Maths','📏','pythagoras')"><div class="topic-pill-ico">📏</div><div class="topic-pill-nm">Trigonometry</div><div class="topic-pill-sub">Maths</div></div>
+        <div class="topic-pill" onclick="qa('How does electricity work? Explain current voltage resistance','Physics','🔌','newton')"><div class="topic-pill-ico">🔌</div><div class="topic-pill-nm">Electricity</div><div class="topic-pill-sub">Physics</div></div>
+        <div class="topic-pill" onclick="qa('Explain Indian independence movement and key leaders','History','🇮🇳','french')"><div class="topic-pill-ico">🇮🇳</div><div class="topic-pill-nm">India Freedom</div><div class="topic-pill-sub">History</div></div>
+      </div>
+    </div>
+
+    <!-- SUBJECTS -->
+    <div class="sec" style="margin-top:20px">
+      <div class="sech"><h3>Subjects</h3><span class="sall" onclick="switchTab('videos')">All →</span></div>
       <div class="subgrid">
         <div class="subc sc" onclick="qa('What is photosynthesis and how does it work?','Science','🔬','photosynthesis')"><div class="sico">🔬</div><div class="snm">Science</div><div class="sct">240 topics</div><div class="sbadge" style="background:#e0f9f5;color:#0d7a6b">Biology · Chemistry</div></div>
-        <div class="subc ma" onclick="qa('Explain the Pythagoras theorem','Maths','📐','pythagoras')"><div class="sico">📐</div><div class="snm">Maths</div><div class="sct">180 topics</div><div class="sbadge" style="background:#ece9ff;color:#4338ca">Algebra · Geometry</div></div>
+        <div class="subc ma" onclick="qa('Explain the Pythagoras theorem with examples','Maths','📐','pythagoras')"><div class="sico">📐</div><div class="snm">Maths</div><div class="sct">180 topics</div><div class="sbadge" style="background:#ece9ff;color:#4338ca">Algebra · Geometry</div></div>
+        <div class="subc ph" onclick="qa('Explain Newton three laws of motion','Physics','⚡','newton')"><div class="sico">⚡</div><div class="snm">Physics</div><div class="sct">160 topics</div><div class="sbadge" style="background:#f3e8ff;color:#6d28d9">Mechanics · Waves</div></div>
+        <div class="subc ch" onclick="qa('What is the periodic table and its trends?','Chemistry','⚗️','periodic')"><div class="sico">⚗️</div><div class="snm">Chemistry</div><div class="sct">140 topics</div><div class="sbadge" style="background:#dcfce7;color:#166534">Organic · Bonds</div></div>
+        <div class="subc bi" onclick="qa('How does the human heart pump blood?','Biology','🫀','heart')"><div class="sico">🫀</div><div class="snm">Biology</div><div class="sct">110 topics</div><div class="sbadge" style="background:#fce7f3;color:#9d174d">Cells · Anatomy</div></div>
         <div class="subc hi" onclick="qa('What caused the French Revolution?','History','🗺️','french')"><div class="sico">🗺️</div><div class="snm">History</div><div class="sct">120 topics</div><div class="sbadge" style="background:#fff8e0;color:#8a5c00">Ancient · Modern</div></div>
         <div class="subc en" onclick="qa('What is the difference between active and passive voice?','English','📖','english')"><div class="sico">📖</div><div class="snm">English</div><div class="sct">95 topics</div><div class="sbadge" style="background:#ffe9e9;color:#a83030">Grammar · Writing</div></div>
-        <div class="subc ph" onclick="qa('Explain Newton\'s three laws of motion','Physics','⚡','newton')"><div class="sico">⚡</div><div class="snm">Physics</div><div class="sct">160 topics</div><div class="sbadge" style="background:#f3e8ff;color:#6d28d9">Mechanics · Optics</div></div>
-        <div class="subc ch" onclick="qa('What is the periodic table?','Chemistry','⚗️','periodic')"><div class="sico">⚗️</div><div class="snm">Chemistry</div><div class="sct">140 topics</div><div class="sbadge" style="background:#dcfce7;color:#166534">Organic · Inorganic</div></div>
-        <div class="subc bi" onclick="qa('How does the human heart pump blood?','Biology','🫀','heart')"><div class="sico">🫀</div><div class="snm">Biology</div><div class="sct">110 topics</div><div class="sbadge" style="background:#fce7f3;color:#9d174d">Cells · Anatomy</div></div>
         <div class="subc cs" onclick="qa('How does AI and machine learning work?','Comp. Sci.','💻','ai')"><div class="sico">💻</div><div class="snm">Comp. Sci.</div><div class="sct">88 topics</div><div class="sbadge" style="background:#e0f2fe;color:#0369a1">Coding · AI</div></div>
       </div>
     </div>
-    <div class="sec" style="margin-top:20px;padding-bottom:16px">
-      <div class="sech"><h3>Recent Videos</h3><span class="sall" onclick="switchTab('videos')">See all →</span></div>
+
+    <!-- TRENDING TOPICS -->
+    <div class="sec" style="margin-top:20px">
+      <div class="sech"><h3>🔥 Trending Topics</h3><span class="sall" onclick="switchTab('search')">More →</span></div>
+      <div>
+        <div class="trending-item" onclick="qa('Explain the Indian Independence Movement in detail with key leaders and events','History','🇮🇳','french')"><div class="trending-rank top">1</div><div class="trending-info"><div class="trending-title">Indian Independence Movement</div><div class="trending-sub">History · Most searched today</div></div><div class="trending-ico">🇮🇳</div></div>
+        <div class="trending-item" onclick="qa('What is mitosis and meiosis and how are they different?','Biology','🧬','heart')"><div class="trending-rank top">2</div><div class="trending-info"><div class="trending-title">Mitosis vs Meiosis</div><div class="trending-sub">Biology · Cell division</div></div><div class="trending-ico">🧬</div></div>
+        <div class="trending-item" onclick="qa('Explain quadratic equations formula factoring and graphing with examples','Maths','📐','pythagoras')"><div class="trending-rank top">3</div><div class="trending-info"><div class="trending-title">Quadratic Equations</div><div class="trending-sub">Maths · Exam favourite</div></div><div class="trending-ico">📐</div></div>
+        <div class="trending-item" onclick="qa('How does photosynthesis work with light dependent and independent reactions?','Science','🌱','photosynthesis')"><div class="trending-rank">4</div><div class="trending-info"><div class="trending-title">Photosynthesis Reactions</div><div class="trending-sub">Science · Class 10 & 12</div></div><div class="trending-ico">🌱</div></div>
+        <div class="trending-item" onclick="qa('Explain chemical bonding ionic covalent and metallic bonds','Chemistry','⚗️','periodic')"><div class="trending-rank">5</div><div class="trending-info"><div class="trending-title">Chemical Bonding</div><div class="trending-sub">Chemistry · JEE/NEET topic</div></div><div class="trending-ico">⚗️</div></div>
+      </div>
+    </div>
+
+    <!-- EXAM PREP QUICK CARDS -->
+    <div class="sec" style="margin-top:20px">
+      <div class="sech"><h3>📝 Exam Prep</h3><span class="sall" onclick="sendQuick('What are the most important topics for board exams?')">Ask AI →</span></div>
+      <div class="quick-grid">
+        <div class="quick-card" onclick="qa('Explain all important topics for JEE physics preparation','Physics','⚡','newton')" style="border-color:#ede9fe">
+          <div class="quick-card-ico">🎯</div>
+          <div class="quick-card-title">JEE Physics Key Topics</div>
+          <div class="quick-card-tag" style="background:#ede9fe;color:#6d28d9">Physics</div>
+        </div>
+        <div class="quick-card" onclick="qa('Important biology topics for NEET preparation and exam','Biology','🫀','heart')" style="border-color:#fce7f3">
+          <div class="quick-card-new">Hot</div>
+          <div class="quick-card-ico">🏥</div>
+          <div class="quick-card-title">NEET Biology Topics</div>
+          <div class="quick-card-tag" style="background:#fce7f3;color:#9d174d">Biology</div>
+        </div>
+        <div class="quick-card" onclick="qa('Class 10 maths important questions and topics for board exam','Maths','📐','pythagoras')" style="border-color:#ece9ff">
+          <div class="quick-card-ico">📊</div>
+          <div class="quick-card-title">Class 10 Maths Boards</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">Maths</div>
+        </div>
+        <div class="quick-card" onclick="qa('Class 12 chemistry important chapters and topics for boards','Chemistry','⚗️','periodic')" style="border-color:#dcfce7">
+          <div class="quick-card-new">New</div>
+          <div class="quick-card-ico">⚗️</div>
+          <div class="quick-card-title">Class 12 Chemistry</div>
+          <div class="quick-card-tag" style="background:#dcfce7;color:#166534">Chemistry</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENT VIDEOS -->
+    <div class="sec" style="margin-top:20px;padding-bottom:100px">
+      <div class="sech"><h3>📺 Continue Learning</h3><span class="sall" onclick="switchTab('videos')">Library →</span></div>
       <div class="vlist" id="recentList"></div>
     </div>
   </div>
@@ -863,13 +938,12 @@ input,textarea,select{font-family:var(--fb)}
     <h2>Search Lessons</h2>
     <div class="search-big-box">
       <svg width="18" height="18" fill="none" stroke="var(--ink3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" id="searchQ" placeholder="Search any topic…" oninput="doSearch(this.value)"/>
-      <button onclick="openCameraSearch()" style="background:none;border:none;cursor:pointer;padding:6px;color:var(--ink3);display:flex;align-items:center" title="Search with camera">
+      <input type="text" id="searchQ" placeholder="Search any topic or question…" oninput="doSearch(this.value)"/>
+      <button onclick="openCameraFor('search')" style="background:none;border:none;cursor:pointer;padding:6px;color:var(--brand);display:flex;align-items:center" title="Search with camera 📷">
         <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
       </button>
     </div>
-    <!-- Hidden camera input -->
-    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleCameraImage(this)"/>
+    <input type="file" id="searchCameraInput" accept="image/*" style="display:none" onchange="handleCameraFor(this,'search')"/>
   </div>
   <div class="sbody">
     <div class="stags" id="searchTags"></div>
@@ -911,13 +985,9 @@ input,textarea,select{font-family:var(--fb)}
       <div class="stat-card"><div class="stat-num" id="subLearned">0</div><div class="stat-lbl">Subjects</div></div>
     </div>
     <div class="prof-sec-title">Badges Earned</div>
-    <div class="badge-grid" id="badgeGrid">
-      <div class="badge-item" style="opacity:.3;border:1.5px dashed var(--border)"><div class="badge-ico">🔒</div><div class="badge-nm">Locked</div></div>
-      <div class="badge-item" style="opacity:.3;border:1.5px dashed var(--border)"><div class="badge-ico">🔒</div><div class="badge-nm">Locked</div></div>
-      <div class="badge-item" style="opacity:.3;border:1.5px dashed var(--border)"><div class="badge-ico">🔒</div><div class="badge-nm">Locked</div></div>
-      <div class="badge-item" style="opacity:.3;border:1.5px dashed var(--border)"><div class="badge-ico">🔒</div><div class="badge-nm">Locked</div></div>
-    </div>
-    <div style="font-size:11px;color:var(--ink3);margin-bottom:16px;text-align:center">Complete activities to earn badges!</div>
+    <div id="badgeGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px"></div>
+    <div id="badgeProgress" style="font-size:11px;color:var(--ink3);margin-bottom:8px;text-align:center"></div>
+    <button id="badgeShowAll" onclick="toggleAllBadges()" style="width:100%;padding:9px;border-radius:50px;border:1.5px solid var(--border);background:var(--bg2);color:var(--brand);font-size:12px;font-weight:600;cursor:pointer;margin-bottom:16px;font-family:var(--fh)">Show All Badges 🏅</button>
     <div class="prof-sec-title">Voice Language</div>
     <div class="lang-selector-wrap" id="langSelector"></div>
     <div class="prof-sec-title">Settings</div>
@@ -1142,11 +1212,14 @@ input,textarea,select{font-family:var(--fb)}
 
     <!-- Input -->
     <div class="chat-input-area">
+      <button onclick="openCameraFor('chat')" style="width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--brand);transition:all .2s" title="Send a photo">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </button>
       <div class="chat-input-wrap">
         <textarea
           class="chat-input"
           id="chatInput"
-          placeholder="Ask any academic question…"
+          placeholder="Ask any question or 📷 send a photo…"
           rows="1"
           onkeydown="chatKeyDown(event)"
           oninput="autoResize(this)"
@@ -1158,43 +1231,44 @@ input,textarea,select{font-family:var(--fb)}
         </svg>
       </button>
     </div>
+    <input type="file" id="chatCameraInput" accept="image/*" style="display:none" onchange="handleCameraFor(this,'chat')"/>
 
   </div>
 </div>
 
 
-<!-- CAMERA SEARCH MODAL -->
+<!-- CAMERA MODAL — works for lesson, search and chat -->
 <div class="camera-modal" id="cameraModal" onclick="if(event.target===this)closeCameraModal()">
   <div class="camera-sheet">
-    <h3>📷 Search with Camera</h3>
-    <p>Take a photo of your question, textbook or problem — AI will identify and explain it!</p>
+    <h3 id="cameraModalTitle">📷 Search with Camera</h3>
+    <p id="cameraModalSub">Take a photo of your question or textbook — AI will read it and help you instantly!</p>
     <div class="camera-btns" id="cameraBtns">
       <div class="camera-btn" onclick="triggerCamera('environment')">
         <div class="camera-btn-ico">📷</div>
         <div class="camera-btn-info">
-          <div class="camera-btn-title">Take a Photo</div>
-          <div class="camera-btn-sub">Use your back camera to capture a question</div>
+          <div class="camera-btn-title">Back Camera</div>
+          <div class="camera-btn-sub">Capture question from textbook or paper</div>
         </div>
       </div>
       <div class="camera-btn" onclick="triggerCamera('user')">
         <div class="camera-btn-ico">🤳</div>
         <div class="camera-btn-info">
-          <div class="camera-btn-title">Use Front Camera</div>
-          <div class="camera-btn-sub">Use front camera to scan notes</div>
+          <div class="camera-btn-title">Front Camera</div>
+          <div class="camera-btn-sub">Scan your notes or screen</div>
         </div>
       </div>
-      <div class="camera-btn" onclick="triggerGallery()">
+      <div class="camera-btn" onclick="triggerCamera('gallery')">
         <div class="camera-btn-ico">🖼️</div>
         <div class="camera-btn-info">
           <div class="camera-btn-title">Choose from Gallery</div>
-          <div class="camera-btn-sub">Pick an existing photo from your phone</div>
+          <div class="camera-btn-sub">Pick a saved photo from your phone</div>
         </div>
       </div>
     </div>
     <div class="camera-processing" id="cameraProcessing">
       <div class="genspin"></div>
-      <div style="font-size:14px;font-weight:600;color:var(--brand);margin-bottom:4px">Analyzing your image...</div>
-      <div style="font-size:12px;color:var(--ink3)">AI is reading your question</div>
+      <div style="font-size:15px;font-weight:700;color:var(--brand);margin-bottom:6px">AI is reading your photo...</div>
+      <div style="font-size:12px;color:var(--ink3)">This may take a few seconds</div>
     </div>
     <button onclick="closeCameraModal()" style="width:100%;margin-top:16px;padding:13px;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--ink3);font-size:14px;cursor:pointer;font-family:var(--fh)">Cancel</button>
   </div>
@@ -1313,19 +1387,91 @@ function restoreChatMessages() {
   }
 }
 
+
+/* ══════════════════════════
+   DAILY CHALLENGE
+══════════════════════════ */
+const DAILY_TOPICS = [
+  {q:"Explain the process of photosynthesis with light-dependent and light-independent reactions",subj:"Science",ico:"🌱",key:"photosynthesis",label:"Photosynthesis Deep Dive",meta:"Science · 5 min lesson"},
+  {q:"Solve and explain quadratic equations using the formula and factoring method",subj:"Maths",ico:"📐",key:"pythagoras",label:"Quadratic Equations Mastery",meta:"Maths · Step-by-step"},
+  {q:"Explain Newton three laws of motion with real life applications",subj:"Physics",ico:"⚡",key:"newton",label:"Newton's Laws in Action",meta:"Physics · 5 min lesson"},
+  {q:"What caused the French Revolution and what were the major effects?",subj:"History",ico:"🗺️",key:"french",label:"French Revolution Explained",meta:"History · 6 min lesson"},
+  {q:"Explain the periodic table groups periods and element trends",subj:"Chemistry",ico:"⚗️",key:"periodic",label:"Periodic Table Trends",meta:"Chemistry · 5 min lesson"},
+  {q:"How does the human heart work and pump blood through the body?",subj:"Biology",ico:"🫀",key:"heart",label:"Human Heart & Circulation",meta:"Biology · 5 min lesson"},
+  {q:"Explain artificial intelligence and machine learning with real examples",subj:"Comp. Sci.",ico:"🤖",key:"ai",label:"AI & Machine Learning Basics",meta:"Comp. Sci. · 5 min lesson"},
+  {q:"What is DNA and how does it store and replicate genetic information?",subj:"Biology",ico:"🧬",key:"heart",label:"DNA: The Code of Life",meta:"Biology · 5 min lesson"},
+  {q:"Explain trigonometry: sine cosine tangent with examples and applications",subj:"Maths",ico:"📏",key:"pythagoras",label:"Trigonometry from Scratch",meta:"Maths · 5 min lesson"},
+  {q:"What is the Indian Independence Movement? Key leaders events and results",subj:"History",ico:"🇮🇳",key:"french",label:"India's Freedom Struggle",meta:"History · 6 min lesson"},
+  {q:"Explain chemical bonding: ionic covalent and metallic bonds",subj:"Chemistry",ico:"⚗️",key:"periodic",label:"Chemical Bonding Types",meta:"Chemistry · 5 min lesson"},
+  {q:"How does electricity work? Explain current voltage resistance and Ohm's law",subj:"Physics",ico:"🔌",key:"newton",label:"Electricity & Circuits",meta:"Physics · 5 min lesson"},
+  {q:"Explain mitosis and meiosis and the differences between them",subj:"Biology",ico:"🔬",key:"heart",label:"Cell Division Explained",meta:"Biology · 5 min lesson"},
+  {q:"What are the laws of thermodynamics? Explain with examples",subj:"Physics",ico:"🔥",key:"newton",label:"Laws of Thermodynamics",meta:"Physics · 5 min lesson"},
+  {q:"Explain active and passive voice rules with examples",subj:"English",ico:"📖",key:"english",label:"Active vs Passive Voice",meta:"English · 4 min lesson"},
+];
+
+let _dailyTopic = null;
+function getDailyTopic() {
+  if (_dailyTopic) return _dailyTopic;
+  // Pick topic based on day of year so it changes daily
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  _dailyTopic = DAILY_TOPICS[dayOfYear % DAILY_TOPICS.length];
+  return _dailyTopic;
+}
+function initDailyChallenge() {
+  const t = getDailyTopic();
+  const titleEl = document.getElementById('dailyTitle');
+  const metaEl = document.getElementById('dailyMeta');
+  if (titleEl) titleEl.textContent = t.label;
+  if (metaEl) metaEl.textContent = t.meta;
+  // Update onclick
+  const card = document.getElementById('dailyCard');
+  if (card) card.onclick = () => qa(t.q, t.subj, t.ico, t.key);
+}
+
 /* ══════════════════════════
    BADGE SYSTEM — Real earned badges
 ══════════════════════════ */
 const BADGE_DEFS = [
-  { id:'first_video',  ico:'🌟', nm:'First Lesson',  desc:'Watch your first lesson',      check: ()=> vidWatched >= 1 },
-  { id:'five_videos',  ico:'📺', nm:'Video Star',    desc:'Watch 5 lessons',              check: ()=> vidWatched >= 5 },
-  { id:'ten_videos',   ico:'🎬', nm:'Binge Learner', desc:'Watch 10 lessons',             check: ()=> vidWatched >= 10 },
-  { id:'first_quiz',   ico:'🎯', nm:'Quiz Starter',  desc:'Complete your first quiz',     check: ()=> quizTotal >= 1 },
-  { id:'quiz_pro',     ico:'🏆', nm:'Quiz Pro',      desc:'Score 80%+ on a quiz',         check: ()=> quizTotal > 0 && Math.round((quizCorrect/quizTotal)*100) >= 80 },
-  { id:'five_subj',    ico:'🧠', nm:'All Rounder',   desc:'Study 5 different subjects',   check: ()=> subjectsSeen.size >= 5 },
-  { id:'streak_3',     ico:'🔥', nm:'On Fire!',      desc:'Study 3 days in a row',        check: ()=> getStreak() >= 3 },
-  { id:'streak_7',     ico:'💎', nm:'Diamond',       desc:'Study 7 days in a row',        check: ()=> getStreak() >= 7 },
+  // 🎓 Learning badges
+  { id:'first_video',   ico:'🌱', nm:'First Step',      desc:'Watch your first AI lesson',           cat:'Learning', check: ()=> vidWatched >= 1 },
+  { id:'five_videos',   ico:'📚', nm:'Bookworm',        desc:'Watch 5 lessons',                      cat:'Learning', check: ()=> vidWatched >= 5 },
+  { id:'ten_videos',    ico:'📺', nm:'Video Star',      desc:'Watch 10 lessons',                     cat:'Learning', check: ()=> vidWatched >= 10 },
+  { id:'twenty_videos', ico:'🎬', nm:'Binge Learner',   desc:'Watch 20 lessons',                     cat:'Learning', check: ()=> vidWatched >= 20 },
+  { id:'fifty_videos',  ico:'🏫', nm:'Class Topper',    desc:'Watch 50 lessons — incredible!',       cat:'Learning', check: ()=> vidWatched >= 50 },
+  // 🧠 Quiz badges
+  { id:'first_quiz',    ico:'🎯', nm:'Quiz Starter',    desc:'Complete your first quiz',             cat:'Quiz',     check: ()=> quizTotal >= 1 },
+  { id:'five_quiz',     ico:'🧩', nm:'Quiz Enthusiast', desc:'Complete 5 quizzes',                   cat:'Quiz',     check: ()=> quizTotal >= 5 },
+  { id:'quiz_score80',  ico:'🥈', nm:'Silver Brain',    desc:'Score 80%+ on any quiz',              cat:'Quiz',     check: ()=> quizTotal > 0 && Math.round((quizCorrect/quizTotal)*100) >= 80 },
+  { id:'quiz_score90',  ico:'🥇', nm:'Gold Brain',      desc:'Score 90%+ on quizzes',               cat:'Quiz',     check: ()=> quizTotal > 0 && Math.round((quizCorrect/quizTotal)*100) >= 90 },
+  { id:'quiz_perfect',  ico:'💯', nm:'Perfect Score',   desc:'Score 100% on a quiz!',               cat:'Quiz',     check: ()=> quizTotal > 0 && Math.round((quizCorrect/quizTotal)*100) === 100 },
+  // 🔥 Streak badges
+  { id:'streak_2',      ico:'⚡', nm:'Getting Warm',    desc:'Study 2 days in a row',               cat:'Streak',   check: ()=> getStreak() >= 2 },
+  { id:'streak_3',      ico:'🔥', nm:'On Fire!',        desc:'Study 3 days in a row',               cat:'Streak',   check: ()=> getStreak() >= 3 },
+  { id:'streak_7',      ico:'💎', nm:'Diamond Week',    desc:'Study 7 days in a row',               cat:'Streak',   check: ()=> getStreak() >= 7 },
+  { id:'streak_14',     ico:'👑', nm:'Two Weeks King',  desc:'Study 14 days in a row',              cat:'Streak',   check: ()=> getStreak() >= 14 },
+  { id:'streak_30',     ico:'🌈', nm:'Legend',          desc:'Study 30 days in a row — amazing!',   cat:'Streak',   check: ()=> getStreak() >= 30 },
+  // 🌍 Subject badges
+  { id:'subj_3',        ico:'📖', nm:'Curious Learner', desc:'Study 3 different subjects',          cat:'Subject',  check: ()=> subjectsSeen.size >= 3 },
+  { id:'subj_5',        ico:'🧠', nm:'All Rounder',     desc:'Study 5 different subjects',          cat:'Subject',  check: ()=> subjectsSeen.size >= 5 },
+  { id:'subj_8',        ico:'🎓', nm:'Scholar',         desc:'Study all 8 subjects',                cat:'Subject',  check: ()=> subjectsSeen.size >= 8 },
+  // 💬 Chat badges
+  { id:'first_chat',    ico:'💬', nm:'First Chat',      desc:'Ask your first AI question',           cat:'Chat',     check: ()=> chatHistory.length >= 2 },
+  { id:'chat_10',       ico:'🗣️', nm:'Chatterbox',      desc:'Have 10 AI conversations',            cat:'Chat',     check: ()=> chatHistory.length >= 10 },
+  { id:'assignment',    ico:'📝', nm:'Homework Hero',   desc:'Generate your first assignment',       cat:'Chat',     check: ()=> parseInt(localStorage.getItem('es_assignments')||'0') >= 1 },
+  // 📷 Camera badge
+  { id:'camera_used',   ico:'📷', nm:'Smart Scanner',   desc:'Use camera search feature',            cat:'Special',  check: ()=> localStorage.getItem('es_camera_used') === 'true' },
+  // 🏆 Special
+  { id:'night_owl',     ico:'🦉', nm:'Night Owl',       desc:'Study after 10 PM',                   cat:'Special',  check: ()=> localStorage.getItem('es_night_owl') === 'true' },
+  { id:'early_bird',    ico:'🐦', nm:'Early Bird',      desc:'Study before 7 AM',                   cat:'Special',  check: ()=> localStorage.getItem('es_early_bird') === 'true' },
 ];
+
+let showingAllBadges = false;
+function toggleAllBadges() {
+  showingAllBadges = !showingAllBadges;
+  renderBadges();
+  const btn = document.getElementById('badgeShowAll');
+  if (btn) btn.textContent = showingAllBadges ? 'Show Less ▲' : 'Show All Badges 🏅';
+}
 
 function getEarnedBadges() {
   try { return JSON.parse(localStorage.getItem('es_badges') || '[]'); } catch(e) { return []; }
@@ -1335,16 +1481,22 @@ function getStreak() {
 }
 function updateStreak() {
   const today = new Date().toDateString();
+  const now = new Date();
+  const hour = now.getHours();
   const lastStudy = localStorage.getItem('es_lastStudyDate');
   const yesterday = new Date(Date.now() - 86400000).toDateString();
   let streak = parseInt(localStorage.getItem('es_streak') || '0');
-  if (lastStudy === today) return; // already counted today
+  if (lastStudy === today) return;
   if (lastStudy === yesterday) { streak++; } else { streak = 1; }
   localStorage.setItem('es_streak', streak);
   localStorage.setItem('es_lastStudyDate', today);
-  // Update streak display
   const sd = document.getElementById('streakDays');
   if (sd) sd.textContent = streak;
+  // Track night owl / early bird
+  if (hour >= 22 || hour < 1) localStorage.setItem('es_night_owl', 'true');
+  if (hour >= 5 && hour < 7) localStorage.setItem('es_early_bird', 'true');
+  // Track assignment count
+  const cur = parseInt(localStorage.getItem('es_assignments') || '0');
 }
 function checkAndAwardBadges() {
   updateStreak();
@@ -1362,19 +1514,39 @@ function checkAndAwardBadges() {
 }
 function renderBadges() {
   const el = document.getElementById('badgeGrid');
+  const prog = document.getElementById('badgeProgress');
   if (!el) return;
   const earned = getEarnedBadges();
   const earnedDefs = BADGE_DEFS.filter(b => earned.includes(b.id));
   const lockedDefs = BADGE_DEFS.filter(b => !earned.includes(b.id));
-  // Show earned first, then locked
-  const all = [...earnedDefs, ...lockedDefs].slice(0, 8);
+
+  // Update progress
+  if (prog) {
+    prog.textContent = earned.length + ' / ' + BADGE_DEFS.length + ' badges earned';
+    prog.style.color = earned.length > 0 ? 'var(--brand)' : 'var(--ink3)';
+  }
+
+  // Show earned first, then locked (8 or all)
+  const limit = showingAllBadges ? BADGE_DEFS.length : 8;
+  const all = [...earnedDefs, ...lockedDefs].slice(0, limit);
+
   el.innerHTML = all.map(b => {
     const isEarned = earned.includes(b.id);
-    return `<div class="badge-item" style="${isEarned ? '' : 'opacity:.3;border:1.5px dashed var(--border)'}" title="${b.desc}">
-      <div class="badge-ico">${isEarned ? b.ico : '🔒'}</div>
-      <div class="badge-nm">${isEarned ? b.nm : b.nm}</div>
+    return `<div class="badge-item" onclick="showBadgeInfo('${b.id}')"
+      style="${isEarned ? 'cursor:pointer;box-shadow:0 2px 10px rgba(80,70,228,.15)' : 'opacity:.35;border:1.5px dashed var(--border);cursor:pointer'}"
+      title="${b.desc}">
+      <div class="badge-ico" style="font-size:${isEarned?'26px':'22px'}">${isEarned ? b.ico : '🔒'}</div>
+      <div class="badge-nm" style="font-size:9px;line-height:1.3;${isEarned?'color:var(--ink)':'color:var(--ink3)'}">${b.nm}</div>
+      ${isEarned ? '<div style="font-size:8px;color:var(--green);margin-top:2px">✓ Earned</div>' : '<div style="font-size:8px;color:var(--ink4);margin-top:2px">' + b.desc.slice(0,18) + '...</div>'}
     </div>`;
   }).join('');
+}
+
+function showBadgeInfo(id) {
+  const b = BADGE_DEFS.find(x => x.id === id);
+  if (!b) return;
+  const earned = getEarnedBadges().includes(id);
+  showToast((earned ? b.ico + ' ' + b.nm + ' — Earned!' : '🔒 ' + b.nm + ': ' + b.desc));
 }
 
 /* ══════════════════════════
@@ -2675,38 +2847,57 @@ function setAppLang(lang, label, name, el) {
 }
 
 /* ══════════════════════════
-   CAMERA SEARCH
+   CAMERA — Works in 3 places: lesson, search, chat
 ══════════════════════════ */
-function openCameraSearch() {
+let cameraTarget = 'search'; // 'lesson' | 'search' | 'chat'
+
+function openCameraFor(target) {
+  cameraTarget = target;
   document.getElementById('cameraModal').classList.add('on');
   document.getElementById('cameraBtns').style.display = 'flex';
   document.getElementById('cameraProcessing').style.display = 'none';
+  // Update modal title based on target
+  const titles = { lesson:'📷 Snap Your Question', search:'📷 Search with Camera', chat:'📷 Send Photo to AI' };
+  const subs = { lesson:'Take a photo of your question — AI will generate a full explanation!', search:'Take a photo to find matching lessons', chat:'AI will read your photo and answer your question directly!' };
+  const el = document.getElementById('cameraModalTitle');
+  const el2 = document.getElementById('cameraModalSub');
+  if (el) el.textContent = titles[target] || titles.search;
+  if (el2) el2.textContent = subs[target] || subs.search;
 }
+
 function closeCameraModal() {
   document.getElementById('cameraModal').classList.remove('on');
 }
-function triggerCamera(facing) {
-  const inp = document.getElementById('cameraInput');
-  inp.setAttribute('capture', facing);
-  inp.accept = 'image/*';
-  inp.click();
-}
-function triggerGallery() {
-  const inp = document.getElementById('cameraInput');
-  inp.removeAttribute('capture');
-  inp.accept = 'image/*';
-  inp.click();
-}
-async function handleCameraImage(input) {
-  if (!input.files || !input.files[0]) return;
-  const file = input.files[0];
 
-  // Show processing state
+function triggerCamera(facing) {
+  const ids = { lesson:'lessonCameraInput', search:'searchCameraInput', chat:'chatCameraInput' };
+  const inp = document.getElementById(ids[cameraTarget] || 'searchCameraInput');
+  if (!inp) return;
+  if (facing === 'gallery') {
+    inp.removeAttribute('capture');
+  } else {
+    inp.setAttribute('capture', facing);
+  }
+  inp.click();
+}
+
+function handleCameraFor(input, target) {
+  if (!input.files || !input.files[0]) return;
+  cameraTarget = target;
+  processCameraImage(input.files[0]);
+  input.value = '';
+}
+
+async function processCameraImage(file) {
+  // Show processing
   document.getElementById('cameraBtns').style.display = 'none';
   document.getElementById('cameraProcessing').style.display = 'block';
+  // Mark camera used for badge
+  localStorage.setItem('es_camera_used', 'true');
+  checkAndAwardBadges();
 
   try {
-    // Convert image to base64
+    // Convert to base64
     const base64 = await new Promise((res, rej) => {
       const reader = new FileReader();
       reader.onload = () => res(reader.result.split(',')[1]);
@@ -2714,39 +2905,63 @@ async function handleCameraImage(input) {
       reader.readAsDataURL(file);
     });
 
-    // Send to AI to identify the question
+    // Ask AI to analyze image
     const resp = await fetch('/api/analyze-image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: base64, mimeType: file.type })
+      body: JSON.stringify({ image: base64, mimeType: file.type, target: cameraTarget })
     });
-
-    if (!resp.ok) throw new Error('Server error');
-    const data = await resp.json();
 
     closeCameraModal();
 
-    if (data.topic) {
-      // Search for the identified topic
-      switchTab('search');
-      document.getElementById('searchQ').value = data.topic;
-      doSearch(data.topic);
-      showToast('Found: ' + data.topic);
+    if (!resp.ok) throw new Error('Server error ' + resp.status);
+    const data = await resp.json();
+
+    if (cameraTarget === 'chat') {
+      // Put the AI answer directly in chat
+      if (data.answer) {
+        openChat();
+        addUserMsg('📷 [Sent a photo of a question]');
+        chatHistory.push({ role: 'user', content: 'Student sent a photo. The question in the photo is: ' + (data.topic || 'unknown topic'), time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
+        addBotMsg(data.answer);
+        chatHistory.push({ role: 'assistant', content: data.answer, time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
+        saveState();
+        showToast('AI answered your photo!');
+      } else {
+        showToast(data.error || 'Could not read the image. Try a clearer photo!');
+      }
+    } else if (cameraTarget === 'lesson') {
+      // Generate lesson from photo topic
+      if (data.topic) {
+        document.getElementById('sinput').value = data.topic;
+        showToast('Topic found: ' + data.topic);
+        closeCameraModal();
+        playVideo();
+      } else {
+        showToast('Could not identify topic. Try a clearer photo!');
+      }
     } else {
-      showToast('Could not identify topic. Please try again!');
+      // Search
+      if (data.topic) {
+        switchTab('search');
+        document.getElementById('searchQ').value = data.topic;
+        doSearch(data.topic);
+        showToast('Searching: ' + data.topic);
+      } else {
+        showToast('Could not identify topic. Try a clearer photo!');
+      }
     }
   } catch(e) {
     closeCameraModal();
-    // Fallback — open chat with image description request
-    showToast('Camera search requires internet. Opening AI chat instead!');
-    setTimeout(() => {
+    console.error('Camera error:', e.message);
+    // Fallback
+    if (cameraTarget === 'chat') {
       openChat();
-      document.getElementById('chatInput').value = 'I have a question from my textbook — can you help me?';
-      document.getElementById('chatInput').focus();
-    }, 500);
+      showToast('Could not process image. Type your question instead!');
+    } else {
+      showToast('Camera error: ' + e.message);
+    }
   }
-  // Reset input
-  input.value = '';
 }
 
 /* ══════════════════════════
