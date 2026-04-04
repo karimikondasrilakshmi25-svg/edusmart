@@ -62,6 +62,7 @@ input,textarea,select{font-family:var(--fb)}
 .sp-fill{height:100%;background:#fff;border-radius:2px;animation:loadfill 2.6s 1s cubic-bezier(.4,0,.2,1) forwards;width:0}
 @keyframes loadfill{to{width:100%}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
 /* LANGUAGE */
 #language{background:var(--bg)}
@@ -748,6 +749,47 @@ input,textarea,select{font-family:var(--fb)}
 .camera-btn-sub{font-size:12px;color:var(--ink3);margin-top:2px}
 .camera-processing{display:none;text-align:center;padding:20px}
 .camera-processing .genspin{margin:0 auto 12px}
+
+/* LEADERBOARD SCREEN */
+#leaderboard{background:var(--bg2)}
+.lb-hdr{background:linear-gradient(135deg,#1a1060,#5046e4,#8b5cf6);padding:52px 24px 56px;position:relative;overflow:hidden}
+.lb-hdr::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:32px;background:var(--bg2);border-radius:28px 28px 0 0}
+.lb-hdr-blob{position:absolute;border-radius:50%;opacity:.13}
+.lb-hdr h1{font-family:var(--fh);font-size:26px;font-weight:800;color:#fff;position:relative;z-index:1}
+.lb-hdr p{font-size:13px;color:rgba(255,255,255,.65);margin-top:4px;position:relative;z-index:1}
+.lb-my-card{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:14px 18px;margin-top:16px;display:flex;align-items:center;gap:14px;position:relative;z-index:1;backdrop-filter:blur(8px)}
+.lb-my-av{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:18px;color:#fff;flex-shrink:0}
+.lb-my-info{flex:1}
+.lb-my-name{font-family:var(--fh);font-size:15px;font-weight:700;color:#fff}
+.lb-my-rank{font-size:12px;color:rgba(255,255,255,.75);margin-top:2px}
+.lb-my-xp{font-family:var(--fh);font-size:18px;font-weight:800;color:#fff}
+.lb-my-xp-lbl{font-size:10px;color:rgba(255,255,255,.6);text-align:right}
+.lb-body{flex:1;overflow-y:auto;padding:16px 20px 110px}
+.lb-tabs{display:flex;background:var(--card);border-radius:50px;padding:4px;margin-bottom:18px;border:1px solid var(--border2)}
+.lb-tab-btn{flex:1;padding:9px;text-align:center;border:none;border-radius:50px;font-family:var(--fh);font-size:13px;font-weight:600;color:var(--ink3);background:transparent;cursor:pointer;transition:all .2s}
+.lb-tab-btn.on{background:var(--brand);color:#fff;box-shadow:0 3px 12px rgba(80,70,228,.3)}
+.lb-list{display:flex;flex-direction:column;gap:9px}
+.lb-xp-info{margin-top:16px;padding:14px;border-radius:14px;background:var(--card);border:1px solid var(--border2);text-align:center}
+.lb-xp-info-title{font-size:12px;font-weight:600;color:var(--ink3);margin-bottom:8px}
+.lb-xp-pills{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.lb-xp-pill{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:50px;background:var(--bg2);border:1px solid var(--border2);font-size:11px;font-weight:600;color:var(--ink2)}
+
+/* LEADERBOARD ROW */
+.lb-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:1.5px solid var(--border2);background:var(--card);transition:all .2s;position:relative;overflow:hidden}
+.lb-row.me{border-color:var(--brand);background:linear-gradient(135deg,rgba(80,70,228,.08),rgba(124,111,247,.05))}
+.lb-row.gold{border-color:#f9a825;background:linear-gradient(135deg,rgba(249,168,37,.08),rgba(249,168,37,.03))}
+.lb-row.silver{border-color:#9ca3af;background:linear-gradient(135deg,rgba(156,163,175,.08),rgba(156,163,175,.03))}
+.lb-row.bronze{border-color:#cd7c2f;background:linear-gradient(135deg,rgba(205,124,47,.08),rgba(205,124,47,.03))}
+.lb-rank{font-family:var(--fh);font-size:17px;font-weight:800;min-width:28px;text-align:center}
+.lb-rank.r1{color:#f9a825}.lb-rank.r2{color:#9ca3af}.lb-rank.r3{color:#cd7c2f}.lb-rank.rn{color:var(--ink4)}
+.lb-medal{font-size:20px;flex-shrink:0}
+.lb-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
+.lb-info{flex:1;min-width:0}
+.lb-name{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-sub{font-size:11px;color:var(--ink3);margin-top:1px}
+.lb-xp{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--brand);flex-shrink:0}
+.lb-xp-lbl{font-size:9px;color:var(--ink4);text-align:right}
+.lb-crown{position:absolute;top:-2px;right:8px;font-size:18px;opacity:.3}
 </style>
   <!-- Prevent file access errors when sharing -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -1013,189 +1055,202 @@ input,textarea,select{font-family:var(--fb)}
 
       <!-- CBSE Tab -->
       <div id="etab-cbse-content" class="quick-grid">
-        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 10 Maths board questions with full step-by-step solutions.')" style="border-color:#ece9ff">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 10 CBSE Class 10 Maths board PYQs with solutions: Real Numbers, Polynomials, Quadratics, AP, Triangles, Probability.')" style="border-color:#ece9ff">
           <div class="quick-card-new" style="background:#5046e4">PYQ</div>
-          <div class="quick-card-ico">📐</div>
-          <div class="quick-card-title">Class 10 Maths</div>
+          <div class="quick-card-ico">📐</div><div class="quick-card-title">Class 10 Maths</div>
           <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">CBSE</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 10 Science board questions with answers - Physics, Chemistry, Biology.')" style="border-color:#e0f9f5">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 10 CBSE Class 10 Science board PYQs with answers: Light, Electricity, Chemical Reactions, Acids, Life Processes, Heredity, Carbon.')" style="border-color:#e0f9f5">
           <div class="quick-card-new" style="background:#5046e4">PYQ</div>
-          <div class="quick-card-ico">🔬</div>
-          <div class="quick-card-title">Class 10 Science</div>
+          <div class="quick-card-ico">🔬</div><div class="quick-card-title">Class 10 Science</div>
           <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">CBSE</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 10 Social Science board questions with answers from History, Geography, Civics and Economics.')" style="border-color:#fff8e0">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 10 CBSE Class 10 Social Science board PYQs with answers: History (Nationalism, World War), Geography (Resources, Agriculture), Political Science, Economics.')" style="border-color:#fff8e0">
           <div class="quick-card-new" style="background:#5046e4">PYQ</div>
-          <div class="quick-card-ico">🌍</div>
-          <div class="quick-card-title">Class 10 Social Science</div>
+          <div class="quick-card-ico">🌍</div><div class="quick-card-title">Class 10 Soc. Science</div>
           <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">CBSE</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 10 English board questions including reading comprehension, grammar, writing and literature.')" style="border-color:#ffe9e9">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 10 CBSE Class 10 English board PYQs: Reading comprehension, grammar (tenses, voice, reported speech), letter writing, First Flight prose and poems.')" style="border-color:#ffe9e9">
           <div class="quick-card-new" style="background:#5046e4">PYQ</div>
-          <div class="quick-card-ico">📚</div>
-          <div class="quick-card-title">Class 10 English</div>
+          <div class="quick-card-ico">📚</div><div class="quick-card-title">Class 10 English</div>
           <div class="quick-card-tag" style="background:#ffe9e9;color:#a83030">CBSE</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 12 Physics board questions with solutions - Electrostatics, Optics, Modern Physics.')" style="border-color:#f3e8ff">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 10 CBSE Class 12 Physics board PYQs with solutions: Electrostatics, Current Electricity, Magnetic Effects, EMI, Optics, Modern Physics.')" style="border-color:#f3e8ff">
           <div class="quick-card-new" style="background:#5046e4">PYQ</div>
-          <div class="quick-card-ico">⚡</div>
-          <div class="quick-card-title">Class 12 Physics</div>
+          <div class="quick-card-ico">⚡</div><div class="quick-card-title">Class 12 Physics</div>
           <div class="quick-card-tag" style="background:#f3e8ff;color:#6d28d9">CBSE</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 12 Chemistry board questions with answers - Physical, Organic, Inorganic.')" style="border-color:#dcfce7">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 10 CBSE Class 12 Chemistry board PYQs with answers: Solid State, Solutions, Electrochemistry, Chemical Kinetics, Organic Chemistry, Biomolecules.')" style="border-color:#dcfce7">
           <div class="quick-card-new" style="background:#5046e4">PYQ</div>
-          <div class="quick-card-ico">⚗️</div>
-          <div class="quick-card-title">Class 12 Chemistry</div>
+          <div class="quick-card-ico">⚗️</div><div class="quick-card-title">Class 12 Chemistry</div>
           <div class="quick-card-tag" style="background:#dcfce7;color:#166534">CBSE</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 12 Biology board questions with answers - Genetics, Reproduction, Biotechnology.')" style="border-color:#fce7f3">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 10 CBSE Class 12 Biology board PYQs with answers: Sexual Reproduction, Genetics, Molecular Basis, Evolution, Human Health, Biotechnology, Ecology.')" style="border-color:#fce7f3">
           <div class="quick-card-new" style="background:#5046e4">PYQ</div>
-          <div class="quick-card-ico">🧬</div>
-          <div class="quick-card-title">Class 12 Biology</div>
+          <div class="quick-card-ico">🧬</div><div class="quick-card-title">Class 12 Biology</div>
           <div class="quick-card-tag" style="background:#fce7f3;color:#9d174d">CBSE</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me 10 important past year CBSE Class 12 Maths board questions with solutions - Calculus, Matrices, Probability.')" style="border-color:#fff8e0">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 10 CBSE Class 12 Maths board PYQs with full solutions: Relations and Functions, Matrices, Determinants, Differentiation, Integration, Differential Equations, Probability.')" style="border-color:#fff8e0">
           <div class="quick-card-new" style="background:#5046e4">PYQ</div>
-          <div class="quick-card-ico">📊</div>
-          <div class="quick-card-title">Class 12 Maths</div>
+          <div class="quick-card-ico">📊</div><div class="quick-card-title">Class 12 Maths</div>
           <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">CBSE</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me all important Maths and Physics formulas for CBSE Class 9 and 10 board exams, chapter by chapter with units.')" style="border-color:#fef9c3">
-          <div class="quick-card-ico">📌</div>
-          <div class="quick-card-title">Formula Sheet</div>
-          <div class="quick-card-tag" style="background:#fef9c3;color:#92400e">Class 9-10</div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give 10 CBSE Class 12 Accountancy board PYQs with answers: Partnership, Company Accounts, Cash Flow Statement, Financial Statements.')" style="border-color:#e0f2fe">
+          <div class="quick-card-new" style="background:#5046e4">PYQ</div>
+          <div class="quick-card-ico">💼</div><div class="quick-card-title">Class 12 Accountancy</div>
+          <div class="quick-card-tag" style="background:#e0f2fe;color:#0369a1">CBSE</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('What is the chapter-wise mark weightage for CBSE Class 10 board exam 2025? List for Maths, Science, Social Science and English.')" style="border-color:#e0f2fe">
-          <div class="quick-card-ico">🎯</div>
-          <div class="quick-card-title">Mark Weightage</div>
-          <div class="quick-card-tag" style="background:#e0f2fe;color:#0369a1">Class 10</div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give 10 CBSE Class 12 Economics board PYQs with answers: Microeconomics (demand, supply, market), Macroeconomics (GDP, money, banking, government budget).')" style="border-color:#fef9c3">
+          <div class="quick-card-new" style="background:#5046e4">PYQ</div>
+          <div class="quick-card-ico">💰</div><div class="quick-card-title">Class 12 Economics</div>
+          <div class="quick-card-tag" style="background:#fef9c3;color:#92400e">CBSE</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give all important Maths and Physics formulas for CBSE Class 10 and 12 board exams, chapter by chapter with units and examples.')" style="border-color:#ece9ff">
+          <div class="quick-card-ico">📌</div><div class="quick-card-title">Formula Sheet</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">Maths + Physics</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('What is the chapter-wise mark weightage for CBSE Class 10 board exam 2025? List all subjects: Maths, Science, Social Science, English with marks per chapter.')" style="border-color:#e0f9f5">
+          <div class="quick-card-ico">🎯</div><div class="quick-card-title">Mark Weightage</div>
+          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">Class 10</div>
         </div>
       </div>
 
       <!-- State Board Tab (hidden by default) -->
       <div id="etab-state-content" class="quick-grid" style="display:none">
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 6 student. Give me 10 important questions with answers for Maths - Fractions, Decimals, Basic Geometry and Algebra.')" style="border-color:#ece9ff">
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 6 student. Give 8 important questions with answers for Maths - Fractions, Decimals, Factors, Basic Geometry, Integers.')" style="border-color:#ece9ff">
           <div class="quick-card-new" style="background:#14b8a6">6th</div>
-          <div class="quick-card-ico">📐</div>
-          <div class="quick-card-title">Class 6 Maths</div>
+          <div class="quick-card-ico">📐</div><div class="quick-card-title">Class 6 Maths</div>
           <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 6 student. Give me 10 important questions with answers for Science - Plants, Animals, Food, Body, Basic Physics.')" style="border-color:#e0f9f5">
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 6 student. Give 8 important questions with answers for Science - Plants, Animals, Food, Body Parts, Water, Air, Light, Basic Physics.')" style="border-color:#e0f9f5">
           <div class="quick-card-new" style="background:#14b8a6">6th</div>
-          <div class="quick-card-ico">🌿</div>
-          <div class="quick-card-title">Class 6 Science</div>
+          <div class="quick-card-ico">🌿</div><div class="quick-card-title">Class 6 Science</div>
           <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 7 student. Give me 10 important questions with answers for Maths - Integers, Fractions, Lines and Angles, Triangles, Data Handling.')" style="border-color:#ece9ff">
-          <div class="quick-card-new" style="background:#14b8a6">7th</div>
-          <div class="quick-card-ico">📐</div>
-          <div class="quick-card-title">Class 7 Maths</div>
-          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
-        </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 7 student. Give me 10 important questions with answers for Science - Nutrition, Heat, Acids and Bases, Weather, Motion and Time.')" style="border-color:#e0f9f5">
-          <div class="quick-card-new" style="background:#14b8a6">7th</div>
-          <div class="quick-card-ico">🔬</div>
-          <div class="quick-card-title">Class 7 Science</div>
-          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
-        </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 8 student. Give me 10 important questions with answers for Maths - Rational Numbers, Squares, Cubes, Algebraic Expressions, Mensuration.')" style="border-color:#ece9ff">
-          <div class="quick-card-new" style="background:#f59e0b">8th</div>
-          <div class="quick-card-ico">📐</div>
-          <div class="quick-card-title">Class 8 Maths</div>
-          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
-        </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 8 student. Give me 10 important questions with answers for Science - Crop Production, Microorganisms, Combustion, Cell, Force and Pressure.')" style="border-color:#e0f9f5">
-          <div class="quick-card-new" style="background:#f59e0b">8th</div>
-          <div class="quick-card-ico">🔬</div>
-          <div class="quick-card-title">Class 8 Science</div>
-          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
-        </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 9 student. Give me 10 important exam questions with answers for Maths - Number Systems, Polynomials, Triangles, Linear Equations, Statistics.')" style="border-color:#ece9ff">
-          <div class="quick-card-new" style="background:#ef4444">9th</div>
-          <div class="quick-card-ico">📐</div>
-          <div class="quick-card-title">Class 9 Maths</div>
-          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
-        </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 9 student. Give me 10 important exam questions with answers for Science - Matter, Atoms, Motion, Gravitation, Sound, Cell Biology.')" style="border-color:#e0f9f5">
-          <div class="quick-card-new" style="background:#ef4444">9th</div>
-          <div class="quick-card-ico">🔬</div>
-          <div class="quick-card-title">Class 9 Science</div>
-          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
-        </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 9 student. Give me 10 important questions with answers for Social Studies - History India, Geography, Civics, Economics.')" style="border-color:#fff8e0">
-          <div class="quick-card-new" style="background:#ef4444">9th</div>
-          <div class="quick-card-ico">🌍</div>
-          <div class="quick-card-title">Class 9 Social Studies</div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 6 student. Give 8 important questions for Social Studies - History (Ancient India), Geography (Earth, Maps), Civics (Our Government).')" style="border-color:#fff8e0">
+          <div class="quick-card-new" style="background:#14b8a6">6th</div>
+          <div class="quick-card-ico">🌍</div><div class="quick-card-title">Class 6 Social Studies</div>
           <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">State Board</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 10 student. Give me 10 important exam questions with full solutions for Maths - Real Numbers, Quadratics, Triangles, Trigonometry, Statistics.')" style="border-color:#ece9ff">
-          <div class="quick-card-new" style="background:#5046e4">10th</div>
-          <div class="quick-card-ico">📐</div>
-          <div class="quick-card-title">Class 10 Maths</div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 7 student. Give 8 important questions for Maths - Integers, Rational Numbers, Lines and Angles, Triangles, Congruence, Data Handling.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#14b8a6">7th</div>
+          <div class="quick-card-ico">📐</div><div class="quick-card-title">Class 7 Maths</div>
           <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 10 student. Give me 10 important exam questions with answers for Science - Chemical Reactions, Acids, Metals, Light, Electricity, Reproduction.')" style="border-color:#e0f9f5">
-          <div class="quick-card-new" style="background:#5046e4">10th</div>
-          <div class="quick-card-ico">🔬</div>
-          <div class="quick-card-title">Class 10 Science</div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 7 student. Give 8 important questions for Science - Nutrition, Respiration, Heat, Acids and Bases, Weather, Soil, Motion, Light, Electric Current.')" style="border-color:#e0f9f5">
+          <div class="quick-card-new" style="background:#14b8a6">7th</div>
+          <div class="quick-card-ico">🔬</div><div class="quick-card-title">Class 7 Science</div>
           <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 10 student. Give me 10 important questions with answers for Social Studies - Indian History, World History, Geography and Civics.')" style="border-color:#fff8e0">
-          <div class="quick-card-new" style="background:#5046e4">10th</div>
-          <div class="quick-card-ico">🌍</div>
-          <div class="quick-card-title">Class 10 Social Studies</div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 7 student. Give 8 important questions for Social Studies - Medieval India History, Our Country India Geography, Civics State Government.')" style="border-color:#fff8e0">
+          <div class="quick-card-new" style="background:#14b8a6">7th</div>
+          <div class="quick-card-ico">🌍</div><div class="quick-card-title">Class 7 Social Studies</div>
           <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 8 student. Give 8 important questions for Maths - Rational Numbers, Squares, Cubes, Algebraic Expressions, Mensuration, Graphs, Factorisation.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#f59e0b">8th</div>
+          <div class="quick-card-ico">📐</div><div class="quick-card-title">Class 8 Maths</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 8 student. Give 8 important questions for Science - Crop Production, Microorganisms, Cell, Combustion, Force and Pressure, Sound, Chemical Effects, Stars.')" style="border-color:#e0f9f5">
+          <div class="quick-card-new" style="background:#f59e0b">8th</div>
+          <div class="quick-card-ico">🔬</div><div class="quick-card-title">Class 8 Science</div>
+          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 8 student. Give 8 important questions for Social Studies - Modern India History, Geography (Land, Agriculture, Industries), Civics Constitution.')" style="border-color:#fff8e0">
+          <div class="quick-card-new" style="background:#f59e0b">8th</div>
+          <div class="quick-card-ico">🌍</div><div class="quick-card-title">Class 8 Social Studies</div>
+          <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 9 student. Give 10 important exam questions for Maths - Number Systems, Polynomials, Linear Equations, Triangles, Quadrilaterals, Circles, Surface Areas, Statistics.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#ef4444">9th</div>
+          <div class="quick-card-ico">📐</div><div class="quick-card-title">Class 9 Maths</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 9 student. Give 10 important exam questions for Science - Matter, Atoms, Motion, Force, Gravitation, Sound, Cell Biology, Tissues, Natural Resources.')" style="border-color:#e0f9f5">
+          <div class="quick-card-new" style="background:#ef4444">9th</div>
+          <div class="quick-card-ico">🔬</div><div class="quick-card-title">Class 9 Science</div>
+          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 9 student. Give 10 important questions for Social Studies - History (French Revolution, Russian Revolution, India Nationalism), Geography, Political Science, Economics.')" style="border-color:#fff8e0">
+          <div class="quick-card-new" style="background:#ef4444">9th</div>
+          <div class="quick-card-ico">🌍</div><div class="quick-card-title">Class 9 Social Studies</div>
+          <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 9 student. Give 8 important questions for English - Reading Comprehension, Grammar (Tenses, Voice, Narration), Prose and Poetry questions.')" style="border-color:#ffe9e9">
+          <div class="quick-card-new" style="background:#ef4444">9th</div>
+          <div class="quick-card-ico">📚</div><div class="quick-card-title">Class 9 English</div>
+          <div class="quick-card-tag" style="background:#ffe9e9;color:#a83030">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 10 student. Give 10 important exam questions with full solutions for Maths - Real Numbers, Quadratics, Triangles, Trigonometry, Circles, Constructions, Statistics, Probability.')" style="border-color:#ece9ff">
+          <div class="quick-card-new" style="background:#5046e4">10th</div>
+          <div class="quick-card-ico">📐</div><div class="quick-card-title">Class 10 Maths</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 10 student. Give 10 important exam questions with answers for Science - Chemical Reactions, Acids Bases, Metals, Carbon, Life Processes, Control, Light, Electricity, Magnetic Effects.')" style="border-color:#e0f9f5">
+          <div class="quick-card-new" style="background:#5046e4">10th</div>
+          <div class="quick-card-ico">🔬</div><div class="quick-card-title">Class 10 Science</div>
+          <div class="quick-card-tag" style="background:#e0f9f5;color:#0d7a6b">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 10 student. Give 10 important questions for Social Studies - History (India Nationalism, World Wars), Geography (Indian Resources), Political Science, Economics (Indian Economic Development).')" style="border-color:#fff8e0">
+          <div class="quick-card-new" style="background:#5046e4">10th</div>
+          <div class="quick-card-ico">🌍</div><div class="quick-card-title">Class 10 Social Studies</div>
+          <div class="quick-card-tag" style="background:#fff8e0;color:#8a5c00">State Board</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('I am a State Board Class 10 student. Give 8 important questions for English - Reading Comprehension, Grammar (all tenses, voice, narration, clauses), Letter writing, Essay writing.')" style="border-color:#ffe9e9">
+          <div class="quick-card-new" style="background:#5046e4">10th</div>
+          <div class="quick-card-ico">📚</div><div class="quick-card-title">Class 10 English</div>
+          <div class="quick-card-tag" style="background:#ffe9e9;color:#a83030">State Board</div>
         </div>
       </div>
 
       <!-- JEE/NEET Tab (hidden by default) -->
       <div id="etab-jee-content" class="quick-grid" style="display:none">
-        <div class="quick-card" onclick="openChat();sendQuick('Give me top 15 most important JEE Main Physics previous year questions with solutions and shortcuts.')" style="border-color:#f3e8ff">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 15 most important JEE Main Physics previous year questions with solutions and shortcuts - Mechanics, Thermodynamics, Waves, Electrostatics, Current Electricity, Optics.')" style="border-color:#f3e8ff">
           <div class="quick-card-new" style="background:#ef4444">JEE</div>
-          <div class="quick-card-ico">⚡</div>
-          <div class="quick-card-title">JEE Physics PYQs</div>
+          <div class="quick-card-ico">⚡</div><div class="quick-card-title">JEE Physics PYQs</div>
           <div class="quick-card-tag" style="background:#f3e8ff;color:#6d28d9">JEE Main</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me top 15 most important JEE Main Chemistry previous year questions with answers and shortcuts.')" style="border-color:#dcfce7">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 15 most important JEE Main Chemistry previous year questions with answers - Physical Chemistry (Mole, Equilibrium, Electrochemistry), Inorganic, Organic.')" style="border-color:#dcfce7">
           <div class="quick-card-new" style="background:#ef4444">JEE</div>
-          <div class="quick-card-ico">⚗️</div>
-          <div class="quick-card-title">JEE Chemistry PYQs</div>
+          <div class="quick-card-ico">⚗️</div><div class="quick-card-title">JEE Chemistry PYQs</div>
           <div class="quick-card-tag" style="background:#dcfce7;color:#166534">JEE Main</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me top 15 most important JEE Main Maths previous year questions with solutions and shortcuts.')" style="border-color:#ece9ff">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 15 most important JEE Main Maths previous year questions with solutions - Calculus, Coordinate Geometry, Algebra, Trigonometry, Matrices, Probability.')" style="border-color:#ece9ff">
           <div class="quick-card-new" style="background:#ef4444">JEE</div>
-          <div class="quick-card-ico">📊</div>
-          <div class="quick-card-title">JEE Maths PYQs</div>
+          <div class="quick-card-ico">📊</div><div class="quick-card-title">JEE Maths PYQs</div>
           <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">JEE Main</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me top 15 most important NEET Biology previous year questions with correct answers and explanations.')" style="border-color:#fce7f3">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 15 most important NEET Biology previous year questions with correct answers - Diversity, Cell Biology, Plant Physiology, Human Physiology, Reproduction, Genetics, Evolution, Ecology.')" style="border-color:#fce7f3">
           <div class="quick-card-new" style="background:#ef4444">NEET</div>
-          <div class="quick-card-ico">🧬</div>
-          <div class="quick-card-title">NEET Biology PYQs</div>
+          <div class="quick-card-ico">🧬</div><div class="quick-card-title">NEET Biology PYQs</div>
           <div class="quick-card-tag" style="background:#fce7f3;color:#9d174d">NEET</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me top 10 most important NEET Physics previous year questions with answers.')" style="border-color:#f3e8ff">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 15 most important NEET Physics previous year questions with answers - Laws of Motion, Work Energy, Thermodynamics, Current Electricity, Optics, Atoms.')" style="border-color:#f3e8ff">
           <div class="quick-card-new" style="background:#ef4444">NEET</div>
-          <div class="quick-card-ico">⚡</div>
-          <div class="quick-card-title">NEET Physics PYQs</div>
+          <div class="quick-card-ico">⚡</div><div class="quick-card-title">NEET Physics PYQs</div>
           <div class="quick-card-tag" style="background:#f3e8ff;color:#6d28d9">NEET</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me top 10 most important NEET Chemistry previous year questions with answers.')" style="border-color:#dcfce7">
+        <div class="quick-card" onclick="openChat();sendQuick('Give 15 most important NEET Chemistry previous year questions with answers - Physical, Inorganic and Organic Chemistry chapters.')" style="border-color:#dcfce7">
           <div class="quick-card-new" style="background:#ef4444">NEET</div>
-          <div class="quick-card-ico">⚗️</div>
-          <div class="quick-card-title">NEET Chemistry PYQs</div>
+          <div class="quick-card-ico">⚗️</div><div class="quick-card-title">NEET Chemistry PYQs</div>
           <div class="quick-card-tag" style="background:#dcfce7;color:#166534">NEET</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('Give me complete JEE Mains important formulas and shortcuts for Physics, Chemistry and Maths. Organize chapter by chapter.')" style="border-color:#fef9c3">
-          <div class="quick-card-ico">📌</div>
-          <div class="quick-card-title">JEE Formula Sheet</div>
-          <div class="quick-card-tag" style="background:#fef9c3;color:#92400e">JEE Main</div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give complete JEE Main formula sheet for Physics: all formulas chapter-wise with units - Mechanics, Thermodynamics, Waves, Electromagnetism, Optics, Modern Physics.')" style="border-color:#fef9c3">
+          <div class="quick-card-ico">📌</div><div class="quick-card-title">JEE Physics Formulas</div>
+          <div class="quick-card-tag" style="background:#fef9c3;color:#92400e">JEE</div>
         </div>
-        <div class="quick-card" onclick="openChat();sendQuick('What is the complete syllabus and chapter-wise weightage for JEE Main 2025 in Physics, Chemistry and Maths?')" style="border-color:#e0f2fe">
-          <div class="quick-card-ico">🎯</div>
-          <div class="quick-card-title">JEE Syllabus 2025</div>
+        <div class="quick-card" onclick="openChat();sendQuick('Give complete JEE Main Maths formula sheet: Calculus, Coordinate Geometry, Algebra, Trigonometry, Probability - all formulas chapter-wise.')" style="border-color:#ece9ff">
+          <div class="quick-card-ico">📌</div><div class="quick-card-title">JEE Maths Formulas</div>
+          <div class="quick-card-tag" style="background:#ece9ff;color:#4338ca">JEE</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('What is the complete chapter-wise syllabus and weightage for JEE Main 2025 in Physics, Chemistry and Maths? Which chapters have highest marks?')" style="border-color:#e0f2fe">
+          <div class="quick-card-ico">🎯</div><div class="quick-card-title">JEE Syllabus 2025</div>
           <div class="quick-card-tag" style="background:#e0f2fe;color:#0369a1">JEE</div>
+        </div>
+        <div class="quick-card" onclick="openChat();sendQuick('What is the complete NEET 2025 syllabus chapter-wise for Biology, Physics and Chemistry? Which chapters carry highest marks in NEET?')" style="border-color:#fce7f3">
+          <div class="quick-card-ico">🎯</div><div class="quick-card-title">NEET Syllabus 2025</div>
+          <div class="quick-card-tag" style="background:#fce7f3;color:#9d174d">NEET</div>
         </div>
       </div>
     </div>
@@ -1206,10 +1261,11 @@ input,textarea,select{font-family:var(--fb)}
     </div>
   </div>
   <nav class="bnav">
-    <button class="ntab on" onclick="switchTab('home')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><div class="nind"></div>Home</button>
-    <button class="ntab" onclick="switchTab('search')"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div class="nind"></div>Search</button>
-    <button class="ntab" onclick="switchTab('videos')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><div class="nind"></div>Videos</button>
-    <button class="ntab" onclick="switchTab('profile')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg><div class="nind"></div>Profile</button>
+    <button class="ntab on" onclick="switchTab('home')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><div class="nind"></div>Home</button>
+    <button class="ntab" onclick="switchTab('search')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div class="nind"></div>Search</button>
+    <button class="ntab" onclick="switchTab('videos')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><div class="nind"></div>Videos</button>
+    <button class="ntab" onclick="switchTab('leaderboard')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V17H7v2h10v-2h-4v-1.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg><div class="nind"></div>Ranks</button>
+    <button class="ntab" onclick="switchTab('profile')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg><div class="nind"></div>Profile</button>
   </nav>
 </div>
 
@@ -1231,10 +1287,11 @@ input,textarea,select{font-family:var(--fb)}
     <div id="searchResults" class="sresults"></div>
   </div>
   <nav class="bnav">
-    <button class="ntab" onclick="switchTab('home')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><div class="nind"></div>Home</button>
-    <button class="ntab on" onclick="switchTab('search')"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div class="nind"></div>Search</button>
-    <button class="ntab" onclick="switchTab('videos')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><div class="nind"></div>Videos</button>
-    <button class="ntab" onclick="switchTab('profile')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg><div class="nind"></div>Profile</button>
+    <button class="ntab" onclick="switchTab('home')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><div class="nind"></div>Home</button>
+    <button class="ntab on" onclick="switchTab('search')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div class="nind"></div>Search</button>
+    <button class="ntab" onclick="switchTab('videos')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><div class="nind"></div>Videos</button>
+    <button class="ntab" onclick="switchTab('leaderboard')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V17H7v2h10v-2h-4v-1.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg><div class="nind"></div>Ranks</button>
+    <button class="ntab" onclick="switchTab('profile')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg><div class="nind"></div>Profile</button>
   </nav>
 </div>
 
@@ -1244,10 +1301,62 @@ input,textarea,select{font-family:var(--fb)}
   <div class="vid-tabs" id="vidTabs"></div>
   <div class="vid-body" id="vidBody"></div>
   <nav class="bnav">
-    <button class="ntab" onclick="switchTab('home')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><div class="nind"></div>Home</button>
-    <button class="ntab" onclick="switchTab('search')"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div class="nind"></div>Search</button>
-    <button class="ntab on" onclick="switchTab('videos')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><div class="nind"></div>Videos</button>
-    <button class="ntab" onclick="switchTab('profile')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg><div class="nind"></div>Profile</button>
+    <button class="ntab" onclick="switchTab('home')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><div class="nind"></div>Home</button>
+    <button class="ntab" onclick="switchTab('search')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div class="nind"></div>Search</button>
+    <button class="ntab on" onclick="switchTab('videos')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><div class="nind"></div>Videos</button>
+    <button class="ntab" onclick="switchTab('leaderboard')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V17H7v2h10v-2h-4v-1.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg><div class="nind"></div>Ranks</button>
+    <button class="ntab" onclick="switchTab('profile')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg><div class="nind"></div>Profile</button>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════════
+     LEADERBOARD SCREEN
+═══════════════════════════════════════ -->
+<div id="leaderboard" class="screen">
+  <div class="lb-hdr">
+    <div class="lb-hdr-blob" style="width:220px;height:220px;background:#a78bfa;top:-80px;right:-60px"></div>
+    <div class="lb-hdr-blob" style="width:120px;height:120px;background:#60a5fa;bottom:10px;left:-30px"></div>
+    <h1>🏆 Global Leaderboard</h1>
+    <p>Top learners this week — keep studying to climb!</p>
+    <div class="lb-my-card" id="lbMyCard">
+      <div class="lb-my-av" id="lbMyAv">A</div>
+      <div class="lb-my-info">
+        <div class="lb-my-name" id="lbMyName">You</div>
+        <div class="lb-my-rank" id="lbMyRank">Loading your rank…</div>
+      </div>
+      <div style="text-align:right">
+        <div class="lb-my-xp" id="lbMyXp">0</div>
+        <div class="lb-my-xp-lbl">XP</div>
+      </div>
+    </div>
+  </div>
+  <div class="lb-body">
+    <div class="lb-tabs">
+      <button class="lb-tab-btn on" id="lbBtnWeek" onclick="switchLbTab('week')">📅 This Week</button>
+      <button class="lb-tab-btn" id="lbBtnAll" onclick="switchLbTab('all')">🌟 All Time</button>
+    </div>
+    <div class="lb-list" id="leaderboardList">
+      <div style="text-align:center;padding:40px;color:var(--ink3);font-size:13px">
+        <div style="font-size:36px;margin-bottom:12px">⏳</div>
+        Loading leaderboard…
+      </div>
+    </div>
+    <div class="lb-xp-info">
+      <div class="lb-xp-info-title">⚡ How to earn XP</div>
+      <div class="lb-xp-pills">
+        <div class="lb-xp-pill">📺 Lesson <strong>+10 XP</strong></div>
+        <div class="lb-xp-pill">🧪 Quiz <strong>+5 XP</strong></div>
+        <div class="lb-xp-pill">🔥 Streak day <strong>+20 XP</strong></div>
+        <div class="lb-xp-pill">💬 AI chat <strong>+2 XP</strong></div>
+      </div>
+    </div>
+  </div>
+  <nav class="bnav">
+    <button class="ntab" onclick="switchTab('home')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><div class="nind"></div>Home</button>
+    <button class="ntab" onclick="switchTab('search')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div class="nind"></div>Search</button>
+    <button class="ntab" onclick="switchTab('videos')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><div class="nind"></div>Videos</button>
+    <button class="ntab on" onclick="switchTab('leaderboard')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V17H7v2h10v-2h-4v-1.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg><div class="nind"></div>Ranks</button>
+    <button class="ntab" onclick="switchTab('profile')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg><div class="nind"></div>Profile</button>
   </nav>
 </div>
 
@@ -1269,7 +1378,14 @@ input,textarea,select{font-family:var(--fb)}
     <div id="badgeGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px"></div>
     <div id="badgeProgress" style="font-size:11px;color:var(--ink3);margin-bottom:8px;text-align:center"></div>
     <button id="badgeShowAll" onclick="toggleAllBadges()" style="width:100%;padding:9px;border-radius:50px;border:1.5px solid var(--border);background:var(--bg2);color:var(--brand);font-size:12px;font-weight:600;cursor:pointer;margin-bottom:16px;font-family:var(--fh)">Show All Badges 🏅</button>
-    <div class="prof-sec-title">Voice Language</div>
+    <!-- LEADERBOARD -->
+    <div class="prof-sec-title" style="display:flex;align-items:center;justify-content:space-between">
+      <span>🏆 Global Leaderboard</span>
+      <button onclick="openLeaderboard()" style="font-size:11px;color:var(--brand);font-weight:600;background:none;border:none;cursor:pointer;font-family:var(--fh)">View All →</button>
+    </div>
+    <div id="leaderboardPreview" style="margin-bottom:16px">
+      <div style="text-align:center;padding:16px;color:var(--ink3);font-size:13px">Loading leaderboard…</div>
+    </div>
     <div class="lang-selector-wrap" id="langSelector"></div>
     <div class="prof-sec-title">Settings</div>
     <div class="menu-list">
@@ -1299,13 +1415,24 @@ input,textarea,select{font-family:var(--fb)}
         <div class="menu-right"><div class="menu-arrow">›</div></div>
       </div>
     </div>
+    <!-- Contact / Support Card -->
+    <div style="background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1.5px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:14px;text-align:center">
+      <div style="font-size:20px;margin-bottom:6px">📬</div>
+      <div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Contact Us</div>
+      <div style="font-size:12px;color:var(--ink3);margin-bottom:10px;line-height:1.5">For promotions, bug reports or any support</div>
+      <a href="mailto:edusmart2012exellence@gmail.com" style="display:inline-flex;align-items:center;gap:7px;background:var(--brand);color:#fff;padding:9px 18px;border-radius:50px;font-family:var(--fh);font-size:13px;font-weight:700;text-decoration:none;transition:background .2s" onmouseover="this.style.background='var(--brand-lt)'" onmouseout="this.style.background='var(--brand)'">
+        ✉️ edusmart2012exellence@gmail.com
+      </a>
+    </div>
+
     <button class="logout-btn" onclick="doLogout()">🚪 Log Out</button>
   </div>
   <nav class="bnav">
-    <button class="ntab" onclick="switchTab('home')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><div class="nind"></div>Home</button>
-    <button class="ntab" onclick="switchTab('search')"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div class="nind"></div>Search</button>
-    <button class="ntab" onclick="switchTab('videos')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><div class="nind"></div>Videos</button>
-    <button class="ntab on" onclick="switchTab('profile')"><svg width="21" height="21" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg><div class="nind"></div>Profile</button>
+    <button class="ntab" onclick="switchTab('home')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><div class="nind"></div>Home</button>
+    <button class="ntab" onclick="switchTab('search')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div class="nind"></div>Search</button>
+    <button class="ntab" onclick="switchTab('videos')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg><div class="nind"></div>Videos</button>
+    <button class="ntab" onclick="switchTab('leaderboard')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V17H7v2h10v-2h-4v-1.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg><div class="nind"></div>Ranks</button>
+    <button class="ntab on" onclick="switchTab('profile')"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg><div class="nind"></div>Profile</button>
   </nav>
 </div>
 
@@ -1391,12 +1518,13 @@ input,textarea,select{font-family:var(--fb)}
       <h3>Still need help?</h3>
       <p>Our support team responds within 24 hours</p>
       <div class="contact-btns">
-        <button class="contact-btn" onclick="showToast('Opening email support…')">✉️ Email Us</button>
+        <button class="contact-btn" onclick="window.open('mailto:edusmart2012exellence@gmail.com','_blank')">✉️ Email Us</button>
         <button class="contact-btn" onclick="showToast('Live chat starting…')">💬 Live Chat</button>
       </div>
     </div>
   </div>
 </div>
+
 
 <!-- VIDEO PLAYER MODAL -->
 <div class="moverlay" id="moverlay" onclick="closeMifBg(event)">
@@ -1565,17 +1693,21 @@ input,textarea,select{font-family:var(--fb)}
 async function callClaude({ system, messages, max_tokens = 1000 }) {
   const recentMsgs = (messages || []).slice(-6).map(m => ({
     role: m.role === 'assistant' ? 'assistant' : 'user',
-    content: String(m.content || '').slice(0, 1500)
+    content: m.content  // may be string or array (for vision)
   }));
-  const cleanSystem = (system || '').slice(0, 1500);
+  const cleanSystem = (system || '').slice(0, 2000);
 
-  // Always use /api/chat backend (works on Render + localhost)
   let resp;
   try {
-    resp = await fetch('/api/chat', {
+    resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: cleanSystem, messages: recentMsgs, max_tokens })
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens,
+        system: cleanSystem,
+        messages: recentMsgs
+      })
     });
   } catch(networkErr) {
     throw new Error('No internet connection. Please check and try again.');
@@ -1583,15 +1715,15 @@ async function callClaude({ system, messages, max_tokens = 1000 }) {
 
   let data;
   try {
-    const text = await resp.text();
-    data = JSON.parse(text);
+    data = await resp.json();
   } catch(e) {
     throw new Error('Server returned invalid response. Please try again in 30 seconds.');
   }
 
-  if (!resp.ok) throw new Error(data.error || 'Server error ' + resp.status);
-  if (!data.text) throw new Error('AI returned empty response. Please try again!');
-  return data.text;
+  if (!resp.ok) throw new Error((data.error && data.error.message) || 'API error ' + resp.status);
+  const text = data.content && data.content[0] && data.content[0].text;
+  if (!text) throw new Error('AI returned empty response. Please try again!');
+  return text;
 }
 
 
@@ -1611,6 +1743,8 @@ function saveState() {
     localStorage.setItem('es_quizCorrect', quizCorrect);
     localStorage.setItem('es_subjects', JSON.stringify([...subjectsSeen]));
     localStorage.setItem('es_streakDate', new Date().toDateString());
+    // Push score to leaderboard (non-blocking)
+    if (typeof pushMyScore === 'function') { try { pushMyScore(); } catch(e){} }
   } catch(e) { console.log('Save error:', e); }
 }
 
@@ -1655,6 +1789,8 @@ function loadState() {
   if (hqa) hqa.textContent = quizTotal > 0 ? Math.round((quizCorrect/quizTotal)*100)+'%' : '—';
   if (hst) hst.textContent = getStreak()+'🔥';
   if (hsb) hsb.textContent = subjectsSeen.size;
+  // Push score and refresh leaderboard preview
+  if (typeof pushMyScore === 'function') { try { pushMyScore(); renderLeaderboardPreview(); } catch(e){} }
 }
 
 function restoreChatMessages() {
@@ -1723,37 +1859,46 @@ function startDailyChallenge() {
    BADGE SYSTEM — Real earned badges
 ══════════════════════════ */
 const BADGE_DEFS = [
-  // 🎓 Learning badges
-  { id:'first_video',   ico:'🌱', nm:'First Step',      desc:'Watch your first AI lesson',           cat:'Learning', check: ()=> vidWatched >= 1 },
-  { id:'five_videos',   ico:'📚', nm:'Bookworm',        desc:'Watch 5 lessons',                      cat:'Learning', check: ()=> vidWatched >= 5 },
-  { id:'ten_videos',    ico:'📺', nm:'Video Star',      desc:'Watch 10 lessons',                     cat:'Learning', check: ()=> vidWatched >= 10 },
-  { id:'twenty_videos', ico:'🎬', nm:'Binge Learner',   desc:'Watch 20 lessons',                     cat:'Learning', check: ()=> vidWatched >= 20 },
-  { id:'fifty_videos',  ico:'🏫', nm:'Class Topper',    desc:'Watch 50 lessons — incredible!',       cat:'Learning', check: ()=> vidWatched >= 50 },
-  // 🧠 Quiz badges
-  { id:'first_quiz',    ico:'🎯', nm:'Quiz Starter',    desc:'Complete your first quiz',             cat:'Quiz',     check: ()=> quizTotal >= 1 },
-  { id:'five_quiz',     ico:'🧩', nm:'Quiz Enthusiast', desc:'Complete 5 quizzes',                   cat:'Quiz',     check: ()=> quizTotal >= 5 },
-  { id:'quiz_score80',  ico:'🥈', nm:'Silver Brain',    desc:'Score 80%+ on any quiz',              cat:'Quiz',     check: ()=> quizTotal > 0 && Math.round((quizCorrect/quizTotal)*100) >= 80 },
-  { id:'quiz_score90',  ico:'🥇', nm:'Gold Brain',      desc:'Score 90%+ on quizzes',               cat:'Quiz',     check: ()=> quizTotal > 0 && Math.round((quizCorrect/quizTotal)*100) >= 90 },
-  { id:'quiz_perfect',  ico:'💯', nm:'Perfect Score',   desc:'Score 100% on a quiz!',               cat:'Quiz',     check: ()=> quizTotal > 0 && Math.round((quizCorrect/quizTotal)*100) === 100 },
-  // 🔥 Streak badges
-  { id:'streak_2',      ico:'⚡', nm:'Getting Warm',    desc:'Study 2 days in a row',               cat:'Streak',   check: ()=> getStreak() >= 2 },
-  { id:'streak_3',      ico:'🔥', nm:'On Fire!',        desc:'Study 3 days in a row',               cat:'Streak',   check: ()=> getStreak() >= 3 },
-  { id:'streak_7',      ico:'💎', nm:'Diamond Week',    desc:'Study 7 days in a row',               cat:'Streak',   check: ()=> getStreak() >= 7 },
-  { id:'streak_14',     ico:'👑', nm:'Two Weeks King',  desc:'Study 14 days in a row',              cat:'Streak',   check: ()=> getStreak() >= 14 },
-  { id:'streak_30',     ico:'🌈', nm:'Legend',          desc:'Study 30 days in a row — amazing!',   cat:'Streak',   check: ()=> getStreak() >= 30 },
-  // 🌍 Subject badges
-  { id:'subj_3',        ico:'📖', nm:'Curious Learner', desc:'Study 3 different subjects',          cat:'Subject',  check: ()=> subjectsSeen.size >= 3 },
-  { id:'subj_5',        ico:'🧠', nm:'All Rounder',     desc:'Study 5 different subjects',          cat:'Subject',  check: ()=> subjectsSeen.size >= 5 },
-  { id:'subj_8',        ico:'🎓', nm:'Scholar',         desc:'Study all 8 subjects',                cat:'Subject',  check: ()=> subjectsSeen.size >= 8 },
-  // 💬 Chat badges
-  { id:'first_chat',    ico:'💬', nm:'First Chat',      desc:'Ask your first AI question',           cat:'Chat',     check: ()=> chatHistory.length >= 2 },
-  { id:'chat_10',       ico:'🗣️', nm:'Chatterbox',      desc:'Have 10 AI conversations',            cat:'Chat',     check: ()=> chatHistory.length >= 10 },
-  { id:'assignment',    ico:'📝', nm:'Homework Hero',   desc:'Generate your first assignment',       cat:'Chat',     check: ()=> parseInt(localStorage.getItem('es_assignments')||'0') >= 1 },
-  // 📷 Camera badge
-  { id:'camera_used',   ico:'📷', nm:'Smart Scanner',   desc:'Use camera search feature',            cat:'Special',  check: ()=> localStorage.getItem('es_camera_used') === 'true' },
-  // 🏆 Special
-  { id:'night_owl',     ico:'🦉', nm:'Night Owl',       desc:'Study after 10 PM',                   cat:'Special',  check: ()=> localStorage.getItem('es_night_owl') === 'true' },
-  { id:'early_bird',    ico:'🐦', nm:'Early Bird',      desc:'Study before 7 AM',                   cat:'Special',  check: ()=> localStorage.getItem('es_early_bird') === 'true' },
+  // Learning
+  { id:'first_video',    ico:'🌱', nm:'First Step',       desc:'Watch your first AI lesson',                    cat:'Learning', check: ()=> vidWatched >= 1 },
+  { id:'five_videos',    ico:'📚', nm:'Bookworm',         desc:'Watch 5 AI lessons',                            cat:'Learning', check: ()=> vidWatched >= 5 },
+  { id:'ten_videos',     ico:'📺', nm:'Video Star',       desc:'Watch 10 lessons',                              cat:'Learning', check: ()=> vidWatched >= 10 },
+  { id:'twenty_videos',  ico:'🎬', nm:'Dedicated Learner',desc:'Watch 20 lessons',                              cat:'Learning', check: ()=> vidWatched >= 20 },
+  { id:'fifty_videos',   ico:'🏫', nm:'Class Topper',     desc:'Watch 50 lessons - incredible!',                cat:'Learning', check: ()=> vidWatched >= 50 },
+  { id:'hundred_vids',   ico:'🎖️', nm:'Scholar Elite',     desc:'Watch 100 lessons - unstoppable!',              cat:'Learning', check: ()=> vidWatched >= 100 },
+  // Quiz
+  { id:'first_quiz',     ico:'🎯', nm:'Quiz Starter',     desc:'Complete your first quiz',                      cat:'Quiz',     check: ()=> quizTotal >= 1 },
+  { id:'five_quiz',      ico:'🧩', nm:'Quiz Fan',         desc:'Complete 5 quizzes',                            cat:'Quiz',     check: ()=> quizTotal >= 5 },
+  { id:'twenty_quiz',    ico:'🏋️', nm:'Quiz Warrior',      desc:'Complete 20 quizzes',                           cat:'Quiz',     check: ()=> quizTotal >= 20 },
+  { id:'quiz_score70',   ico:'🎖️', nm:'Bronze Brain',      desc:'Score 70%+ average on quizzes',                 cat:'Quiz',     check: ()=> quizTotal >= 3 && Math.round((quizCorrect/quizTotal)*100) >= 70 },
+  { id:'quiz_score80',   ico:'🥈', nm:'Silver Brain',     desc:'Score 80%+ average on quizzes',                 cat:'Quiz',     check: ()=> quizTotal >= 3 && Math.round((quizCorrect/quizTotal)*100) >= 80 },
+  { id:'quiz_score90',   ico:'🥇', nm:'Gold Brain',       desc:'Score 90%+ average on quizzes',                 cat:'Quiz',     check: ()=> quizTotal >= 5 && Math.round((quizCorrect/quizTotal)*100) >= 90 },
+  { id:'quiz_perfect',   ico:'💯', nm:'Perfect Scholar',  desc:'Score 100% on any quiz - extraordinary!',       cat:'Quiz',     check: ()=> quizTotal > 0 && Math.round((quizCorrect/quizTotal)*100) === 100 },
+  // Streak - meaningful milestones
+  { id:'streak_3',       ico:'🔥', nm:'On Fire!',         desc:'Study 3 days in a row',                         cat:'Streak',   check: ()=> getStreak() >= 3 },
+  { id:'streak_7',       ico:'💎', nm:'Diamond Week',     desc:'Study 7 days in a row - amazing!',              cat:'Streak',   check: ()=> getStreak() >= 7 },
+  { id:'streak_14',      ico:'👑', nm:'Two Week King',    desc:'Study 14 days in a row - champion!',            cat:'Streak',   check: ()=> getStreak() >= 14 },
+  { id:'streak_30',      ico:'🌈', nm:'Monthly Legend',   desc:'Study 30 days in a row - legendary!',           cat:'Streak',   check: ()=> getStreak() >= 30 },
+  { id:'streak_60',      ico:'🚀', nm:'Unstoppable',      desc:'Study 60 days in a row - beyond amazing!',      cat:'Streak',   check: ()=> getStreak() >= 60 },
+  { id:'streak_100',     ico:'🌟', nm:'100 Day Legend',   desc:'Study 100 days in a row - absolute legend!',    cat:'Streak',   check: ()=> getStreak() >= 100 },
+  // Subjects
+  { id:'subj_3',         ico:'📖', nm:'Curious Learner',  desc:'Study 3 different subjects',                    cat:'Subject',  check: ()=> subjectsSeen.size >= 3 },
+  { id:'subj_5',         ico:'🧠', nm:'All Rounder',      desc:'Study 5 different subjects',                    cat:'Subject',  check: ()=> subjectsSeen.size >= 5 },
+  { id:'subj_8',         ico:'🎓', nm:'Scholar',          desc:'Study 8 different subjects',                    cat:'Subject',  check: ()=> subjectsSeen.size >= 8 },
+  { id:'subj_12',        ico:'🌐', nm:'Polymath',         desc:'Study 12+ subjects - Renaissance learner!',     cat:'Subject',  check: ()=> subjectsSeen.size >= 12 },
+  // Chat
+  { id:'first_chat',     ico:'💬', nm:'First Chat',       desc:'Ask your first AI question',                    cat:'Chat',     check: ()=> chatHistory.length >= 2 },
+  { id:'chat_10',        ico:'🗣️', nm:'Active Learner',    desc:'Ask 10 questions to the AI',                    cat:'Chat',     check: ()=> chatHistory.length >= 10 },
+  { id:'chat_50',        ico:'🎤', nm:'Deep Thinker',     desc:'Ask 50 questions to the AI tutor',              cat:'Chat',     check: ()=> chatHistory.length >= 50 },
+  { id:'chat_100',       ico:'🤖', nm:'AI Best Friend',   desc:'Ask 100 questions - truly dedicated!',          cat:'Chat',     check: ()=> chatHistory.length >= 100 },
+  { id:'assignment',     ico:'📝', nm:'Homework Hero',    desc:'Generate your first practice assignment',       cat:'Chat',     check: ()=> parseInt(localStorage.getItem('es_assignments')||'0') >= 1 },
+  { id:'assignment_5',   ico:'📋', nm:'Assignment Pro',   desc:'Complete 5 practice assignments',               cat:'Chat',     check: ()=> parseInt(localStorage.getItem('es_assignments')||'0') >= 5 },
+  // Special
+  { id:'camera_used',    ico:'📷', nm:'Smart Scanner',    desc:'Use camera to scan a question',                 cat:'Special',  check: ()=> localStorage.getItem('es_camera_used') === 'true' },
+  { id:'night_owl',      ico:'🦉', nm:'Night Owl',        desc:'Study after 10 PM - dedicated!',                cat:'Special',  check: ()=> localStorage.getItem('es_night_owl') === 'true' },
+  { id:'early_bird',     ico:'🐦', nm:'Early Bird',       desc:'Study before 7 AM - morning warrior!',          cat:'Special',  check: ()=> localStorage.getItem('es_early_bird') === 'true' },
+  { id:'board_prep',     ico:'📜', nm:'Board Ready',      desc:'Study 10+ board exam topics',                   cat:'Special',  check: ()=> parseInt(localStorage.getItem('es_board_topics')||'0') >= 10 },
+  { id:'daily_7',        ico:'⚡', nm:'Daily Champion',  desc:'Complete 7 daily challenges',                   cat:'Special',  check: ()=> parseInt(localStorage.getItem('es_daily_done')||'0') >= 7 },
 ];
 
 let showingAllBadges = false;
@@ -1792,15 +1937,24 @@ function updateStreak() {
 function checkAndAwardBadges() {
   updateStreak();
   const earned = getEarnedBadges();
-  let newBadge = false;
+  // Only 1 badge per day max - prevents 9 badges on day 1
+  const todayKey = 'es_badge_day_' + new Date().toDateString();
+  const todayCount = parseInt(localStorage.getItem(todayKey) || '0');
+  if (todayCount >= 1) { renderBadges(); return; }
+
+  let newBadgeCount = 0;
   BADGE_DEFS.forEach(b => {
+    if (newBadgeCount >= 1) return; // max 1 per call
     if (!earned.includes(b.id) && b.check()) {
       earned.push(b.id);
-      newBadge = true;
-      showToast('🏅 Badge earned: ' + b.nm + '!');
+      newBadgeCount++;
+      setTimeout(() => showToast('🏅 New badge: ' + b.ico + ' ' + b.nm + '!'), 1000);
     }
   });
-  if (newBadge) localStorage.setItem('es_badges', JSON.stringify(earned));
+  if (newBadgeCount > 0) {
+    localStorage.setItem('es_badges', JSON.stringify(earned));
+    localStorage.setItem(todayKey, String(todayCount + newBadgeCount));
+  }
   renderBadges();
 }
 function renderBadges() {
@@ -1886,6 +2040,49 @@ const ALL_VIDS = [
   {q:"How does a computer work? CPU, RAM and storage explained",subj:"Comp. Sci.",icon:"💻",bg:"#e0f2fe",dur:"5 min",key:"ai"},
   {q:"What is Python programming? Beginner guide with examples",subj:"Comp. Sci.",icon:"🐍",bg:"#e0f2fe",dur:"5 min",key:"ai"},
   {q:"Artificial intelligence and machine learning explained simply",subj:"Comp. Sci.",icon:"🤖",bg:"#e0f2fe",dur:"5 min",key:"ai"},
+  {q:"Class 6 Maths: Fractions, decimals and basic algebra for beginners",subj:"Maths",icon:"📐",bg:"#ece9ff",dur:"4 min",key:"pythagoras"},
+  {q:"Class 6 Science: Plants, animals and food chains explained simply",subj:"Science",icon:"🌿",bg:"#e0f9f5",dur:"4 min",key:"photosynthesis"},
+  {q:"Class 7 Science: Nutrition in plants and animals explained",subj:"Science",icon:"🌿",bg:"#e0f9f5",dur:"4 min",key:"photosynthesis"},
+  {q:"Class 7 Maths: Lines angles and triangles with solved examples",subj:"Maths",icon:"📐",bg:"#ece9ff",dur:"4 min",key:"pythagoras"},
+  {q:"Class 8 Science: Cell structure and functions explained simply",subj:"Biology",icon:"🔬",bg:"#fce7f3",dur:"4 min",key:"heart"},
+  {q:"Class 8 Maths: Squares cubes and algebraic expressions explained",subj:"Maths",icon:"📐",bg:"#ece9ff",dur:"4 min",key:"pythagoras"},
+  {q:"Class 9 Maths: Number systems and polynomials complete guide",subj:"Maths",icon:"📐",bg:"#ece9ff",dur:"5 min",key:"pythagoras"},
+  {q:"Class 9 Science: Matter in our surroundings and atoms and molecules",subj:"Science",icon:"🔬",bg:"#e0f9f5",dur:"5 min",key:"periodic"},
+  {q:"Endocrine system: hormones glands and their functions in body",subj:"Biology",icon:"🧪",bg:"#fce7f3",dur:"5 min",key:"heart"},
+  {q:"Excretory system: how kidneys filter blood and form urine",subj:"Biology",icon:"🧬",bg:"#fce7f3",dur:"5 min",key:"heart"},
+  {q:"Human reproductive system: male and female explained",subj:"Biology",icon:"🧬",bg:"#fce7f3",dur:"5 min",key:"heart"},
+  {q:"Ecosystem: food chain food web and energy flow explained",subj:"Biology",icon:"🌊",bg:"#fce7f3",dur:"5 min",key:"heart"},
+  {q:"Human immune system: how the body fights disease and infection",subj:"Biology",icon:"🧬",bg:"#fce7f3",dur:"5 min",key:"heart"},
+  {q:"Genetics: Mendel laws dominance and recessive traits explained",subj:"Biology",icon:"🧬",bg:"#fce7f3",dur:"5 min",key:"heart"},
+  {q:"Evolution: Darwin natural selection and evidence for evolution",subj:"Biology",icon:"🦕",bg:"#fce7f3",dur:"5 min",key:"heart"},
+  {q:"Projectile motion: horizontal and vertical components with problems",subj:"Physics",icon:"🏀",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  {q:"Work energy and power: formulas and solved examples",subj:"Physics",icon:"⚡",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  {q:"Electromagnetic induction and Faraday law explained",subj:"Physics",icon:"🧲",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  {q:"Capacitors and electric circuits: charging and discharging",subj:"Physics",icon:"🔌",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  {q:"Atomic structure: Bohr model orbitals and electron configuration",subj:"Physics",icon:"⚛️",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  {q:"Nuclear physics: radioactivity fission and fusion explained",subj:"Physics",icon:"☢️",bg:"#f3e8ff",dur:"5 min",key:"newton"},
+  {q:"Organic chemistry: functional groups nomenclature and reactions",subj:"Chemistry",icon:"🧪",bg:"#dcfce7",dur:"5 min",key:"periodic"},
+  {q:"Mole concept and stoichiometry: calculations explained step by step",subj:"Chemistry",icon:"⚗️",bg:"#dcfce7",dur:"5 min",key:"periodic"},
+  {q:"Chemical thermodynamics: enthalpy entropy and Gibbs energy",subj:"Chemistry",icon:"🔥",bg:"#dcfce7",dur:"5 min",key:"periodic"},
+  {q:"Biomolecules: carbohydrates proteins fats and nucleic acids",subj:"Chemistry",icon:"🧬",bg:"#dcfce7",dur:"5 min",key:"periodic"},
+  {q:"3D geometry: distance formula equation of line and plane",subj:"Maths",icon:"📐",bg:"#ece9ff",dur:"5 min",key:"pythagoras"},
+  {q:"Vectors: addition dot product cross product with examples",subj:"Maths",icon:"➡️",bg:"#ece9ff",dur:"5 min",key:"pythagoras"},
+  {q:"Permutations and combinations with real Indian exam examples",subj:"Maths",icon:"🎲",bg:"#ece9ff",dur:"5 min",key:"pythagoras"},
+  {q:"Complex numbers: Argand plane polar form and applications",subj:"Maths",icon:"🔢",bg:"#ece9ff",dur:"5 min",key:"pythagoras"},
+  {q:"Mauryan Empire: Chandragupta Ashoka administration and decline",subj:"History",icon:"🏛️",bg:"#fff8e0",dur:"5 min",key:"french"},
+  {q:"British colonialism in India: East India Company to Independence",subj:"History",icon:"🇬🇧",bg:"#fff8e0",dur:"6 min",key:"french"},
+  {q:"Russian Revolution 1917: causes events and impact explained",subj:"History",icon:"🇷🇺",bg:"#fff8e0",dur:"5 min",key:"french"},
+  {q:"Fundamental Rights and Directive Principles in Indian Constitution",subj:"Civics",icon:"📜",bg:"#fef9c3",dur:"5 min",key:"french"},
+  {q:"Object oriented programming: classes inheritance and polymorphism",subj:"Comp. Sci.",icon:"🐍",bg:"#e0f2fe",dur:"5 min",key:"ai"},
+  {q:"SQL and databases: queries joins and normalization explained",subj:"Comp. Sci.",icon:"🗄️",bg:"#e0f2fe",dur:"5 min",key:"ai"},
+  {q:"Sorting algorithms: bubble merge quick sort with examples",subj:"Comp. Sci.",icon:"📊",bg:"#e0f2fe",dur:"5 min",key:"ai"},
+  {q:"Demand supply and market equilibrium: laws and graphs",subj:"Economics",icon:"📈",bg:"#fef3c7",dur:"5 min",key:"default"},
+  {q:"Indian economic development: sectors poverty and employment",subj:"Economics",icon:"🇮🇳",bg:"#fef3c7",dur:"5 min",key:"default"},
+  {q:"Accounting basics: journal entries ledger and trial balance",subj:"Economics",icon:"📒",bg:"#fef3c7",dur:"5 min",key:"default"},
+  {q:"Writing skills: essays letters reports and notices for board exams",subj:"English",icon:"✍️",bg:"#ffe9e9",dur:"4 min",key:"english"},
+  {q:"Figures of speech: simile metaphor personification alliteration",subj:"English",icon:"📚",bg:"#ffe9e9",dur:"4 min",key:"english"},
+  {q:"Comprehension passages: tips and strategies for board exams",subj:"English",icon:"📖",bg:"#ffe9e9",dur:"4 min",key:"english"},
+  {q:"Reported speech direct and indirect narration rules",subj:"English",icon:"🗣️",bg:"#ffe9e9",dur:"4 min",key:"english"},
 ];
 
 const QUIZ_DATA = {
@@ -2084,12 +2281,22 @@ function goTo(id) {
 }
 function switchTab(id) {
   goTo(id);
-  const ORDER=['home','search','videos','profile'];
+  const ORDER=['home','search','videos','leaderboard','profile'];
   document.querySelectorAll('.bnav').forEach(nav=>{
     nav.querySelectorAll('.ntab').forEach((t,i)=>t.classList.toggle('on',ORDER[i]===id));
   });
   if (id==='search') { document.getElementById('searchQ').focus(); doSearch(''); }
   if (id==='videos') renderVidLib();
+  if (id==='leaderboard') {
+    // Update header avatar with current user initial
+    const lbAv = document.getElementById('lbMyAv');
+    const lbNm = document.getElementById('lbMyName');
+    if (lbAv) lbAv.textContent = userName.charAt(0).toUpperCase();
+    if (lbNm) lbNm.textContent = userName;
+    const xpEl = document.getElementById('lbMyXp');
+    if (xpEl) xpEl.textContent = getUserXP().toLocaleString('en-IN');
+    loadLeaderboard(lbTab);
+  }
 }
 
 function openPanel(id) { document.getElementById(id).classList.add('on'); }
@@ -2347,7 +2554,7 @@ function doLogout() {
 /* ══════════════════════════
    VIDEO LIBRARY
 ══════════════════════════ */
-const VID_TABS=['All','Science','Maths','Physics','Chemistry','Biology','History','English','Comp. Sci.'];
+const VID_TABS=['All','Science','Biology','Maths','Physics','Chemistry','History','Geography','Civics','Economics','English','Comp. Sci.','CBSE','State Board','JEE','NEET'];
 function renderVidLib() {
   const tabsEl=document.getElementById('vidTabs');
   if (!tabsEl) return;
@@ -3282,75 +3489,302 @@ async function processCameraImage(file) {
       reader.readAsDataURL(file);
     });
 
-    // Ask AI to analyze image
-    let resp, data;
-    try {
-      resp = await fetch('/api/analyze-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64, mimeType: file.type, target: cameraTarget })
-      });
-      if (!resp.ok) throw new Error('Server error ' + resp.status);
-      data = await resp.json();
-    } catch(fetchErr) {
-      closeCameraModal();
-      // Fallback: if image API fails, open chat and ask user to type
-      if (cameraTarget === 'chat') {
-        openChat();
-        addBotMsg('📷 I received your photo but could not read it clearly.\n\nPlease **type your question** and I will answer it right away! 📚');
-      } else {
-        showToast('⚠️ Photo could not be processed. Please type your topic instead.');
-      }
-      return;
+    // Determine media type
+    const mimeType = file.type || 'image/jpeg';
+
+    // System prompt based on target
+    let systemPrompt, userPrompt;
+    if (cameraTarget === 'chat') {
+      systemPrompt = `You are EduSmart AI tutor for Indian students. Analyze the image and provide a complete, helpful academic answer. If it's a question, solve it step by step. Be thorough and educational.`;
+      userPrompt = 'Please analyze this image and answer the question or explain the content shown. Provide a complete academic explanation.';
+    } else {
+      systemPrompt = `You extract academic topics from images. Respond with ONLY a JSON: {"topic":"short topic name","question":"full question text if visible or null"}. Keep topic under 8 words.`;
+      userPrompt = 'What academic topic or question is shown in this image? Respond ONLY with JSON.';
     }
+
+    // Call Anthropic vision API directly
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: cameraTarget === 'chat' ? 1500 : 300,
+        system: systemPrompt,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mimeType, data: base64 } },
+            { type: 'text', text: userPrompt }
+          ]
+        }]
+      })
+    });
+
+    const apiData = await resp.json();
+    if (!resp.ok) throw new Error((apiData.error && apiData.error.message) || 'API error ' + resp.status);
+    const resultText = apiData.content && apiData.content[0] && apiData.content[0].text;
+    if (!resultText) throw new Error('Empty response');
 
     closeCameraModal();
 
     if (cameraTarget === 'chat') {
-      // Put the AI answer directly in chat
-      if (data.answer) {
-        openChat();
-        addUserMsg('📷 [Sent a photo of a question]');
-        chatHistory.push({ role: 'user', content: 'Student sent a photo. The question in the photo is: ' + (data.topic || 'unknown topic'), time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
-        addBotMsg(data.answer);
-        chatHistory.push({ role: 'assistant', content: data.answer, time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
-        saveState();
-        showToast('AI answered your photo!');
-      } else {
-        showToast(data.error || 'Could not read the image. Try a clearer photo!');
-      }
-    } else if (cameraTarget === 'lesson') {
-      // Generate lesson from photo topic
-      if (data.topic) {
-        document.getElementById('sinput').value = data.topic;
-        showToast('Topic found: ' + data.topic);
-        closeCameraModal();
-        playVideo();
-      } else {
-        showToast('Could not identify topic. Try a clearer photo!');
-      }
+      openChat();
+      addUserMsg('📷 [Sent a photo of a question]');
+      const t = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+      chatHistory.push({ role: 'user', content: 'Student sent a photo. Please analyze and answer.', time: t });
+      addBotMsg(resultText);
+      chatHistory.push({ role: 'assistant', content: resultText, time: t });
+      saveState();
+      showToast('✅ AI answered your photo!');
     } else {
-      // Search
-      if (data.topic) {
-        switchTab('search');
-        document.getElementById('searchQ').value = data.topic;
-        doSearch(data.topic);
-        showToast('Searching: ' + data.topic);
+      // Parse topic from JSON response
+      let topic = null;
+      try {
+        const cleaned = resultText.replace(/```json?\n?|```/g,'').trim();
+        const parsed = JSON.parse(cleaned);
+        topic = parsed.topic || parsed.question || null;
+      } catch(pe) {
+        // If not JSON, use the text directly as topic (trimmed)
+        topic = resultText.replace(/["`{}]/g,'').trim().slice(0, 60);
+      }
+
+      if (topic) {
+        if (cameraTarget === 'lesson') {
+          document.getElementById('sinput').value = topic;
+          showToast('📚 Topic found: ' + topic);
+          playVideo();
+        } else {
+          switchTab('search');
+          document.getElementById('searchQ').value = topic;
+          doSearch(topic);
+          showToast('🔍 Searching: ' + topic);
+        }
       } else {
-        showToast('Could not identify topic. Try a clearer photo!');
+        showToast('Could not read the image clearly. Please try a clearer photo!');
       }
     }
   } catch(e) {
     closeCameraModal();
     console.error('Camera error:', e.message);
-    // Fallback
     if (cameraTarget === 'chat') {
       openChat();
-      showToast('Could not process image. Type your question instead!');
+      addBotMsg('📷 I received your photo but could not process it. Please **type your question** below and I will help right away! 😊');
+      document.getElementById('chatInput').focus();
     } else {
-      showToast('Camera error: ' + e.message);
+      showToast('⚠️ Could not read the photo. Please type your topic instead.');
     }
   }
+}
+
+/* ══════════════════════════
+   SUPABASE — Global Real-Time Leaderboard
+══════════════════════════ */
+const SUPA_URL  = 'https://ilbpzihagtpstsldkgim.supabase.co';
+const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlsYnB6aWhhZ3Rwc3RzbGRrZ2ltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5Mzg4NDAsImV4cCI6MjA5MDUxNDg0MH0.6YP6YaJkfzQKz_cPr0IYuKOBz0N03WX6DgXanZumukQ';
+
+async function supaFetch(path, method, body) {
+  const res = await fetch(SUPA_URL + '/rest/v1/' + path, {
+    method: method || 'GET',
+    headers: {
+      'apikey': SUPA_KEY,
+      'Authorization': 'Bearer ' + SUPA_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': method === 'POST' ? 'resolution=merge-duplicates,return=minimal' : 'return=representation'
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (method === 'POST' || method === 'PATCH') return res.ok;
+  return res.ok ? res.json() : [];
+}
+
+let lbTab = 'week';
+
+function getUserXP() {
+  const v      = parseInt(localStorage.getItem('es_vidWatched') || '0');
+  const qt     = parseInt(localStorage.getItem('es_quizTotal')  || '0');
+  const streak = getStreak();
+  const chats  = chatHistory.filter(m => m.role === 'user').length;
+  return (v * 10) + (qt * 5) + (streak * 20) + (chats * 2);
+}
+
+function getTopBadge() {
+  const earned = getEarnedBadges();
+  const priority = ['streak_100','hundred_vids','quiz_perfect','streak_60','fifty_videos',
+    'quiz_score90','streak_30','twenty_videos','quiz_score80','streak_14','ten_videos','five_videos','first_video'];
+  for (const id of priority) {
+    if (earned.includes(id)) {
+      const b = BADGE_DEFS.find(x => x.id === id);
+      return b ? b.ico : '📚';
+    }
+  }
+  return '📚';
+}
+
+function getWeekKey() {
+  const d    = new Date();
+  const jan1 = new Date(d.getFullYear(), 0, 1);
+  const week = Math.ceil(((d - jan1) / 86400000 + jan1.getDay() + 1) / 7);
+  return d.getFullYear() + '_W' + week;
+}
+
+// Push current user's score to Supabase
+async function pushMyScore() {
+  if (!userName || userName === 'Student') return;
+  const uid = (userEmail || userName).replace(/[^a-zA-Z0-9]/g, '_').slice(0, 40);
+  const xp  = getUserXP();
+  const entry = {
+    uid,
+    name:       userName,
+    xp,
+    badge:      getTopBadge(),
+    lessons:    parseInt(localStorage.getItem('es_vidWatched') || '0'),
+    streak:     getStreak(),
+    week_key:   getWeekKey(),
+    updated_at: new Date().toISOString()
+  };
+  try {
+    const ok = await supaFetch('leaderboard?on_conflict=uid', 'POST', entry);
+    if (!ok) {
+      await supaFetch('leaderboard?uid=eq.' + entry.uid, 'PATCH', entry);
+    }
+  } catch(e) { /* offline — fail silently */ }
+}
+
+// Fetch leaderboard entries from Supabase
+async function fetchLbEntries(tab) {
+  try {
+    const rows = await supaFetch('leaderboard?order=xp.desc&limit=200');
+    if (!Array.isArray(rows)) return [];
+    if (tab === 'week') {
+      // "This week" = updated in the last 7 days OR week_key matches
+      const wk = getWeekKey();
+      const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+      return rows.filter(r => {
+        if (r.week_key === wk) return true;
+        if (r.updated_at && new Date(r.updated_at).getTime() >= oneWeekAgo) return true;
+        return false;
+      }).slice(0, 10);
+    }
+    return rows.slice(0, 10);
+  } catch(e) { return []; }
+}
+
+function renderLbRows(entries, tab, myUid) {
+  const el = document.getElementById('leaderboardList');
+  if (!el) return;
+
+  const myXP    = getUserXP();
+  const myIdx   = entries.findIndex(e => e.uid === myUid);
+  const myRank  = myIdx >= 0 ? myIdx + 1 : '—';
+
+  const lbRankEl = document.getElementById('lbMyRank');
+  const lbXpEl   = document.getElementById('lbMyXp');
+  if (lbRankEl) lbRankEl.textContent = myRank !== '—' ? 'Rank #' + myRank + ' of ' + entries.length + ' learners' : 'Keep learning to rank up!';
+  if (lbXpEl)   lbXpEl.textContent   = myXP.toLocaleString('en-IN');
+
+  if (entries.length === 0) {
+    el.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--ink3)">
+      <div style="font-size:48px;margin-bottom:12px">🏆</div>
+      <div style="font-family:var(--fh);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px">Be the First on the Board!</div>
+      <div style="font-size:13px;line-height:1.6">No learners yet this ${tab === 'week' ? 'week' : 'time'}.<br>Start learning to claim the #1 spot!</div>
+    </div>`;
+    return;
+  }
+
+  const MEDALS   = ['🥇','🥈','🥉'];
+  const AV_COLS  = ['#5046e4','#14b8a6','#f9a825','#22c55e','#ec4899','#0ea5e9','#8b5cf6','#ff6b6b','#f97316','#06b6d4'];
+  const RANK_CLS = ['r1','r2','r3'];
+  const ROW_CLS  = ['gold','silver','bronze'];
+
+  el.innerHTML = entries.map((entry, i) => {
+    const isMe      = entry.uid === myUid;
+    const avColor   = AV_COLS[i % AV_COLS.length];
+    const initial   = (entry.name || '?').charAt(0).toUpperCase();
+    const medal     = i < 3 ? MEDALS[i] : '';
+    const rowCls    = i < 3 ? ROW_CLS[i] : '';
+    const rankCls   = i < 3 ? RANK_CLS[i] : 'rn';
+    const streakTxt = entry.streak > 0 ? '🔥 ' + entry.streak + ' day streak' : (entry.lessons || 0) + ' lessons';
+    return `<div class="lb-row ${rowCls}${isMe ? ' me' : ''}">
+      ${i === 0 ? '<div class="lb-crown">👑</div>' : ''}
+      <div class="lb-rank ${rankCls}">${i + 1}</div>
+      ${medal ? `<div class="lb-medal">${medal}</div>` : '<div style="width:20px;flex-shrink:0"></div>'}
+      <div class="lb-av" style="background:${avColor}">${initial}</div>
+      <div class="lb-info">
+        <div class="lb-name">${escHtml(entry.name)}${isMe ? ' <span style="font-size:10px;color:var(--brand);font-weight:600">(You)</span>' : ''}</div>
+        <div class="lb-sub">${entry.badge || '📚'} ${streakTxt}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="lb-xp">${(entry.xp || 0).toLocaleString('en-IN')}</div>
+        <div class="lb-xp-lbl">XP</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadLeaderboard(tab) {
+  const el = document.getElementById('leaderboardList');
+  if (!el) return;
+
+  // Show loading spinner
+  el.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--ink3)">
+    <div style="font-size:32px;margin-bottom:10px;animation:spin 1s linear infinite;display:inline-block">⏳</div>
+    <div style="font-size:13px">Loading global leaderboard…</div>
+  </div>`;
+
+  // Push my score first, wait briefly for Supabase to commit, then fetch
+  await pushMyScore();
+  await new Promise(r => setTimeout(r, 900));
+  const myUid   = (userEmail || userName).replace(/[^a-zA-Z0-9]/g, '_').slice(0, 40);
+  const entries = await fetchLbEntries(tab);
+  renderLbRows(entries, tab, myUid);
+}
+
+async function renderLeaderboardPreview() {
+  const el = document.getElementById('leaderboardPreview');
+  if (!el) return;
+
+  el.innerHTML = `<div style="text-align:center;padding:16px;color:var(--ink3);font-size:13px">Loading…</div>`;
+
+  await pushMyScore();
+  const myUid   = (userEmail || userName).replace(/[^a-zA-Z0-9]/g, '_').slice(0, 40);
+  const entries = await fetchLbEntries('week');
+  const top3    = entries.slice(0, 3);
+
+  if (top3.length === 0) {
+    el.innerHTML = `<div style="text-align:center;padding:20px;color:var(--ink3);font-size:13px">🏆 No learners yet — be the first!</div>`;
+    return;
+  }
+
+  const AV_COLS = ['#f9a825','#9ca3af','#cd7c2f'];
+  const MEDALS  = ['🥇','🥈','🥉'];
+  const RSTYLES = [
+    'border:1.5px solid #f9a825;background:linear-gradient(135deg,rgba(249,168,37,.08),rgba(249,168,37,.03))',
+    'border:1.5px solid #9ca3af;background:var(--bg2)',
+    'border:1.5px solid #cd7c2f;background:var(--bg2)'
+  ];
+
+  el.innerHTML = top3.map((entry, i) => {
+    const isMe = entry.uid === myUid;
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;margin-bottom:8px;${RSTYLES[i]}">
+      <div style="font-size:18px">${MEDALS[i]}</div>
+      <div style="width:30px;height:30px;border-radius:50%;background:${AV_COLS[i]};display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:700;font-size:12px;color:#fff;flex-shrink:0">${(entry.name||'?').charAt(0).toUpperCase()}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--fh);font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(entry.name)}${isMe?' <span style="color:var(--brand)">(You)</span>':''}</div>
+      </div>
+      <div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--brand)">${(entry.xp||0).toLocaleString('en-IN')} XP</div>
+    </div>`;
+  }).join('');
+}
+
+function openLeaderboard() { switchTab('leaderboard'); }
+
+function switchLbTab(tab) {
+  lbTab = tab;
+  const w = document.getElementById('lbBtnWeek');
+  const a = document.getElementById('lbBtnAll');
+  if (w) w.classList.toggle('on', tab === 'week');
+  if (a) a.classList.toggle('on', tab === 'all');
+  loadLeaderboard(tab);
 }
 
 /* ══════════════════════════
