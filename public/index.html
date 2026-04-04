@@ -2646,7 +2646,7 @@ Student: ${userName} | Subject: ${curSubject}`;
       saveState();
       setTimeout(() => {
         chatPhase = 'awaitQuizYN';
-        addBotMsg('Great! You learned about **' + lastExplainedTopic + '**!\n\n**Want to test yourself?** Say **Yes** for a 5-question quiz or **No** to continue!');
+        addBotMsg('Great! You learned about **' + lastExplainedTopic + '**!\n\n**Want to test yourself?** Say **Yes** for a 3-question quiz or **No** to continue!');
 
 
       }, 600);
@@ -2691,33 +2691,68 @@ async function startChatQuiz() {
   document.getElementById('chatSendBtn').disabled = true;
 
   try {
+    // Use only 3 questions to keep JSON small and avoid cutoff
     const raw = await callClaude({
-      system: `You generate academic quiz questions. Respond ONLY with a valid JSON array, nothing else. No markdown, no explanation.`,
+      system: `You generate academic MCQ quiz questions. 
+CRITICAL RULES:
+- Respond with ONLY a valid complete JSON array
+- No markdown, no backticks, no explanation text before or after
+- Keep each explanation under 15 words
+- Keep each question under 20 words
+- Keep each option under 8 words
+- The JSON MUST be complete and valid`,
       messages: [{
         role: 'user',
-        content: `Generate 5 MCQ questions about "${lastExplainedTopic}". 
-Return ONLY a JSON array like this:
-[{"q":"question text","opts":["A","B","C","D"],"ans":0,"exp":"explanation why ans is correct"}]
-ans is the 0-based index of the correct option. Make questions test deep understanding, not just definitions.`
+        content: `Generate exactly 3 MCQ questions about "${lastExplainedTopic}".
+Output ONLY this JSON (nothing else):
+[{"q":"short question?","opts":["opt1","opt2","opt3","opt4"],"ans":0,"exp":"brief reason"}]
+ans = 0-based index of correct answer. Keep everything SHORT.`
       }],
-      max_tokens: 1000
+      max_tokens: 700
     });
-    const cleaned = raw.replace(/```json?|```/g,'').trim();
-    const questions = JSON.parse(cleaned);
+
+    // Robust JSON parse - handles truncation
+    let questions;
+    try {
+      let cleaned = raw.replace(/```json?\n?|```/g, '').trim();
+      const arrStart = cleaned.indexOf('[');
+      const arrEnd = cleaned.lastIndexOf(']');
+      if (arrStart !== -1 && arrEnd > arrStart) {
+        cleaned = cleaned.slice(arrStart, arrEnd + 1);
+        cleaned = cleaned
+          .replace(/,(\s*[}\]])/g, '$1')
+          .replace(/[\x00-\x1f\x7f]/g, ' ');
+        questions = JSON.parse(cleaned);
+      } else {
+        throw new Error('No JSON array in response');
+      }
+    } catch(parseErr) {
+      throw new Error('Quiz parse failed: ' + parseErr.message);
+    }
+
+    if (!Array.isArray(questions) || questions.length === 0) throw new Error('Invalid quiz data');
+
     hideTyping();
     chatTyping = false;
     document.getElementById('chatSendBtn').disabled = false;
     quizInChat = { current:0, correct:0, questions };
-    addBotMsg(`🧪 **Quiz Time! — ${lastExplainedTopic}**\n\n5 questions coming up. Let's see what you've got! 💪`);
+    addBotMsg("🧪 **Quiz Time! — " + lastExplainedTopic + "**\n\n" + questions.length + " questions coming up. Let's go! 💪");
+
+
     setTimeout(() => renderChatQuizQ(), 400);
+
   } catch(e) {
     hideTyping();
     chatTyping = false;
     document.getElementById('chatSendBtn').disabled = false;
-    addBotMsg('⚠️ Could not generate quiz: ' + (e.message || 'Unknown error') + '\n\nType **quiz** to try again!');
+    console.error('Quiz error:', e.message);
+    addBotMsg('⚠️ Quiz generation failed. Let me try again!\n\nType **quiz** to retry.');
+
+
     chatPhase = 'chat';
   }
 }
+
 
 function renderChatQuizQ() {
   const msgs = document.getElementById('chatMsgs');
