@@ -157,32 +157,81 @@ app.listen(PORT, () => {
   console.log(` Groq Key: ${process.env.GROQ_API_KEY ? 'LOADED OK' : 'MISSING!'}\n`);
 });
 
-// ── Image Analysis for Camera Search ──
+// ── Image Analysis — reads photo and answers question ──
 app.post('/api/analyze-image', async (req, res) => {
   const key = process.env.GROQ_API_KEY;
   if (!key) return res.status(500).json({ error: 'Server not configured' });
 
-  const { image, mimeType } = req.body;
+  const { image, mimeType, target } = req.body;
   if (!image) return res.status(400).json({ error: 'No image provided' });
 
+  // Build prompt based on what the user wants
+  let prompt;
+  if (target === 'chat') {
+    prompt = `A student has sent you a photo of a question from their textbook or notes. 
+Look at this image carefully and:
+1. Identify what academic question or topic is shown
+2. Give a clear, detailed explanation and answer
+
+Format your response as a helpful tutor explaining to a student.
+If you cannot read the image clearly, say: "I can see this is a study-related image. Please type out the specific question and I will explain it in detail!"`;
+  } else {
+    prompt = `A student has taken a photo of a question, textbook page, or study material.
+Identify the main academic topic shown in this image.
+Reply with ONLY the topic in 4-8 words. Examples:
+- "Quadratic equations factoring method"
+- "Photosynthesis light dependent reactions"  
+- "Newton second law of motion"
+- "French Revolution causes and effects"
+Just the topic, nothing else.`;
+  }
+
   try {
-    // Use text-based approach — ask Groq to identify topic from description
+    // Use Groq vision model - llama-3.2-11b-vision-preview supports images
+    const messages = [{
+      role: 'user',
+      content: [
+        {
+          type: 'image_url',
+          image_url: {
+            url: `data:${mimeType || 'image/jpeg'};base64,${image}`
+          }
+        },
+        {
+          type: 'text',
+          text: prompt
+        }
+      ]
+    }];
+
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{
-          role: 'user',
-          content: 'A student has taken a photo of a question or textbook page. Based on typical school/college subjects, suggest the most likely academic topic they want to learn about. Reply with ONLY the topic name in 3-6 words, nothing else. Example replies: "Quadratic equations in algebra" or "Photosynthesis light reactions" or "Newton second law motion"'
-        }],
-        max_tokens: 30
+        model: 'llama-3.2-11b-vision-preview',
+        messages,
+        max_tokens: target === 'chat' ? 800 : 30,
+        temperature: 0.3
       })
     });
+
     const data = await response.json();
-    const topic = data.choices?.[0]?.message?.content?.trim() || '';
-    res.json({ topic });
+
+    if (!response.ok) {
+      console.error('Vision API error:', data.error?.message);
+      return res.status(500).json({ error: data.error?.message || 'Vision API error' });
+    }
+
+    const result = data.choices?.[0]?.message?.content?.trim() || '';
+
+    if (target === 'chat') {
+      res.json({ answer: result, topic: result.split('\n')[0].slice(0, 60) });
+    } else {
+      res.json({ topic: result });
+    }
+
   } catch(e) {
-    res.status(500).json({ error: e.message });
+    console.error('Image analysis error:', e.message);
+    res.status(500).json({ error: 'Could not analyze image: ' + e.message });
   }
 });
