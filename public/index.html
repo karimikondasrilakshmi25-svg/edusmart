@@ -1856,7 +1856,7 @@ window.addEventListener('load', () => {
     } else {
       goTo('language');
     }
-  }, 2000);
+  }, 3700);
 });
 
 /* ══════════════════════════
@@ -2916,7 +2916,10 @@ function addBotMsg(text, savedTime) {
   html = html.replace(/(<li data-ul>[\s\S]*?<\/li>(\s*<br>\s*<li data-ul>[\s\S]*?<\/li>)*)/g,
     m => '<ul>' + m.replace(/<br>\s*(?=<li)/g, '') + '</ul>');
   // Clean up data attributes
-  html = html.replace(/ data-ol| data-ul/g, '');<div class="chat-msg-av">🤖</div>
+  html = html.replace(/ data-ol| data-ul/g, '');
+
+  d.innerHTML = `
+    <div class="chat-msg-av">🤖</div>
     <div>
       <div class="chat-bubble">${html}</div>
       <div class="chat-time">${time}</div>
