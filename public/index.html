@@ -1690,40 +1690,39 @@ input,textarea,select{font-family:var(--fb)}
    REAL AI PROXY HELPER
    Calls Groq backend — 100% FREE, API key safe on server!
 ══════════════════════════ */
-async function callClaude({ system, messages, max_tokens = 1000 }) {
-  const recentMsgs = (messages || []).slice(-6).map(m => ({
-    role: m.role === 'assistant' ? 'assistant' : 'user',
-    content: m.content  // may be string or array (for vision)
-  }));
-  const cleanSystem = (system || '').slice(0, 2000);
+// Detect backend URL automatically — works on Render, Netlify, localhost
+const BACKEND_URL = (() => {
+  const h = window.location.hostname;
+  if (h === 'localhost' || h === '127.0.0.1') return 'http://localhost:3000';
+  return window.location.origin; // same origin as the hosted app
+})();
 
-  let resp;
+async function callClaude({ system, messages, max_tokens = 1000, endpoint = '/api/chat' }) {
+  const recentMsgs = (messages || []).slice(-10).map(m => ({
+    role: m.role === 'assistant' ? 'assistant' : 'user',
+    content: typeof m.content === 'string' ? m.content : m.content
+  }));
+  const cleanSystem = (system || '').slice(0, 4000);
+
+  let resp, data;
   try {
-    resp = await fetch('https://api.anthropic.com/v1/messages', {
+    resp = await fetch(BACKEND_URL + endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens,
-        system: cleanSystem,
-        messages: recentMsgs
-      })
+      body: JSON.stringify({ system: cleanSystem, messages: recentMsgs, max_tokens })
     });
-  } catch(networkErr) {
-    throw new Error('No internet connection. Please check and try again.');
-  }
-
-  let data;
-  try {
-    data = await resp.json();
+    if (resp.ok) {
+      data = await resp.json();
+      const text = data.content?.[0]?.text || data.text || data.reply || null;
+      if (text) return text;
+      if (data.error) throw new Error(data.error);
+    } else {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error || 'Server error ' + resp.status);
+    }
   } catch(e) {
-    throw new Error('Server returned invalid response. Please try again in 30 seconds.');
+    throw new Error(e.message || 'Could not reach AI. Please check your internet and try again.');
   }
-
-  if (!resp.ok) throw new Error((data.error && data.error.message) || 'API error ' + resp.status);
-  const text = data.content && data.content[0] && data.content[0].text;
-  if (!text) throw new Error('AI returned empty response. Please try again!');
-  return text;
 }
 
 
@@ -3502,28 +3501,27 @@ async function processCameraImage(file) {
       userPrompt = 'What academic topic or question is shown in this image? Respond ONLY with JSON.';
     }
 
-    // Call Anthropic vision API directly
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: cameraTarget === 'chat' ? 1500 : 300,
-        system: systemPrompt,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: mimeType, data: base64 } },
-            { type: 'text', text: userPrompt }
-          ]
-        }]
-      })
-    });
+    // Call backend proxy for vision
+    let resultText = null;
+    try {
+      const vResp = await fetch(BACKEND_URL + '/api/vision', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system: systemPrompt,
+          prompt: userPrompt,
+          image: base64,
+          mimeType,
+          max_tokens: cameraTarget === 'chat' ? 1500 : 300
+        })
+      });
+      if (vResp.ok) {
+        const vData = await vResp.json();
+        resultText = vData.content?.[0]?.text || vData.text || null;
+      }
+    } catch(e) { /* backend unavailable */ }
 
-    const apiData = await resp.json();
-    if (!resp.ok) throw new Error((apiData.error && apiData.error.message) || 'API error ' + resp.status);
-    const resultText = apiData.content && apiData.content[0] && apiData.content[0].text;
-    if (!resultText) throw new Error('Empty response');
+    if (!resultText) throw new Error('Could not process image. Please type your question instead.');
 
     closeCameraModal();
 
