@@ -1042,6 +1042,145 @@ input,textarea,select{font-family:var(--fb)}
       </div>
     </div>
 
+    <!-- 🎯 FUN FEATURES ROW -->
+    <div class="sec" style="margin-top:20px">
+      <div class="sech"><h3>🎮 Fun Learning</h3></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+
+        <!-- Spin the Wheel -->
+        <div onclick="openSpinWheel()" style="background:linear-gradient(135deg,#5046e4,#8b5cf6);border-radius:var(--r);padding:16px;cursor:pointer;position:relative;overflow:hidden;min-height:100px;display:flex;flex-direction:column;justify-content:space-between">
+          <div style="position:absolute;top:-20px;right:-20px;font-size:70px;opacity:.18">🎡</div>
+          <div style="font-size:28px">🎡</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:14px;font-weight:800;color:#fff">Spin & Learn</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.75);margin-top:2px">Random topic challenge!</div>
+          </div>
+        </div>
+
+        <!-- Brain Teaser -->
+        <div onclick="openBrainTeaser()" style="background:linear-gradient(135deg,#f9a825,#f97316);border-radius:var(--r);padding:16px;cursor:pointer;position:relative;overflow:hidden;min-height:100px;display:flex;flex-direction:column;justify-content:space-between">
+          <div style="position:absolute;top:-20px;right:-20px;font-size:70px;opacity:.18">🧠</div>
+          <div style="font-size:28px">🧠</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:14px;font-weight:800;color:#fff">Brain Teaser</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.75);margin-top:2px">Tricky AI riddles!</div>
+          </div>
+        </div>
+
+        <!-- Flashcards -->
+        <div onclick="openFlashcards()" style="background:linear-gradient(135deg,#14b8a6,#0ea5e9);border-radius:var(--r);padding:16px;cursor:pointer;position:relative;overflow:hidden;min-height:100px;display:flex;flex-direction:column;justify-content:space-between">
+          <div style="position:absolute;top:-20px;right:-20px;font-size:70px;opacity:.18">🃏</div>
+          <div style="font-size:28px">🃏</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:14px;font-weight:800;color:#fff">Flashcards</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.75);margin-top:2px">AI-generated cards!</div>
+          </div>
+        </div>
+
+        <!-- Speed Round -->
+        <div onclick="openSpeedRound()" style="background:linear-gradient(135deg,#ec4899,#ff6b6b);border-radius:var(--r);padding:16px;cursor:pointer;position:relative;overflow:hidden;min-height:100px;display:flex;flex-direction:column;justify-content:space-between">
+          <div style="position:absolute;top:-20px;right:-20px;font-size:70px;opacity:.18">⚡</div>
+          <div style="font-size:28px">⚡</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:14px;font-weight:800;color:#fff">Speed Round</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.75);margin-top:2px">60 sec quiz blitz!</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 🎡 SPIN WHEEL MODAL -->
+    <div id="spinWheelModal" style="display:none;position:fixed;inset:0;background:rgba(8,6,32,.9);z-index:100;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px)" onclick="if(event.target===this)closeSpinWheel()">
+      <div style="background:var(--card);border-radius:24px;padding:28px 24px;width:100%;max-width:360px;text-align:center">
+        <div style="font-family:var(--fh);font-size:20px;font-weight:800;color:var(--ink);margin-bottom:4px">🎡 Spin & Learn!</div>
+        <div style="font-size:13px;color:var(--ink3);margin-bottom:20px">Tap SPIN for a random topic challenge</div>
+        <div id="spinResult" style="min-height:80px;display:flex;align-items:center;justify-content:center;margin-bottom:20px">
+          <div style="font-size:48px">🎡</div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button onclick="doSpin()" style="flex:1;padding:14px;border-radius:50px;border:none;background:var(--brand);color:#fff;font-family:var(--fh);font-size:15px;font-weight:700;cursor:pointer">🎰 SPIN!</button>
+          <button onclick="closeSpinWheel()" style="padding:14px 18px;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--ink3);font-family:var(--fh);font-weight:600;cursor:pointer">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🧠 BRAIN TEASER MODAL -->
+    <div id="brainTeaserModal" style="display:none;position:fixed;inset:0;background:rgba(8,6,32,.9);z-index:100;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px)" onclick="if(event.target===this)closeBrainTeaser()">
+      <div style="background:var(--card);border-radius:24px;padding:28px 24px;width:100%;max-width:380px">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div style="font-family:var(--fh);font-size:20px;font-weight:800;color:var(--ink)">🧠 Brain Teaser</div>
+          <div id="btStreak" style="font-size:12px;font-weight:700;color:var(--amber);background:var(--bg2);border-radius:50px;padding:4px 10px">🔥 0 streak</div>
+        </div>
+        <div id="btProgress" style="font-size:11px;color:var(--ink3);margin-bottom:14px">Can you guess the answer?</div>
+
+        <!-- Question -->
+        <div id="brainTeaserContent" style="background:var(--bg2);border-radius:16px;padding:18px;margin-bottom:14px;min-height:100px;display:flex;align-items:center;justify-content:center">
+          <div style="text-align:center;color:var(--ink3);font-size:13px">Loading riddle…</div>
+        </div>
+
+        <!-- Guess Input -->
+        <div id="btGuessArea" style="margin-bottom:12px">
+          <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Your Answer</div>
+          <div style="display:flex;gap:8px">
+            <input id="btGuessInput" type="text" placeholder="Type your guess here…" style="flex:1;padding:12px 14px;border-radius:12px;border:1.5px solid var(--border);background:var(--bg2);font-size:14px;color:var(--ink);outline:none;font-family:var(--fb)" onkeydown="if(event.key==='Enter')checkBrainGuess()"/>
+            <button onclick="checkBrainGuess()" style="padding:12px 16px;border-radius:12px;border:none;background:var(--brand);color:#fff;font-family:var(--fh);font-weight:700;font-size:14px;cursor:pointer">✓</button>
+          </div>
+        </div>
+
+        <!-- Feedback -->
+        <div id="btFeedback" style="display:none;border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:14px;font-weight:600;text-align:center"></div>
+
+        <!-- Answer reveal -->
+        <div id="brainTeaserAnswer" style="display:none;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:14px;color:#166534;font-weight:600"></div>
+
+        <!-- Buttons -->
+        <div style="display:flex;gap:8px">
+          <button onclick="revealBrainAnswer()" id="revealBtn" style="flex:1;padding:11px;border-radius:50px;border:1.5px solid var(--amber);background:transparent;color:var(--amber);font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer">💡 Give Up</button>
+          <button onclick="loadBrainTeaser()" style="flex:1;padding:11px;border-radius:50px;border:none;background:var(--brand);color:#fff;font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer">Next 🧠</button>
+          <button onclick="closeBrainTeaser()" style="padding:11px 14px;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--ink3);font-family:var(--fh);font-weight:600;cursor:pointer">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🃏 FLASHCARD MODAL -->
+    <div id="flashcardModal" style="display:none;position:fixed;inset:0;background:rgba(8,6,32,.9);z-index:100;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px)" onclick="if(event.target===this)closeFlashcards()">
+      <div style="background:var(--card);border-radius:24px;padding:28px 24px;width:100%;max-width:380px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div style="font-family:var(--fh);font-size:18px;font-weight:800;color:var(--ink)">🃏 Flashcards</div>
+          <div id="fcCounter" style="font-size:12px;color:var(--ink3)">Card 1</div>
+        </div>
+        <div id="flashcardBox" onclick="flipFlashcard()" style="min-height:160px;background:linear-gradient(135deg,var(--brand),var(--brand-lt));border-radius:18px;padding:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:16px;transition:all .3s">
+          <div id="flashcardText" style="font-family:var(--fh);font-size:16px;font-weight:700;color:#fff;text-align:center;line-height:1.5">Tap to start!</div>
+        </div>
+        <div style="text-align:center;font-size:12px;color:var(--ink3);margin-bottom:14px" id="fcHint">👆 Tap card to flip</div>
+        <div style="display:flex;gap:10px">
+          <button onclick="prevFlashcard()" style="flex:1;padding:12px;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--ink2);font-family:var(--fh);font-weight:600;cursor:pointer">← Prev</button>
+          <button onclick="nextFlashcard()" style="flex:1;padding:12px;border-radius:50px;border:none;background:var(--brand);color:#fff;font-family:var(--fh);font-weight:700;cursor:pointer">Next →</button>
+          <button onclick="closeFlashcards()" style="padding:12px 16px;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--ink3);font-family:var(--fh);font-weight:600;cursor:pointer">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⚡ SPEED ROUND MODAL -->
+    <div id="speedRoundModal" style="display:none;position:fixed;inset:0;background:rgba(8,6,32,.9);z-index:100;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px)" onclick="if(event.target===this)closeSpeedRound()">
+      <div style="background:var(--card);border-radius:24px;padding:28px 24px;width:100%;max-width:380px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div style="font-family:var(--fh);font-size:18px;font-weight:800;color:var(--ink)">⚡ Speed Round</div>
+          <div id="speedTimer" style="font-family:var(--fh);font-size:24px;font-weight:800;color:var(--coral)">60</div>
+        </div>
+        <div style="height:6px;background:var(--border);border-radius:3px;margin-bottom:16px;overflow:hidden"><div id="speedBar" style="height:100%;background:linear-gradient(90deg,var(--green),var(--amber));border-radius:3px;width:100%;transition:width 1s linear"></div></div>
+        <div id="speedScore" style="text-align:center;font-size:13px;color:var(--ink3);margin-bottom:12px">Score: <span id="speedScoreNum" style="font-family:var(--fh);font-weight:700;color:var(--brand)">0</span></div>
+        <div id="speedQuestion" style="font-family:var(--fh);font-size:16px;font-weight:700;color:var(--ink);text-align:center;min-height:60px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;line-height:1.4">Press Start to begin!</div>
+        <div id="speedOpts" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px"></div>
+        <div style="display:flex;gap:10px">
+          <button onclick="startSpeedRound()" id="speedStartBtn" style="flex:1;padding:12px;border-radius:50px;border:none;background:var(--green);color:#fff;font-family:var(--fh);font-size:14px;font-weight:700;cursor:pointer">▶ Start!</button>
+          <button onclick="closeSpeedRound()" style="padding:12px 16px;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--ink3);font-family:var(--fh);font-weight:600;cursor:pointer">✕</button>
+        </div>
+      </div>
+    </div>
+
     <!-- EXAM PREP QUICK CARDS -->
     <div class="sec" style="margin-top:20px">
       <div class="sech"><h3>📝 Exam Prep &amp; Past Papers</h3><span class="sall" onclick="openChat();sendQuick('What are the most important topics for my board exam?')">Ask AI →</span></div>
@@ -3501,7 +3640,7 @@ async function processCameraImage(file) {
       userPrompt = 'What academic topic or question is shown in this image? Respond ONLY with JSON.';
     }
 
-    // Call backend proxy for vision
+    // Call /api/vision on backend
     let resultText = null;
     try {
       const vResp = await fetch(BACKEND_URL + '/api/vision', {
@@ -3511,15 +3650,24 @@ async function processCameraImage(file) {
           system: systemPrompt,
           prompt: userPrompt,
           image: base64,
-          mimeType,
-          max_tokens: cameraTarget === 'chat' ? 1500 : 300
+          mimeType: mimeType,
+          max_tokens: cameraTarget === 'chat' ? 1500 : 400
         })
       });
-      if (vResp.ok) {
-        const vData = await vResp.json();
-        resultText = vData.content?.[0]?.text || vData.text || null;
-      }
-    } catch(e) { /* backend unavailable */ }
+      const vData = await vResp.json();
+      resultText = vData.content?.[0]?.text || vData.text || null;
+      if (!resultText && vData.error) throw new Error(vData.error);
+    } catch(e) {
+      console.error('Vision error:', e.message);
+      // Fallback: send as text description via chat
+      try {
+        resultText = await callClaude({
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userPrompt + ' (Note: image could not be processed directly, please give a helpful educational response)' }],
+          max_tokens: cameraTarget === 'chat' ? 1000 : 300
+        });
+      } catch(e2) { resultText = null; }
+    }
 
     if (!resultText) throw new Error('Could not process image. Please type your question instead.');
 
@@ -3783,6 +3931,339 @@ function switchLbTab(tab) {
   if (w) w.classList.toggle('on', tab === 'week');
   if (a) a.classList.toggle('on', tab === 'all');
   loadLeaderboard(tab);
+}
+
+/* ══════════════════════════
+   🎡 SPIN & LEARN
+══════════════════════════ */
+const SPIN_TOPICS = [
+  {q:"Explain photosynthesis with light-dependent and independent reactions",subj:"Science",ico:"🌱"},
+  {q:"Solve quadratic equations using formula and factoring",subj:"Maths",ico:"📐"},
+  {q:"Newton's three laws of motion with real examples",subj:"Physics",ico:"⚡"},
+  {q:"What caused the French Revolution?",subj:"History",ico:"🗺️"},
+  {q:"Explain the periodic table trends",subj:"Chemistry",ico:"⚗️"},
+  {q:"How does the human heart pump blood?",subj:"Biology",ico:"🫀"},
+  {q:"Explain artificial intelligence and machine learning",subj:"Comp. Sci.",ico:"🤖"},
+  {q:"What is DNA and how does it store genetic information?",subj:"Biology",ico:"🧬"},
+  {q:"Explain trigonometry: sine cosine tangent",subj:"Maths",ico:"📏"},
+  {q:"Indian Independence Movement and key leaders",subj:"History",ico:"🇮🇳"},
+  {q:"Chemical bonding: ionic covalent metallic bonds",subj:"Chemistry",ico:"🔗"},
+  {q:"How does electricity work? Current voltage resistance",subj:"Physics",ico:"🔌"},
+  {q:"Mitosis vs meiosis — differences explained",subj:"Biology",ico:"🔬"},
+  {q:"Laws of thermodynamics with examples",subj:"Physics",ico:"🔥"},
+  {q:"Active and passive voice rules with examples",subj:"English",ico:"📖"},
+  {q:"Explain the water cycle in detail",subj:"Science",ico:"💧"},
+  {q:"What is the Pythagorean theorem?",subj:"Maths",ico:"📐"},
+  {q:"Explain types of triangles and their properties",subj:"Maths",ico:"🔺"},
+  {q:"What are enzymes and how do they work?",subj:"Biology",ico:"🧪"},
+  {q:"Explain the causes and effects of World War 2",subj:"History",ico:"🌍"},
+];
+
+function openSpinWheel() {
+  const m = document.getElementById('spinWheelModal');
+  m.style.display = 'flex';
+  document.getElementById('spinResult').innerHTML = '<div style="font-size:48px">🎡</div><div style="font-size:14px;color:var(--ink3);margin-top:8px">Press SPIN!</div>';
+}
+function closeSpinWheel() { document.getElementById('spinWheelModal').style.display = 'none'; }
+
+function doSpin() {
+  const el = document.getElementById('spinResult');
+  const emojis = ['🎡','🌀','⭐','🎯','🔥','💫','🎲'];
+  let count = 0;
+  el.innerHTML = '<div style="font-size:48px;animation:spin .3s linear infinite">🎰</div>';
+  const interval = setInterval(() => {
+    el.innerHTML = `<div style="font-size:40px">${emojis[count % emojis.length]}</div>`;
+    count++;
+    if (count > 14) {
+      clearInterval(interval);
+      const t = SPIN_TOPICS[Math.floor(Math.random() * SPIN_TOPICS.length)];
+      el.innerHTML = `
+        <div style="text-align:center">
+          <div style="font-size:42px;margin-bottom:8px">${t.ico}</div>
+          <div style="font-family:var(--fh);font-size:16px;font-weight:800;color:var(--ink);margin-bottom:4px">${t.subj}</div>
+          <div style="font-size:13px;color:var(--ink3);margin-bottom:14px">${t.q}</div>
+          <button onclick="closeSpinWheel();qa('${t.q.replace(/'/g,"\'")}','${t.subj}','${t.ico}','default')" style="padding:10px 22px;border-radius:50px;border:none;background:var(--brand);color:#fff;font-family:var(--fh);font-weight:700;cursor:pointer">🚀 Start Lesson!</button>
+        </div>`;
+    }
+  }, 100);
+}
+
+/* ══════════════════════════
+   🧠 BRAIN TEASER
+══════════════════════════ */
+const BRAIN_TEASERS = [
+  {q:"I have cities, but no houses live there. I have mountains, but no trees grow. I have water, but no fish swim. I have roads, but no cars drive. What am I?", a:"map", aFull:"A Map! 🗺️", hints:["Think of something flat","You use it for navigation","Found in an atlas"]},
+  {q:"A student scored 0 in Maths but still passed the exam. How?", a:"music", aFull:"It was a Music exam! 🎵", hints:["It's a different subject","Not a maths exam","Think of arts subjects"]},
+  {q:"I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?", a:"echo", aFull:"An Echo! 🔊", hints:["You hear me in mountains","I repeat your words","Sound bouncing back"]},
+  {q:"The more you take, the more you leave behind. What am I?", a:"footsteps", aFull:"Footsteps! 👣", hints:["Related to walking","You make them on the ground","Think of tracks left behind"]},
+  {q:"A scientist has 3 test tubes. She breaks 1. How many does she have?", a:"3", aFull:"Still 3! Broken tubes are still tubes 🧪", hints:["Think carefully","Breaking doesn't make it disappear","Count ALL test tubes"]},
+  {q:"What has keys but no locks, space but no room, and you can enter but can't go inside?", a:"keyboard", aFull:"A Keyboard! ⌨️", hints:["You use it every day","It's on your computer","Used for typing"]},
+  {q:"I am always in front of you but cannot be seen. What am I?", a:"future", aFull:"The Future! ⏳", hints:["Related to time","It hasn't happened yet","Tomorrow is part of it"]},
+  {q:"A farmer has 17 sheep. All but 9 die. How many are left?", a:"9", aFull:"9 sheep! 🐑", hints:["Read very carefully","'All but 9' is the key","Simple if you read slowly"]},
+  {q:"Which is heavier: a kilogram of iron or a kilogram of feathers?", a:"same", aFull:"They weigh the same — both are 1 kg! ⚖️", hints:["Focus on the unit","Both are measured in kg","The material doesn't matter"]},
+  {q:"In a race, you overtake the person in 2nd place. What place are you now?", a:"2nd", aFull:"2nd place! You didn't overtake 1st 🏃", hints:["Think step by step","You took their position","What was 2nd becomes...?"]},
+  {q:"A rooster lays an egg on top of a hill. Which side does it roll down?", a:"none", aFull:"Roosters don't lay eggs! 🐓", hints:["Think about biology","What is a rooster?","Male or female?"]},
+  {q:"What can run but never walks, has a mouth but never talks, has a head but never weeps?", a:"river", aFull:"A River! 🌊", hints:["Found in nature","Water flows in it","Think of the Ganga or Godavari"]},
+  {q:"I have hands but I cannot clap. What am I?", a:"clock", aFull:"A Clock! 🕐", hints:["You see it on walls","It shows time","It has a face too"]},
+  {q:"What goes up but never comes down?", a:"age", aFull:"Your Age! 🎂", hints:["It happens every year","Everyone experiences it","Related to birthdays"]},
+];
+
+let currentTeaser = 0;
+let teaserRevealed = false;
+let btStreak = 0;
+let btHintCount = 0;
+let btSolved = false;
+
+function openBrainTeaser() {
+  document.getElementById('brainTeaserModal').style.display = 'flex';
+  btStreak = 0;
+  loadBrainTeaser();
+}
+function closeBrainTeaser() {
+  document.getElementById('brainTeaserModal').style.display = 'none';
+}
+
+function loadBrainTeaser() {
+  currentTeaser = Math.floor(Math.random() * BRAIN_TEASERS.length);
+  teaserRevealed = false;
+  btHintCount = 0;
+  btSolved = false;
+  const t = BRAIN_TEASERS[currentTeaser];
+
+  document.getElementById('brainTeaserContent').innerHTML = `
+    <div style="text-align:center;width:100%">
+      <div style="font-size:30px;margin-bottom:10px">🤔</div>
+      <div style="font-family:var(--fh);font-size:15px;font-weight:700;color:var(--ink);line-height:1.6">${t.q}</div>
+    </div>`;
+
+  // Reset all state elements
+  document.getElementById('brainTeaserAnswer').style.display = 'none';
+  document.getElementById('btFeedback').style.display = 'none';
+  document.getElementById('btGuessInput').value = '';
+  document.getElementById('btGuessInput').disabled = false;
+  document.getElementById('btGuessArea').style.display = 'block';
+  document.getElementById('revealBtn').style.display = 'block';
+  document.getElementById('btProgress').textContent = 'Can you guess the answer?';
+  document.getElementById('btStreak').textContent = '🔥 ' + btStreak + ' streak';
+
+  // Focus input
+  setTimeout(() => document.getElementById('btGuessInput').focus(), 200);
+}
+
+function checkBrainGuess() {
+  if (btSolved || teaserRevealed) return;
+  const t = BRAIN_TEASERS[currentTeaser];
+  const guess = document.getElementById('btGuessInput').value.trim().toLowerCase();
+  if (!guess) { showToast('Type your answer first! 😊'); return; }
+
+  const fb = document.getElementById('btFeedback');
+  fb.style.display = 'block';
+
+  // Check if guess contains key answer words
+  const answerWords = t.a.toLowerCase().split(/\s+/);
+  const guessWords = guess.toLowerCase().split(/\s+/);
+  const isCorrect = answerWords.some(aw => guessWords.some(gw =>
+    gw.includes(aw) || aw.includes(gw)
+  )) || guess.includes(t.a.toLowerCase());
+
+  if (isCorrect) {
+    btSolved = true;
+    btStreak++;
+    fb.style.background = '#f0fdf4';
+    fb.style.border = '1.5px solid #bbf7d0';
+    fb.style.color = '#166534';
+    fb.innerHTML = '🎉 Correct! Well done!';
+
+    document.getElementById('brainTeaserAnswer').style.display = 'block';
+    document.getElementById('brainTeaserAnswer').innerHTML = '✅ ' + t.aFull;
+    document.getElementById('btGuessArea').style.display = 'none';
+    document.getElementById('revealBtn').style.display = 'none';
+    document.getElementById('btStreak').textContent = '🔥 ' + btStreak + ' streak';
+    document.getElementById('btProgress').textContent = '🏆 You got it! +20 XP earned!';
+    showToast('🎉 Correct! +20 XP!');
+  } else {
+    // Wrong — show hint
+    btHintCount++;
+    const hints = t.hints || [];
+    if (btHintCount <= hints.length) {
+      fb.style.background = '#fff8e0';
+      fb.style.border = '1.5px solid #fde68a';
+      fb.style.color = '#8a5c00';
+      fb.innerHTML = `❌ Not quite! Hint ${btHintCount}: ${hints[btHintCount-1]}`;
+      document.getElementById('btProgress').textContent = `Hint ${btHintCount} of ${hints.length} used`;
+    } else {
+      fb.style.background = '#fff5f5';
+      fb.style.border = '1.5px solid #fecaca';
+      fb.style.color = '#9b2c2c';
+      fb.innerHTML = '❌ Wrong! Try again or tap "Give Up"';
+    }
+    btStreak = 0;
+    document.getElementById('btStreak').textContent = '🔥 0 streak';
+    document.getElementById('btGuessInput').value = '';
+    document.getElementById('btGuessInput').focus();
+  }
+}
+
+function revealBrainAnswer() {
+  if (btSolved) return;
+  teaserRevealed = true;
+  btStreak = 0;
+  const t = BRAIN_TEASERS[currentTeaser];
+  const el = document.getElementById('brainTeaserAnswer');
+  el.style.display = 'block';
+  el.innerHTML = '💡 Answer: ' + t.aFull;
+  document.getElementById('btFeedback').style.display = 'none';
+  document.getElementById('btGuessArea').style.display = 'none';
+  document.getElementById('revealBtn').style.display = 'none';
+  document.getElementById('btProgress').textContent = 'Try to guess next time! 💪';
+  document.getElementById('btStreak').textContent = '🔥 0 streak';
+}
+
+/* ══════════════════════════
+   🃏 FLASHCARDS
+══════════════════════════ */
+const FLASHCARD_SETS = [
+  {front:"What is Newton's 2nd Law?", back:"F = ma (Force = mass × acceleration) ⚡"},
+  {front:"What is photosynthesis?", back:"Plants convert sunlight + CO₂ + water → glucose + oxygen 🌱"},
+  {front:"What is the Pythagorean Theorem?", back:"a² + b² = c² (for right triangles) 📐"},
+  {front:"What is mitosis?", back:"Cell division producing 2 identical daughter cells 🔬"},
+  {front:"What caused WW1?", back:"Assassination of Archduke Franz Ferdinand + MAIN (Militarism, Alliances, Imperialism, Nationalism) 🌍"},
+  {front:"What is an atom?", back:"Smallest unit of matter with protons, neutrons, electrons ⚛️"},
+  {front:"What is Ohm's Law?", back:"V = IR (Voltage = Current × Resistance) 🔌"},
+  {front:"What is osmosis?", back:"Movement of water from low to high concentration through semi-permeable membrane 💧"},
+  {front:"What is the quadratic formula?", back:"x = (-b ± √(b²-4ac)) / 2a 📏"},
+  {front:"What is DNA?", back:"Deoxyribonucleic Acid — carries genetic instructions in cells 🧬"},
+  {front:"What is evaporation?", back:"Liquid changing to gas/vapour at the surface below boiling point ☁️"},
+  {front:"What is an enzyme?", back:"Biological catalyst that speeds up chemical reactions in living things 🧪"},
+];
+let fcIndex = 0;
+let fcFlipped = false;
+
+function openFlashcards() {
+  document.getElementById('flashcardModal').style.display = 'flex';
+  fcIndex = 0;
+  fcFlipped = false;
+  renderFlashcard();
+}
+function closeFlashcards() { document.getElementById('flashcardModal').style.display = 'none'; }
+
+function renderFlashcard() {
+  const card = FLASHCARD_SETS[fcIndex];
+  fcFlipped = false;
+  document.getElementById('flashcardBox').style.background = 'linear-gradient(135deg,var(--brand),var(--brand-lt))';
+  document.getElementById('flashcardText').textContent = card.front;
+  document.getElementById('fcCounter').textContent = `Card ${fcIndex+1} of ${FLASHCARD_SETS.length}`;
+  document.getElementById('fcHint').textContent = '👆 Tap card to flip';
+}
+
+function flipFlashcard() {
+  const card = FLASHCARD_SETS[fcIndex];
+  fcFlipped = !fcFlipped;
+  if (fcFlipped) {
+    document.getElementById('flashcardBox').style.background = 'linear-gradient(135deg,#22c55e,#14b8a6)';
+    document.getElementById('flashcardText').textContent = card.back;
+    document.getElementById('fcHint').textContent = '✅ Tap again to see question';
+  } else {
+    document.getElementById('flashcardBox').style.background = 'linear-gradient(135deg,var(--brand),var(--brand-lt))';
+    document.getElementById('flashcardText').textContent = card.front;
+    document.getElementById('fcHint').textContent = '👆 Tap card to flip';
+  }
+}
+function nextFlashcard() { fcIndex = (fcIndex + 1) % FLASHCARD_SETS.length; renderFlashcard(); }
+function prevFlashcard() { fcIndex = (fcIndex - 1 + FLASHCARD_SETS.length) % FLASHCARD_SETS.length; renderFlashcard(); }
+
+/* ══════════════════════════
+   ⚡ SPEED ROUND
+══════════════════════════ */
+const SPEED_QS = [
+  {q:"F = ma is Newton's which law?",opts:["1st","2nd","3rd","4th"],ans:1},
+  {q:"How many sides does a hexagon have?",opts:["5","6","7","8"],ans:1},
+  {q:"What gas do plants absorb?",opts:["Oxygen","Nitrogen","CO₂","Hydrogen"],ans:2},
+  {q:"Speed of light is approx?",opts:["3×10⁶","3×10⁸","3×10¹⁰","3×10⁴"],ans:1},
+  {q:"H₂O is?",opts:["Salt","Water","Acid","Gold"],ans:1},
+  {q:"Largest planet in solar system?",opts:["Earth","Saturn","Jupiter","Neptune"],ans:2},
+  {q:"√144 = ?",opts:["11","12","13","14"],ans:1},
+  {q:"Who discovered gravity?",opts:["Einstein","Newton","Galileo","Darwin"],ans:1},
+  {q:"DNA stands for?",opts:["Deoxyribonucleic Acid","Dioxyribose Acid","Double Nucleic Acid","None"],ans:0},
+  {q:"Photosynthesis occurs in?",opts:["Mitochondria","Nucleus","Chloroplast","Ribosome"],ans:2},
+  {q:"π ≈ ?",opts:["3.14","2.71","1.62","4.13"],ans:0},
+  {q:"Chemical symbol for Gold?",opts:["Go","Gd","Au","Ag"],ans:2},
+  {q:"Human chromosomes = ?",opts:["23","46","48","44"],ans:1},
+  {q:"Boiling point of water (°C)?",opts:["90","95","100","110"],ans:2},
+  {q:"Light year is unit of?",opts:["Time","Distance","Speed","Mass"],ans:1},
+];
+let speedScore = 0;
+let speedInterval = null;
+let speedTimeLeft = 60;
+let speedQIndex = 0;
+let speedRunning = false;
+
+function openSpeedRound() {
+  document.getElementById('speedRoundModal').style.display = 'flex';
+  resetSpeedRound();
+}
+function closeSpeedRound() {
+  document.getElementById('speedRoundModal').style.display = 'none';
+  clearInterval(speedInterval);
+  speedRunning = false;
+}
+
+function resetSpeedRound() {
+  speedScore = 0; speedTimeLeft = 60; speedQIndex = 0; speedRunning = false;
+  clearInterval(speedInterval);
+  document.getElementById('speedTimer').textContent = '60';
+  document.getElementById('speedBar').style.width = '100%';
+  document.getElementById('speedScoreNum').textContent = '0';
+  document.getElementById('speedQuestion').textContent = 'Press Start to begin!';
+  document.getElementById('speedOpts').innerHTML = '';
+  document.getElementById('speedStartBtn').style.display = 'block';
+}
+
+function startSpeedRound() {
+  speedRunning = true;
+  document.getElementById('speedStartBtn').style.display = 'none';
+  speedQIndex = Math.floor(Math.random() * SPEED_QS.length);
+  renderSpeedQ();
+  speedInterval = setInterval(() => {
+    speedTimeLeft--;
+    document.getElementById('speedTimer').textContent = speedTimeLeft;
+    document.getElementById('speedBar').style.width = (speedTimeLeft / 60 * 100) + '%';
+    if (speedTimeLeft <= 10) document.getElementById('speedTimer').style.color = 'var(--coral)';
+    if (speedTimeLeft <= 0) {
+      clearInterval(speedInterval);
+      speedRunning = false;
+      document.getElementById('speedQuestion').innerHTML = `🏁 Time's up! Score: <span style="color:var(--brand)">${speedScore}</span>`;
+      document.getElementById('speedOpts').innerHTML = '';
+      document.getElementById('speedStartBtn').textContent = '🔄 Play Again';
+      document.getElementById('speedStartBtn').onclick = () => { resetSpeedRound(); startSpeedRound(); };
+      document.getElementById('speedStartBtn').style.display = 'block';
+      showToast('⚡ Speed Round done! Score: ' + speedScore);
+    }
+  }, 1000);
+}
+
+function renderSpeedQ() {
+  if (!speedRunning) return;
+  const q = SPEED_QS[speedQIndex % SPEED_QS.length];
+  document.getElementById('speedQuestion').textContent = q.q;
+  document.getElementById('speedOpts').innerHTML = q.opts.map((o, i) =>
+    `<button onclick="answerSpeed(${i})" style="padding:10px 14px;border-radius:12px;border:1.5px solid var(--border);background:var(--bg2);font-size:14px;font-weight:500;color:var(--ink);cursor:pointer;text-align:left;transition:all .15s">${o}</button>`
+  ).join('');
+}
+
+function answerSpeed(i) {
+  if (!speedRunning) return;
+  const q = SPEED_QS[speedQIndex % SPEED_QS.length];
+  const btns = document.getElementById('speedOpts').querySelectorAll('button');
+  btns.forEach((b, idx) => {
+    b.style.pointerEvents = 'none';
+    if (idx === q.ans) b.style.background = '#f0fdf4', b.style.borderColor = 'var(--green)', b.style.color = 'var(--green)';
+    if (idx === i && i !== q.ans) b.style.background = '#fff5f5', b.style.borderColor = 'var(--coral)', b.style.color = 'var(--coral)';
+  });
+  if (i === q.ans) { speedScore += 10; document.getElementById('speedScoreNum').textContent = speedScore; showToast('✅ Correct! +10'); }
+  else showToast('❌ Wrong!');
+  speedQIndex++;
+  setTimeout(() => { if (speedRunning) renderSpeedQ(); }, 700);
 }
 
 /* ══════════════════════════
