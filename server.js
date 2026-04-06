@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// ── CORS — allow requests from any origin ───────────────────────────
+// ── CORS ────────────────────────────────────────────────────────────
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
@@ -14,32 +14,38 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: '25mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || '';
-const MODEL_CHAT    = 'claude-haiku-4-5-20251001';
-const MODEL_VISION  = 'claude-sonnet-4-20250514';
+const GROQ_KEY   = process.env.GROQ_API_KEY || '';
+const GROQ_URL   = 'https://api.groq.com/openai/v1/chat/completions';
+const MODEL_CHAT = 'llama-3.3-70b-versatile';      // best free Groq model
+const MODEL_VIS  = 'meta-llama/llama-4-scout-17b-16e-instruct'; // Groq vision model
 
-// ── Helper: call Anthropic API ──────────────────────────────────────
-async function callAnthropic(body) {
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+// ── Helper: call Groq chat ──────────────────────────────────────────
+async function callGroq(messages, model, max_tokens = 1000) {
+  const resp = await fetch(GROQ_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_KEY,
-      'anthropic-version': '2023-06-01'
+      'Authorization': 'Bearer ' + GROQ_KEY
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify({ model, messages, max_tokens, temperature: 0.7 })
   });
   const data = await resp.json();
-  if (!resp.ok) throw new Error(data?.error?.message || 'API error ' + resp.status);
+  if (!resp.ok) throw new Error(data?.error?.message || 'Groq error ' + resp.status);
   return data;
 }
 
-// ── /api/health — Check if server + API key are working ────────────
+// ── Helper: extract text from Groq response ─────────────────────────
+function getText(data) {
+  return data?.choices?.[0]?.message?.content || null;
+}
+
+// ── /api/health ─────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
-    keySet: !!ANTHROPIC_KEY,
-    keyLength: ANTHROPIC_KEY.length,
+    provider: 'Groq AI',
+    keySet: !!GROQ_KEY,
+    keyLength: GROQ_KEY.length,
     time: new Date().toISOString()
   });
 });
@@ -47,85 +53,88 @@ app.get('/api/health', (req, res) => {
 // ── /api/chat — Text AI chat ────────────────────────────────────────
 app.post('/api/chat', async (req, res) => {
   try {
-    if (!ANTHROPIC_KEY) return res.status(500).json({ error: 'ANTHROPIC_API_KEY not set on server' });
+    if (!GROQ_KEY) return res.status(500).json({ error: 'GROQ_API_KEY not set on server' });
     const { system, messages, max_tokens = 1000 } = req.body;
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'messages array required' });
     }
-    const data = await callAnthropic({
-      model: MODEL_CHAT,
-      max_tokens,
-      system: (system || '').slice(0, 4000),
-      messages: messages.slice(-10)
-    });
-    res.json(data);
+    const groqMsgs = [];
+    if (system) groqMsgs.push({ role: 'system', content: system.slice(0, 4000) });
+    messages.slice(-10).forEach(m => groqMsgs.push({
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: typeof m.content === 'string' ? m.content : JSON.stringify(m.content)
+    }));
+    const data = await callGroq(groqMsgs, MODEL_CHAT, max_tokens);
+    const text = getText(data);
+    if (!text) throw new Error('Empty response from Groq');
+    // Return in Anthropic-compatible format so frontend works without changes
+    res.json({ content: [{ type: 'text', text }] });
   } catch (e) {
     console.error('/api/chat error:', e.message);
     res.status(500).json({ error: e.message });
   }
 });
 
-// ── /api/vision — Photo/image analysis ─────────────────────────────
+// ── /api/vision — Photo analysis with Groq vision ──────────────────
 app.post('/api/vision', async (req, res) => {
   try {
-    if (!ANTHROPIC_KEY) return res.status(500).json({ error: 'ANTHROPIC_API_KEY not set on server' });
+    if (!GROQ_KEY) return res.status(500).json({ error: 'GROQ_API_KEY not set on server' });
     const { system, prompt, image, mimeType, max_tokens = 1500 } = req.body;
     if (!image) return res.status(400).json({ error: 'image (base64) is required' });
 
-    // Clean base64 — remove data URL prefix if present
     const cleanImage = image.replace(/^data:image\/[a-z]+;base64,/, '');
     const cleanMime  = (mimeType || 'image/jpeg').split(';')[0];
+    const dataUrl    = `data:${cleanMime};base64,${cleanImage}`;
 
-    const data = await callAnthropic({
-      model: MODEL_VISION,
-      max_tokens,
-      system: (system || 'You are EduSmart AI tutor for Indian students. Analyze the image and provide a complete helpful academic answer.').slice(0, 4000),
-      messages: [{
-        role: 'user',
-        content: [
-          {
-            type: 'image',
-            source: { type: 'base64', media_type: cleanMime, data: cleanImage }
-          },
-          {
-            type: 'text',
-            text: prompt || 'Please analyze this image and provide a complete academic explanation.'
-          }
-        ]
-      }]
+    const groqMsgs = [];
+    if (system) groqMsgs.push({ role: 'system', content: system.slice(0, 2000) });
+    groqMsgs.push({
+      role: 'user',
+      content: [
+        { type: 'image_url', image_url: { url: dataUrl } },
+        { type: 'text',      text: prompt || 'Analyze this image and provide a complete academic explanation.' }
+      ]
     });
-    res.json(data);
+
+    const data = await callGroq(groqMsgs, MODEL_VIS, max_tokens);
+    const text = getText(data);
+    if (!text) throw new Error('Empty vision response from Groq');
+    res.json({ content: [{ type: 'text', text }] });
   } catch (e) {
     console.error('/api/vision error:', e.message);
     res.status(500).json({ error: e.message });
   }
 });
 
-// ── /api/lesson — AI lesson generation ─────────────────────────────
+// ── /api/lesson — Lesson generation ────────────────────────────────
 app.post('/api/lesson', async (req, res) => {
   try {
-    if (!ANTHROPIC_KEY) return res.status(500).json({ error: 'ANTHROPIC_API_KEY not set on server' });
+    if (!GROQ_KEY) return res.status(500).json({ error: 'GROQ_API_KEY not set on server' });
     const { system, messages, max_tokens = 1200 } = req.body;
-    const data = await callAnthropic({
-      model: MODEL_CHAT,
-      max_tokens,
-      system: (system || '').slice(0, 4000),
-      messages: (messages || []).slice(-4)
-    });
-    res.json(data);
+    const groqMsgs = [];
+    if (system) groqMsgs.push({ role: 'system', content: system.slice(0, 4000) });
+    (messages || []).slice(-4).forEach(m => groqMsgs.push({
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: typeof m.content === 'string' ? m.content : JSON.stringify(m.content)
+    }));
+    const data = await callGroq(groqMsgs, MODEL_CHAT, max_tokens);
+    const text = getText(data);
+    if (!text) throw new Error('Empty lesson response from Groq');
+    res.json({ content: [{ type: 'text', text }] });
   } catch (e) {
     console.error('/api/lesson error:', e.message);
     res.status(500).json({ error: e.message });
   }
 });
 
-// ── Serve index.html for all other routes ──────────────────────────
+// ── Serve index.html ────────────────────────────────────────────────
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ EduSmart server running on port ${PORT}`);
-  console.log(`🔑 API Key set: ${!!ANTHROPIC_KEY}`);
+  console.log(`✅ EduSmart running on port ${PORT}`);
+  console.log(`🤖 Provider: Groq AI (FREE)`);
+  console.log(`🔑 Key set: ${!!GROQ_KEY}`);
 });
