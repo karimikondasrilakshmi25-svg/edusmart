@@ -21,9 +21,9 @@
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="EduSmart – Free AI Learning App for Indian Students"/>
 <meta property="og:description" content="Free AI-powered lessons, quizzes and tutor for CBSE, JEE, NEET students. Learn Science, Maths, Physics, Chemistry with AI instantly!"/>
-<meta property="og:url" content="https://z5.onrender.com"/>
+<meta property="og:url" content="https://edusmart-84z5.onrender.com"/>
 <meta property="og:site_name" content="EduSmart"/>
-<meta property="og:image" content="https://z5.onrender.com/og-image.png"/>
+<meta property="og:image" content="https://edusmart-84z5.onrender.com/og-image.png"/>
 <meta property="og:locale" content="en_IN"/>
 
 <!-- 🐦 Twitter Card -->
@@ -32,7 +32,7 @@
 <meta name="twitter:description" content="Free AI lessons, quizzes and tutor for CBSE, JEE, NEET. Learn any topic instantly!"/>
 
 <!-- 📍 Canonical URL -->
-<link rel="canonical" href="https://z5.onrender.com"/>
+<link rel="canonical" href="https://edusmart-84z5.onrender.com"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
@@ -3651,7 +3651,7 @@ async function processCameraImage(file) {
     // Convert to base64
     const base64 = await new Promise((res, rej) => {
       const reader = new FileReader();
-      reader.onload = () => res(reader.result.split(',')[1]);
+      reader.onload = () => res(reader.result.split(',')[1]); // pure base64 only
       reader.onerror = rej;
       reader.readAsDataURL(file);
     });
@@ -3671,6 +3671,7 @@ async function processCameraImage(file) {
 
     // Call /api/vision on backend
     let resultText = null;
+    let visionError = '';
     try {
       const vResp = await fetch(BACKEND_URL + '/api/vision', {
         method: 'POST',
@@ -3684,21 +3685,18 @@ async function processCameraImage(file) {
         })
       });
       const vData = await vResp.json();
+      console.log('[Vision] status:', vResp.status, 'data:', JSON.stringify(vData).slice(0,200));
       resultText = vData.content?.[0]?.text || vData.text || null;
-      if (!resultText && vData.error) throw new Error(vData.error);
+      if (!resultText && vData.error) visionError = vData.error;
     } catch(e) {
-      console.error('Vision error:', e.message);
-      // Fallback: send as text description via chat
-      try {
-        resultText = await callClaude({
-          system: systemPrompt,
-          messages: [{ role: 'user', content: userPrompt + ' (Note: image could not be processed directly, please give a helpful educational response)' }],
-          max_tokens: cameraTarget === 'chat' ? 1000 : 300
-        });
-      } catch(e2) { resultText = null; }
+      console.error('[Vision] fetch error:', e.message);
+      visionError = e.message;
     }
 
-    if (!resultText) throw new Error('Could not process image. Please type your question instead.');
+    if (!resultText) {
+      console.error('[Vision] failed:', visionError);
+      throw new Error('photo_failed');
+    }
 
     closeCameraModal();
 
@@ -3743,10 +3741,14 @@ async function processCameraImage(file) {
     console.error('Camera error:', e.message);
     if (cameraTarget === 'chat') {
       openChat();
-      addBotMsg('📷 I received your photo but could not process it. Please **type your question** below and I will help right away! 😊');
+      if (e.message === 'photo_failed') {
+        addBotMsg('📷 I could not read your photo. Try again with better lighting, or **type your question** below! 😊');
+      } else {
+        addBotMsg('📷 Photo received! There was a connection issue. Please **type your question** below and I will answer right away! 😊');
+      }
       document.getElementById('chatInput').focus();
     } else {
-      showToast('⚠️ Could not read the photo. Please type your topic instead.');
+      showToast('⚠️ Photo unclear. Try better lighting or type the topic!');
     }
   }
 }
